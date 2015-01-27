@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi", "DataBooster.DbWebApi\DataBooster.DbWebApi.csproj", "{37F01AC2-C486-4E32-838C-E0F23BE16B5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A6985-BA61-4CE6-8085-322035D9014F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Pack-Oracle-ODP.NET.bat = NuGet\Pack-Oracle-ODP.NET.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\nupkg\NuGet Command-Line.htm = NuGet\nupkg\NuGet Command-Line.htm
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{798E5725-AA6A-4AFB-A752-EEF6044C36C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET", "ODP.NET", "{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec = NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec
+		NuGet\Oracle\ODP.NET\web.config.transform = NuGet\Oracle\ODP.NET\web.config.transform
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
+		{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
+		{798E5725-AA6A-4AFB-A752-EEF6044C36C7} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
+		{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
+	EndGlobalSection
+EndGlobal
