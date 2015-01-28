@@ -23,34 +23,25 @@ namespace DataBooster.DbWebApi
 
 		public static void SupportCsvMediaType(this HttpConfiguration config)
 		{
-			const string queryStringMediaType = "media";
 			MediaTypeFormatter mediaTypeFormatter = config.Formatters.JsonFormatter;
 
-			if (mediaTypeFormatter != null)
-				if (mediaTypeFormatter.MediaTypeMappings.Count == 0)
-				{
-					mediaTypeFormatter.AddQueryStringMapping(queryStringMediaType, "json", "application/json");
-					mediaTypeFormatter.AddUriPathExtensionMapping("json", "application/json");
-				}
-
+			mediaTypeFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"));
 			mediaTypeFormatter = config.Formatters.XmlFormatter;
-
-			if (mediaTypeFormatter != null)
-				if (mediaTypeFormatter.MediaTypeMappings.Count == 0)
-				{
-					mediaTypeFormatter.AddQueryStringMapping(queryStringMediaType, "xml", "application/xml");
-					mediaTypeFormatter.AddUriPathExtensionMapping("xml", "application/xml");
-				}
+			mediaTypeFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"));
 
 			if (config.Formatters.FormUrlEncodedFormatter != null)
 				mediaTypeFormatter = config.Formatters.FormUrlEncodedFormatter;
 
 			mediaTypeFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(CsvMediaTypeString));
+			mediaTypeFormatter.AddMediaTypeMapping("csv", CsvMediaType);
+		}
 
-			if (mediaTypeFormatter.MediaTypeMappings.Count == 0)
+		private static void AddMediaTypeMapping(this MediaTypeFormatter mediaTypeFormatter, string type, MediaTypeHeaderValue mediaType)
+		{
+			if (mediaTypeFormatter != null && mediaTypeFormatter.MediaTypeMappings.Count == 0)
 			{
-				mediaTypeFormatter.AddQueryStringMapping(queryStringMediaType, "csv", "text/csv");
-				mediaTypeFormatter.AddUriPathExtensionMapping("csv", "text/csv");
+				mediaTypeFormatter.AddQueryStringMapping("media", type, mediaType);
+				mediaTypeFormatter.AddUriPathExtensionMapping(type, mediaType);
 			}
 		}
 
