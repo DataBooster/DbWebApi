@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,7 +8,6 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
-using System.Text;
 
 namespace DataBooster.DbWebApi
 {
@@ -28,19 +28,30 @@ namespace DataBooster.DbWebApi
 
 			if (mediaTypeFormatter != null)
 				if (mediaTypeFormatter.MediaTypeMappings.Count == 0)
-					mediaTypeFormatter.MediaTypeMappings.Add(new QueryStringMapping(queryStringMediaType, "json", "application/json"));
+				{
+					mediaTypeFormatter.AddQueryStringMapping(queryStringMediaType, "json", "application/json");
+					mediaTypeFormatter.AddUriPathExtensionMapping("json", "application/json");
+				}
 
 			mediaTypeFormatter = config.Formatters.XmlFormatter;
 
 			if (mediaTypeFormatter != null)
 				if (mediaTypeFormatter.MediaTypeMappings.Count == 0)
-					mediaTypeFormatter.MediaTypeMappings.Add(new QueryStringMapping(queryStringMediaType, "xml", "application/xml"));
+				{
+					mediaTypeFormatter.AddQueryStringMapping(queryStringMediaType, "xml", "application/xml");
+					mediaTypeFormatter.AddUriPathExtensionMapping("xml", "application/xml");
+				}
 
 			if (config.Formatters.FormUrlEncodedFormatter != null)
 				mediaTypeFormatter = config.Formatters.FormUrlEncodedFormatter;
 
 			mediaTypeFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(CsvMediaTypeString));
-			mediaTypeFormatter.MediaTypeMappings.Add(new QueryStringMapping(queryStringMediaType, "csv", "text/csv"));
+
+			if (mediaTypeFormatter.MediaTypeMappings.Count == 0)
+			{
+				mediaTypeFormatter.AddQueryStringMapping(queryStringMediaType, "csv", "text/csv");
+				mediaTypeFormatter.AddUriPathExtensionMapping("csv", "text/csv");
+			}
 		}
 
 		internal static MediaTypeHeaderValue NegotiateMediaType(this HttpRequestMessage request)
