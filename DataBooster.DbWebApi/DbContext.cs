@@ -27,9 +27,8 @@ namespace DataBooster.DbWebApi
 			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters));
 		}
 
-		public void ExecuteDbApi_CSV(string sp, IDictionary<string, object> parameters, Stream stream)
+		public void ExecuteDbApi_CSV(string sp, IDictionary<string, object> parameters, TextWriter textWriter)
 		{
-			StreamWriter writer = new StreamWriter(stream);
 			CsvConfig<Dictionary<string, object>>.OmitHeaders = true;
 			var row = new Dictionary<string, object>[1];
 
@@ -41,14 +40,16 @@ namespace DataBooster.DbWebApi
 					for (int i = 0; i < headers.Length; i++)
 						headers[i] = reader.GetName(i);
 
-					CsvWriter<string>.WriteRow(writer, headers);
+					CsvWriter<string>.WriteRow(textWriter, headers);
 				},
 				reader =>
 				{
 					row[0] = ReadRowAsDictionary(reader);
-					CsvWriter<Dictionary<string, object>>.Write(writer, row);
+					CsvWriter<Dictionary<string, object>>.Write(textWriter, row);
 				},
 				null, null);
+
+			textWriter.Flush();
 		}
 
 		private Dictionary<string, object> ReadRowAsDictionary(DbDataReader reader)
