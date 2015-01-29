@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Linq;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
 
@@ -26,11 +27,12 @@ namespace DataBooster.DbWebApi
 			MediaTypeFormatter mediaTypeFormatter = config.Formatters.JsonFormatter;
 
 			mediaTypeFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"));
-			mediaTypeFormatter = config.Formatters.XmlFormatter;
-			mediaTypeFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"));
 
-			if (config.Formatters.FormUrlEncodedFormatter != null)
-				mediaTypeFormatter = config.Formatters.FormUrlEncodedFormatter;
+			if (config.Formatters.XmlFormatter != null)
+			{
+				mediaTypeFormatter = config.Formatters.XmlFormatter;
+				mediaTypeFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"));
+			}
 
 			mediaTypeFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(CsvMediaTypeString));
 			mediaTypeFormatter.AddMediaTypeMapping("csv", CsvMediaType);
@@ -38,11 +40,26 @@ namespace DataBooster.DbWebApi
 
 		private static void AddMediaTypeMapping(this MediaTypeFormatter mediaTypeFormatter, string type, MediaTypeHeaderValue mediaType)
 		{
-			if (mediaTypeFormatter != null && mediaTypeFormatter.MediaTypeMappings.Count == 0)
+			if (mediaTypeFormatter != null && !mediaTypeFormatter.MediaTypeMappings.Any(m => m.ExistMediaTypeMapping(type)))
 			{
 				mediaTypeFormatter.AddQueryStringMapping("media", type, mediaType);
 				mediaTypeFormatter.AddUriPathExtensionMapping(type, mediaType);
 			}
+		}
+
+		private static bool ExistMediaTypeMapping(this MediaTypeMapping mediaTypeMapping, string media)
+		{
+			QueryStringMapping qsMapping = mediaTypeMapping as QueryStringMapping;
+
+			if (qsMapping != null && qsMapping.QueryStringParameterValue == media)
+				return true;
+
+			UriPathExtensionMapping ueMapping = mediaTypeMapping as UriPathExtensionMapping;
+
+			if (ueMapping != null && ueMapping.UriPathExtension == media)
+				return true;
+
+			return false;
 		}
 
 		internal static MediaTypeHeaderValue NegotiateMediaType(this HttpRequestMessage request)
@@ -64,16 +81,16 @@ namespace DataBooster.DbWebApi
 				HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
 
 				csvResponse.Content = new PushStreamContent((stream, httpContent, transportContext) =>
+				{
+					StreamWriter textWriter = new StreamWriter(stream, new UTF8Encoding());
+
+					using (DbContext dbContext = new DbContext())
 					{
-						StreamWriter textWriter = new StreamWriter(stream, new UTF8Encoding());
+						dbContext.ExecuteDbApi_CSV(sp, parameters, textWriter);
+					}
 
-						using (DbContext dbContext = new DbContext())
-						{
-							dbContext.ExecuteDbApi_CSV(sp, parameters, textWriter);
-						}
-
-						stream.Close();
-					}, CsvMediaType);
+					stream.Close();
+				}, CsvMediaType);
 
 				csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = "[save_as].csv" };
 
