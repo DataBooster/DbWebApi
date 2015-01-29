@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
 using DataBooster.DbWebApi.DataAccess;
-using ServiceStack.Text;
+using CsvHelper;
 
 namespace DataBooster.DbWebApi
 {
@@ -29,8 +29,7 @@ namespace DataBooster.DbWebApi
 
 		public void ExecuteDbApi_CSV(string sp, IDictionary<string, object> parameters, TextWriter textWriter)
 		{
-			CsvConfig<Dictionary<string, object>>.OmitHeaders = true;
-			var row = new Dictionary<string, object>[1];
+			CsvExporter csvExporter = new CsvExporter(textWriter);
 
 			_DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters), true, null,
 				reader =>
@@ -40,26 +39,19 @@ namespace DataBooster.DbWebApi
 					for (int i = 0; i < headers.Length; i++)
 						headers[i] = reader.GetName(i);
 
-					CsvWriter<string>.WriteRow(textWriter, headers);
+					csvExporter.WriteHeader(headers);
 				},
 				reader =>
 				{
-					row[0] = ReadRowAsDictionary(reader);
-					CsvWriter<Dictionary<string, object>>.Write(textWriter, row);
+					object[] values = new object[reader.VisibleFieldCount];
+
+					reader.GetValues(values);
+
+					csvExporter.WriteRow(values);
 				},
 				null, null);
 
 			textWriter.Flush();
-		}
-
-		private Dictionary<string, object> ReadRowAsDictionary(DbDataReader reader)
-		{
-			Dictionary<string, object> row = new Dictionary<string, object>(reader.VisibleFieldCount);
-
-			for (int c = 0; c < reader.VisibleFieldCount; c++)
-				row.Add(c.ToString(), reader[c]);
-
-			return row;
 		}
 
 		#region IDisposable Members
