@@ -45,9 +45,8 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.10.0\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DataBooster.Oracle.ODP.1.7.2.0\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess">
+      <HintPath>..\packages\DataBooster.Oracle.ODP.1.7.2.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -77,7 +76,6 @@
   <ItemGroup>
     <Compile Include="Csv\CsvDateTimeConverter.cs" />
     <Compile Include="Csv\CsvExporter.cs" />
-    <Compile Include="DataAccess\ConfigHelper.partial.cs" />
     <Compile Include="DataAccess\ConfigHelper.sample.cs" />
     <Compile Include="DataAccess\DbPackage.partial.sample.cs" />
     <Compile Include="DataAccess\DbPackage.sample.cs" />

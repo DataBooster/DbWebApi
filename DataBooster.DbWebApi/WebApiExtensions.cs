@@ -22,41 +22,41 @@ namespace DataBooster.DbWebApi
 			CsvMediaType = new MediaTypeHeaderValue(CsvMediaTypeString) { CharSet = "utf-8" };
 		}
 
-		public static void SupportCsvMediaType(this HttpConfiguration config)
+		public static void SupportCsvMediaType(this HttpConfiguration config, string queryStringParameterName = "format")
 		{
 			MediaTypeFormatter mediaTypeFormatter = config.Formatters.JsonFormatter;
 
-			mediaTypeFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"));
+			mediaTypeFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
 
 			if (config.Formatters.XmlFormatter != null)
 			{
 				mediaTypeFormatter = config.Formatters.XmlFormatter;
-				mediaTypeFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"));
+				mediaTypeFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
 			}
 
 			mediaTypeFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(CsvMediaTypeString));
-			mediaTypeFormatter.AddMediaTypeMapping("csv", CsvMediaType);
+			mediaTypeFormatter.AddMediaTypeMapping("csv", CsvMediaType, queryStringParameterName);
 		}
 
-		private static void AddMediaTypeMapping(this MediaTypeFormatter mediaTypeFormatter, string type, MediaTypeHeaderValue mediaType)
+		private static void AddMediaTypeMapping(this MediaTypeFormatter mediaTypeFormatter, string type, MediaTypeHeaderValue mediaType, string queryStringParameterName)
 		{
 			if (mediaTypeFormatter != null && !mediaTypeFormatter.MediaTypeMappings.Any(m => m.ExistMediaTypeMapping(type)))
 			{
-				mediaTypeFormatter.AddQueryStringMapping("media", type, mediaType);
+				mediaTypeFormatter.AddQueryStringMapping(queryStringParameterName, type, mediaType);
 				mediaTypeFormatter.AddUriPathExtensionMapping(type, mediaType);
 			}
 		}
 
-		private static bool ExistMediaTypeMapping(this MediaTypeMapping mediaTypeMapping, string media)
+		private static bool ExistMediaTypeMapping(this MediaTypeMapping mediaTypeMapping, string mediaFormat)
 		{
 			QueryStringMapping qsMapping = mediaTypeMapping as QueryStringMapping;
 
-			if (qsMapping != null && qsMapping.QueryStringParameterValue == media)
+			if (qsMapping != null && qsMapping.QueryStringParameterValue == mediaFormat)
 				return true;
 
 			UriPathExtensionMapping ueMapping = mediaTypeMapping as UriPathExtensionMapping;
 
-			if (ueMapping != null && ueMapping.UriPathExtension == media)
+			if (ueMapping != null && ueMapping.UriPathExtension == mediaFormat)
 				return true;
 
 			return false;
