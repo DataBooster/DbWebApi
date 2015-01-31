@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Copyright (c) 2015 Abel Cheng <abelcys@gmail.com> and other contributors.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using CsvHelper;

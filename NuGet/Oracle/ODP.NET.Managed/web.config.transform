@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<connectionStrings>
+		<add name="DataBooster.DbWebApi.MainConnection" providerName="Oracle.ManagedDataAccess.Client" connectionString="Data Source=SAMPLEDB;User Id=/"/>
+	</connectionStrings>
+</configuration>

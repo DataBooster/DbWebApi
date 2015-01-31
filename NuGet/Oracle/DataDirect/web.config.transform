@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<connectionStrings>
+		<add name="DataBooster.DbWebApi.MainConnection" providerName="DDTek.Oracle" connectionString="Data Source=SAMPLEDB;Authentication Method=Client"/>
+	</connectionStrings>
+</configuration>

@@ -12,7 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A69
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\Pack-Oracle-DataDirect.bat = NuGet\Pack-Oracle-DataDirect.bat
 		NuGet\Pack-Oracle-ODP.NET.bat = NuGet\Pack-Oracle-ODP.NET.bat
+		NuGet\Pack-Oracle-ODP.NET.Managed.bat = NuGet\Pack-Oracle-ODP.NET.Managed.bat
+		NuGet\Pack-SqlServer.bat = NuGet\Pack-SqlServer.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056}"
@@ -21,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{CF8B7765
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\SqlServer\DataBooster.DbWebApi.nuspec = NuGet\SqlServer\DataBooster.DbWebApi.nuspec
+		NuGet\SqlServer\web.config.transform = NuGet\SqlServer\web.config.transform
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{798E5725-AA6A-4AFB-A752-EEF6044C36C7}"
 EndProject
@@ -28,6 +35,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET", "ODP.NET", "{9FBD
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec = NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec
 		NuGet\Oracle\ODP.NET\web.config.transform = NuGet\Oracle\ODP.NET\web.config.transform
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDirect", "DataDirect", "{A172D239-9E04-46AF-9243-1D8FE49F19B1}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec = NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec
+		NuGet\Oracle\DataDirect\web.config.transform = NuGet\Oracle\DataDirect\web.config.transform
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET.Managed", "ODP.NET.Managed", "{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec = NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec
+		NuGet\Oracle\ODP.NET.Managed\web.config.transform = NuGet\Oracle\ODP.NET.Managed\web.config.transform
 	EndProjectSection
 EndProject
 Global
@@ -49,5 +68,7 @@ Global
 		{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
 		{798E5725-AA6A-4AFB-A752-EEF6044C36C7} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
 		{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
+		{A172D239-9E04-46AF-9243-1D8FE49F19B1} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
+		{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
 	EndGlobalSection
 EndGlobal

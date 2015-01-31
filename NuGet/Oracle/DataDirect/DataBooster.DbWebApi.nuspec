@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>DataBooster.DbWebApi.Oracle.ODP</id>
+		<id>DataBooster.DbWebApi.Oracle.DataDirect</id>
 		<version>$version$</version>
-		<title>$title$ for Oracle (use ODP.NET Provider)</title>
+		<title>$title$ for Oracle (use DataDirect Provider)</title>
 		<authors>$author$</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
 		<licenseUrl>http://dbwebapi.codeplex.com/license</licenseUrl>
@@ -12,10 +12,10 @@
 		<description>$description$</description>
 		<releaseNotes>http://dbwebapi.codeplex.com/releases</releaseNotes>
 		<copyright>Copyright 2015 Abel Cheng and other contributors</copyright>
-		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle ODP.NET Database Stored Procedure DataAccess</tags>
+		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle DataDirect DDTek Database Stored Procedure DataAccess</tags>
 	</metadata>
 	<files>
-		<file src="..\NuGet\Oracle\ODP.NET\web.config.transform" target="content" />
-		<file src="..\NuGet\Oracle\ODP.NET\web.config.transform" target="content\app.config.transform" />
+		<file src="..\NuGet\Oracle\DataDirect\web.config.transform" target="content" />
+		<file src="..\NuGet\Oracle\DataDirect\web.config.transform" target="content\app.config.transform" />
 	</files>
 </package>
