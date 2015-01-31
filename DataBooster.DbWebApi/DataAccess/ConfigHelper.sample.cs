@@ -9,7 +9,6 @@ namespace DataBooster.DbWebApi.DataAccess
 		#region Setting key names defined in your config file, can be overridden in partial OnInitializing()
 		private static string _ConnectionSettingKey = "DataBooster.DbWebApi.MainConnection";
 		private static string _PackageSettingKey = "DataBooster.DbWebApi.MainPackage";
-		private static string _AuxConnectionSettingKey = "DataBooster.DbWebApi.AuxConnection";
 		#endregion
 
 		#region Properties
@@ -49,20 +48,6 @@ namespace DataBooster.DbWebApi.DataAccess
 			get { return _DatabasePackage; }
 			set { _DatabasePackage = value ?? string.Empty; }
 		}
-
-		private static DbProviderFactory _AuxDbProviderFactory;
-		public static DbProviderFactory AuxDbProviderFactory
-		{
-			get { return _AuxDbProviderFactory; }
-			set { _AuxDbProviderFactory = value; }
-		}
-
-		private static string _AuxConnectionString;
-		public static string AuxConnectionString
-		{
-			get { return _AuxConnectionString; }
-			set { _AuxConnectionString = value; }
-		}
 		#endregion
 
 		static ConfigHelper()
@@ -77,17 +62,6 @@ namespace DataBooster.DbWebApi.DataAccess
 			_DatabasePackage = ConfigurationManager.AppSettings[_PackageSettingKey];
 			if (_DatabasePackage == null)
 				_DatabasePackage = string.Empty;
-
-			if (string.IsNullOrWhiteSpace(_AuxConnectionSettingKey) == false)
-			{
-				connSetting = ConfigurationManager.ConnectionStrings[_AuxConnectionSettingKey];
-
-				if (connSetting != null)
-				{
-					_AuxDbProviderFactory = DbProviderFactories.GetFactory(connSetting.ProviderName);
-					_AuxConnectionString = connSetting.ConnectionString;
-				}
-			}
 			#endregion
 
 			OnInitialized();

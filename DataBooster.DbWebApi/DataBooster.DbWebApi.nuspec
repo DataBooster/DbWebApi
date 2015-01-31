@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>DataBooster.DbWebApi.Oracle.ODP</id>
+		<id>DataBooster.DbWebApi.SqlServer</id>
 		<version>$version$</version>
-		<title>$title$ for Oracle (use ODP.NET Provider)</title>
+		<title>$title$ for SQL Server</title>
 		<authors>$author$</authors>
-		<owners>http://databooster.codeplex.com</owners>
+		<owners>https://github.com/DataBooster/DbWebApi</owners>
 		<licenseUrl>http://dbwebapi.codeplex.com/license</licenseUrl>
-		<projectUrl>http://dbwebapi.codeplex.com</projectUrl>
+		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>http://dbwebapi.codeplex.com/releases</releaseNotes>
-		<copyright>Copyright 2015 Abel Cheng</copyright>
-		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle ODP.NET Database Stored Procedure DataAccess</tags>
+		<copyright>Copyright 2015 Abel Cheng and other contributors</copyright>
+		<tags>DataBooster generic Web API for data driven ADO.NET Booster SQL Server ODP.NET Database Stored Procedure DataAccess</tags>
 	</metadata>
 	<files>
-		<file src="..\NuGet\Oracle\ODP.NET\web.config.transform" target="content" />
-		<file src="..\NuGet\Oracle\ODP.NET\web.config.transform" target="content\app.config.transform" />
+		<file src="..\NuGet\SqlServer\web.config.transform" target="content" />
+		<file src="..\NuGet\SqlServer\web.config.transform" target="content\app.config.transform" />
 	</files>
 </package>

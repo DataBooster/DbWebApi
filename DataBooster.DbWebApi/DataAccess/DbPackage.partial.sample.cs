@@ -3,9 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Collections.Generic;
-using Oracle.DataAccess.Client;
 using DbParallel.DataAccess;
-using DbParallel.DataAccess.Booster.Oracle;
 using DbParallel.DataAccess.Booster.SqlServer;
 
 namespace DataBooster.DbWebApi.DataAccess

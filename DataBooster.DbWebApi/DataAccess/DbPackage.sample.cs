@@ -3,9 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Collections.Generic;
-using Oracle.DataAccess.Client;
 using DbParallel.DataAccess;
-using DbParallel.DataAccess.Booster.Oracle;
 using DbParallel.DataAccess.Booster.SqlServer;
 
 namespace DataBooster.DbWebApi.DataAccess
@@ -195,10 +193,9 @@ namespace DataBooster.DbWebApi.DataAccess
 		#endregion
 
 		#region A sample of using SqlLauncher class
-
 		public static SqlLauncher CreateSampleSqlLauncher()
 		{
-			return new SqlLauncher(ConfigHelper.AuxConnectionString, "schema.DestBigTable",
+			return new SqlLauncher(ConfigHelper.ConnectionString, "schema.DestBigTable",
 				/*	(Optional)
 				 *	If the data source and the destination table have the same number of columns,
 				 *	and the ordinal position of each source column within the data source matches the ordinal position
@@ -220,70 +217,6 @@ namespace DataBooster.DbWebApi.DataAccess
 		{
 			launcher.Post(col0, col1, col2);
 		}
-
-		#endregion
-
-		#region A sample of using OracleLauncher class
-
-		public static OracleLauncher CreateSampleOraLauncher(int grpId)
-		{
-			return new OracleLauncher(ConfigHelper.ConnectionString, GetProcedure("WRITE_BULK_DATA"),
-				parameters =>
-				{
-					parameters.Add("inGroup_ID", grpId);			// Ordinary parameter
-
-					// All Array Bind Types must be explicitly specified and must match PL/SQL table row types defined in database side
-					parameters.AddAssociativeArray("inItem_IDs", OracleDbType.Int32);
-					parameters.AddAssociativeArray("inItem_Values", OracleDbType.BinaryDouble);
-				});
-		}
-
-		public static void AddSampleOraRow(this OracleLauncher launcher, int itemId, double itemValue)
-		{
-			launcher.Post(itemId, itemValue);
-		}
-
-		// The database side package:
-
-		//	CREATE OR REPLACE PACKAGE SCHEMA.PACKAGE IS
-		//	TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
-		//	TYPE DOUBLE_ARRAY IS TABLE OF BINARY_DOUBLE INDEX BY PLS_INTEGER;
-		//	-- ...
-		//	PROCEDURE WRITE_BULK_DATA
-		//	(
-		//		inGroup_ID      NUMBER,
-		//		inItem_IDs      NUMBER_ARRAY,
-		//		inItem_Values   DOUBLE_ARRAY
-		//	);
-		//	-- ...
-		//	END PACKAGE;
-		//	/
-		//	CREATE OR REPLACE PACKAGE BODY SCHEMA.PACKAGE IS
-		//	-- ...
-		//	PROCEDURE WRITE_BULK_DATA
-		//	(
-		//		inGroup_ID      NUMBER,
-		//		inItem_IDs      NUMBER_ARRAY,
-		//		inItem_Values   DOUBLE_ARRAY
-		//	)	AS
-		//	BEGIN
-		//		FORALL i IN inItem_IDs.FIRST .. inItem_IDs.LAST
-		//		INSERT /*+ APPEND_VALUES */ INTO SCHEMA.TEST_WRITE_DATA
-		//		(
-		//			GROUP_ID,
-		//			ITEM_ID,
-		//			ITEM_VALUE
-		//		)
-		//		VALUES
-		//		(
-		//			inGroup_ID,
-		//			inItem_IDs(i),
-		//			inItem_Values(i)
-		//		);
-		//		COMMIT;
-		//	END WRITE_BULK_DATA;
-		//	-- ...
-		//	END PACKAGE;
 		#endregion
 #endif
 		#endregion
