@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
+using DataBooster.DbWebApi;
 
 namespace MyDbWebApi
 {
@@ -10,10 +8,12 @@ namespace MyDbWebApi
 		public static void Register(HttpConfiguration config)
 		{
 			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional }
+				name: "DbWebApi",
+				routeTemplate: "{sp}",
+				defaults: new { controller = "DbWebApi" }
 			);
+
+			config.SupportCsvMediaType();
 		}
 	}
 }

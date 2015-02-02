@@ -41,19 +41,25 @@
       <HintPath>..\..\packages\CsvHelper.2.10.0\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="DataBooster.DbWebApi">
-      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.0.8-alpha\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
+      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.0.10-alpha\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
     </Reference>
     <Reference Include="DbParallel.DataAccess">
       <HintPath>..\..\packages\DataBooster.SqlServer.1.7.2.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="DDTek.Oracle, Version=3.5.0.0, Culture=neutral, PublicKeyToken=c84cd5c63851e072" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.DataAccess, Version=4.112.3.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -117,10 +123,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\ConfigHelper.sample.cs" />
-    <Compile Include="DataAccess\DbPackage.partial.sample.cs" />
-    <Compile Include="DataAccess\DbPackage.sample.cs" />
-    <Compile Include="DataAccess\MyBizMain.sample.cs" />
+    <Compile Include="Authorization\MyDbWebApiAuthorization.cs" />
+    <Compile Include="Controllers\DbWebApiController.cs" />
+    <Compile Include="Authorization\DbWebApiAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -142,11 +147,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

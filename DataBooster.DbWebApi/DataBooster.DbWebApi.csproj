@@ -82,6 +82,7 @@
     <Compile Include="DataAccess\MyBizMain.sample.cs" />
     <Compile Include="DbContext.cs" />
     <Compile Include="DbWebApiOptions.cs" />
+    <Compile Include="IDbWebApiAuthorization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApiExtensions.cs" />
   </ItemGroup>
