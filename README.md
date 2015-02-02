@@ -34,16 +34,29 @@ namespace SampleDbWebApi.Controllers
 	}
 }
 ```
-That's it!
-ExecuteDbApi is an extension method provided by DbWebApi library.
+That's it!  
+ExecuteDbApi is an extension method to ApiController provided by DbWebApi library.
 ``` CSharp
 public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
                                                string sp, IDictionary<string, object> parameters)
-// sp:         Specifies the fully qualified name of database stored procedures or functions
+// sp:         Specifies the fully qualified name of database stored procedure or function
 // parameters: Specifies required parameters as name-value pairs
 ```
 
-- Web.config
+
+- Web.config  
+"DataBooster.DbWebApi.MainConnection" is the only one configuration item needs to be customized:
+``` Xml
 	<connectionStrings>
 		<add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" />
 	</connectionStrings>
+```
+
+## NuGet
+There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
+- [DataBooster.DbWebApi.SqlServer - DbWebApi for SQL Server](http://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
+- [DataBooster.DbWebApi.Oracle.Managed - DbWebApi for Oracle (use ODP.NET Managed Driver)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.Managed)
+- [DataBooster.DbWebApi.Oracle.ODP - DbWebApi for Oracle (use ODP.NET Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.ODP)
+- [DataBooster.DbWebApi.Oracle.DataDirect - DbWebApi for Oracle (use DataDirect Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.DataDirect)
+
+## Examples
