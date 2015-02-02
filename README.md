@@ -20,18 +20,18 @@ using DataBooster.DbWebApi;
 
 namespace SampleDbWebApi.Controllers
 {
-    public class DbWebApiController : ApiController
-    {
-		  [HttpGet]
-		  [HttpPost]
-		  [HttpPut]
-		  [HttpDelete]
-		  [CustomPermissionFilter]
-		  public HttpResponseMessage Execute(string sp, IDictionary<string, object> parameters)
-		  {
-			  return this.ExecuteDbApi(sp, parameters);
-		  }
-    }
+	public class DbWebApiController : ApiController
+	{
+			[HttpGet]
+			[HttpPost]
+			[HttpPut]
+			[HttpDelete]
+			[CustomPermissionFilter]
+			public HttpResponseMessage Execute(string sp, IDictionary<string, object> parameters)
+			{
+				return this.ExecuteDbApi(sp, parameters);
+			}
+	}
 }
 ```
 That's it!
@@ -42,3 +42,8 @@ public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
 // sp:         Specifies the fully qualified name of database stored procedures or functions
 // parameters: Specifies required parameters as name-value pairs
 ```
+
+- Web.config
+	<connectionStrings>
+		<add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" />
+	</connectionStrings>
