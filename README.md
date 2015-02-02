@@ -37,5 +37,8 @@ namespace SampleDbWebApi.Controllers
 That's it!
 ExecuteDbApi is an extension method provided by DbWebApi library.
 ``` CSharp
-public static HttpResponseMessage ExecuteDbApi(this ApiController apiController, string sp, IDictionary<string, object> parameters)
+public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
+                                               string sp, IDictionary<string, object> parameters)
+// sp:         Specifies the fully qualified name of database stored procedures or functions
+// parameters: Specifies required parameters as name-value pairs
 ```
