@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MyDbWebApi")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An example of using DataBooster.DbWebApi. https://github.com/DataBooster/DbWebApi")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("DataBooster")]
 [assembly: AssemblyProduct("MyDbWebApi")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
