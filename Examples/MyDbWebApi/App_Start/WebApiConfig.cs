@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using DataBooster.DbWebApi;
 
 namespace MyDbWebApi
@@ -14,6 +15,7 @@ namespace MyDbWebApi
 			);
 
 			config.SupportCsvMediaType();
+			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
 		}
 	}
 }

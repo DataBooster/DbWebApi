@@ -12,7 +12,7 @@ namespace MyDbWebApi.Controllers
 		[HttpPut]
 		[HttpDelete]
 		[DbWebApiAuthorize]
-		public HttpResponseMessage Execute(string sp, IDictionary<string, object> parameters)
+		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
 		{
 			return this.ExecuteDbApi(sp, parameters);
 		}
