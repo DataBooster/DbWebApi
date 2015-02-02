@@ -20,18 +20,18 @@ using DataBooster.DbWebApi;
 
 namespace SampleDbWebApi.Controllers
 {
-	public class DbWebApiController : ApiController
-	{
-			[HttpGet]
-			[HttpPost]
-			[HttpPut]
-			[HttpDelete]
-			[CustomPermissionFilter]
-			public HttpResponseMessage Execute(string sp, IDictionary<string, object> parameters)
-			{
-				return this.ExecuteDbApi(sp, parameters);
-			}
-	}
+    public class DbWebApiController : ApiController
+    {
+        [HttpGet]
+        [HttpPost]
+        [HttpPut]
+        [HttpDelete]
+        [DbWebApiAuthorize]
+        public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
+        {
+            return this.ExecuteDbApi(sp, parameters);
+        }
+    }
 }
 ```
 That's it!  
@@ -47,16 +47,23 @@ public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
 - Web.config  
 "DataBooster.DbWebApi.MainConnection" is the only one configuration item needs to be customized:
 ``` Xml
-	<connectionStrings>
-		<add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" />
-	</connectionStrings>
+<connectionStrings>
+  <add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" />
+</connectionStrings>
 ```
 
 ## NuGet
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
-- [DataBooster.DbWebApi.SqlServer - DbWebApi for SQL Server](http://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
-- [DataBooster.DbWebApi.Oracle.Managed - DbWebApi for Oracle (use ODP.NET Managed Driver)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.Managed)
-- [DataBooster.DbWebApi.Oracle.ODP - DbWebApi for Oracle (use ODP.NET Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.ODP)
-- [DataBooster.DbWebApi.Oracle.DataDirect - DbWebApi for Oracle (use DataDirect Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.DataDirect)
+- [DbWebApi for SQL Server](http://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
+- [DbWebApi for Oracle (use ODP.NET Managed Driver)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.Managed)
+- [DbWebApi for Oracle (use ODP.NET Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.ODP)
+- [DbWebApi for Oracle (use DataDirect Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.DataDirect)
+
+For-Oracle versions always contain the support for SQL Server. To switch from Oracle to SQL Server, simply change the providerName and connectionString of connectionStrings "DataBooster.DbWebApi.MainConnection" in your web.config.  
+To switch above from one NuGet package to another NuGet Package, simply uninstall one and install another from NuGet Package Manager.
 
 ## Examples
+
+Please refer to example ASP.NET MVC 4 Web Application - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Examples/MyDbWebApi
+
+The example project also requires Visual Studio 2010 or above.
