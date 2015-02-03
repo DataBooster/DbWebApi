@@ -98,7 +98,7 @@ The request JSON should like:
     Notes: current implementation CSV response will only return the first result set if your stored procedure has multiple result sets. It's considering to allow client to specify which result set to return in future releases.  
 
 #### Response body formats  
-1. application/json, text/json  
+##### application/json, text/json  
     Sample:  
 ``` JSON
 {
@@ -130,7 +130,7 @@ The request JSON should like:
 }
 ```
 
-2. application/xml, text/xml  
+##### application/xml, text/xml  
     Sample:
 ``` XML
 <StoredProcedureResponse xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/DbParallel.DataAccess">
@@ -200,10 +200,15 @@ The request JSON should like:
 </StoredProcedureResponse>
 ```
 
-3. text/csv  
-
-
-
+##### text/csv  
+    Sample:
+``` CSV
+COL_1,COL_2,COL_3,COL_4,COL_5
+2015-02-03,3.14159,Hello World1,,0
+2015-02-02,3.14159,,1234567.800099,1
+2015-02-01,3.14159,Hello World3,,2
+2015-01-31,3.14159,,9876541.230091,3
+```
 
 ## NuGet
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
