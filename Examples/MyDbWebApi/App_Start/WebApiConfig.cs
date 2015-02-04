@@ -10,8 +10,9 @@ namespace MyDbWebApi
 		{
 			config.Routes.MapHttpRoute(
 				name: "DbWebApi",
-				routeTemplate: "{sp}",
-				defaults: new { controller = "DbWebApi" }
+				routeTemplate: "{sp}/{ext}",
+				defaults: new { controller = "DbWebApi", ext = RouteParameter.Optional },
+				constraints: new { ext = @"|json|xml|csv" }
 			);
 
 			config.SupportCsvMediaType();
