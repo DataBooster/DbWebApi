@@ -217,7 +217,7 @@ Notes:
 
 >For some systems integration, CSV format is also widely used for data filling. It's mostly waste of human resources to design such SSIS packages one by one, and to maintain such encumbrances for ever. It's time for machine to do such mechanical process, let DbWebApi serve as the machine. No more mechanical designs, no more packages, no more configurations, no more deployments and no more maintenances. Let artificial complexities, dust to dust, nothing to nothing!
 
->CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled. Because of using a push stream, the client will always receive a HTTP 200 OK status without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection.
+>CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled. Because of using a push stream, the client will always receive a HTTP 200 OK status without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection and the client would get a Receive Failure without any detail exception message.
 
 ## NuGet
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
