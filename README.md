@@ -210,6 +210,15 @@ COL_1,COL_2,COL_3,COL_4,COL_5
 2015-01-31,3.14159,,9876541.230091,3
 ```
 
+Notes:  
+> JSON and XML respones are constructed completely in Web API server before sending to the client, so you might  encounter OutOfMemoryException if the client wants to receive huge amounts of data. However, JSON can be sufficient in most application scenarios with its simplicity. And after all, process data as close to where the data physically resides as possible, this is a basic principle of big data processing. (i.e. Simplifying the complexity as early as possible.)  
+
+>For most of Web applications, the final data are for human eyes to read.
+
+>For some systems integration, CSV format is also widely used for data filling. It's mostly waste of human resources to design such SSIS packages one by one, and to maintain such encumbrances for ever. It's time for machine to do such mechanical process, let DbWebApi serve as the machine. No more mechanical designs, no more packages, no more configurations, no more deployments and no more maintenances. Let artificial complexities, dust to dust, nothing to nothing!
+
+>CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled. Because of using a push stream, the client will always receive a HTTP 200 OK status without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection.
+
 ## NuGet
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
 - [DbWebApi for SQL Server](http://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
