@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DbWebApi")]
 [assembly: AssemblyDescription("DataBooster generic Web API for data driven applications. https://github.com/DataBooster/DbWebApi")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DataBooster")]
+[assembly: AssemblyCompany("Abel Cheng")]
 [assembly: AssemblyProduct("DataBooster.DbWebApi")]
 [assembly: AssemblyCopyright("Copyright © Abel Cheng 2015")]
 [assembly: AssemblyTrademark("")]
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.2.0")]
-[assembly: AssemblyFileVersion("1.1.2.0")]
-[assembly: AssemblyInformationalVersion("1.1.2-beta")]
+[assembly: AssemblyVersion("1.1.3.0")]
+[assembly: AssemblyFileVersion("1.1.3.0")]
+[assembly: AssemblyInformationalVersion("1.1.3-beta")]

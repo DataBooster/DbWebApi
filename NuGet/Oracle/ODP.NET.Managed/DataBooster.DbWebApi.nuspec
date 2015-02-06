@@ -6,13 +6,13 @@
 		<title>$title$ for Oracle (use ODP.NET Managed Driver)</title>
 		<authors>$author$</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
-		<licenseUrl>http://dbwebapi.codeplex.com/license</licenseUrl>
+		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
-		<releaseNotes>http://dbwebapi.codeplex.com/releases</releaseNotes>
-		<copyright>Copyright 2015 Abel Cheng and other contributors</copyright>
-		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle ODP.NET Managed Database Stored Procedure DataAccess</tags>
+		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
+		<copyright>Copyright 2015 Abel Cheng</copyright>
+		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle ODP.NET Managed Database Stored Procedure DataAccess JSON XML CSV</tags>
 	</metadata>
 	<files>
 		<file src="..\NuGet\Oracle\ODP.NET.Managed\web.config.transform" target="content" />
