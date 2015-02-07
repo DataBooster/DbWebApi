@@ -6,7 +6,7 @@ DbWebApi is a .Net library that implement an entirely generic Web API for data-d
 
 ### What are the benefits of DbWebApi?
 
-- In data-driven applications area, there are a large number of scenarios without substantial logic in data access web services, however they wasted a lot of our efforts on very boring data moving coding or configurations, we've had enough of it. Since now on, most of thus repetitive works should be dumped onto DbWebApi.
+- In data-driven applications area, there are a large number of scenarios without substantial logic in data access web services, however they wasted a lot of our efforts on very boring data moving coding or configurations, we've had enough of it. Since now on, most of thus repetitive works can be dumped onto DbWebApi.
 - DbWebApi can coexist within your existing ASP.NET Web API, as a supplementary service to reduce new boring manual works for most common of application scenarios. DbWebApi does not attempt to replace any existing methods or cover much specific application scenarios.
 
 ## Usage
@@ -32,7 +32,7 @@ namespace SampleDbWebApi.Controllers
 }
 ```
 That's it!  
-ExecuteDbApi is an extension method to ApiController provided by DbWebApi library.
+ExecuteDbApi is the extension method to ApiController.
 ``` CSharp
 public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
                                                string sp, IDictionary<string, object> parameters)
@@ -51,7 +51,7 @@ public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
 #### Client Request  
 ##### Url:  
 As registered in your WebApiConfig Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
--- Input Parameters:  
+##### Input Parameters:  
 Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
 For example, a SQL Server Stored Procedure:  
 ``` SQL
@@ -214,7 +214,24 @@ Notes:
 
 >For some systems integration, CSV format is also widely used for data filling. It's mostly waste of human resources to design such SSIS packages one by one, and to maintain such encumbrances for ever. It's time for machine to do such mechanical process, let DbWebApi serve as the machine. No more mechanical designs, no more packages, no more configurations, no more deployments and no more maintenances. Let artificial complexities, dust to dust, nothing to nothing!
 
->CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled. Because of using a push stream, the client will always receive a HTTP 200 OK status without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection and the client would get a Receive Failure without any detail exception message.
+>CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled.
+
+### Exceptions
+For JSON and XML responses, detail exception will be encapsulated into HttpResponseMessage with HTTP 500 error status if the Web API service encounters any problems. For the verbosity of errors to show in client side, it depends on your IncludeErrorDetailPolicy in HttpConfiguration. However, because CSV respone uses a push stream, the client side will always receive a HTTP 200 OK header without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection and the client would get a Receive Failure without any detail exception message.
+
+### Permission Control
+The example project shows using an authorization filter [DbWebApiAuthorize] to restrict which user can execute which stored procedure, that will integrate with your own implementation of permissions checking.
+``` CSharp
+    public class MyDbWebApiAuthorization : IDbWebApiAuthorization
+    {
+        public bool IsAuthorized(string userName, string storedProcedure)
+        {
+            // TO DO, to implementate your own authorization logic
+            return true;	// If allow permission
+            return false;	// If deny permission
+        }
+    }
+```
 
 ## NuGet
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
@@ -228,6 +245,6 @@ To switch above from one NuGet package to another NuGet Package, simply uninstal
 
 ## Examples
 
-Please refer to example ASP.NET MVC 4 Web Application - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Examples/MyDbWebApi
+Please refer to example project - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Examples/MyDbWebApi
 
-The example project also requires Visual Studio 2010 or above.
+The example project also requires Visual Studio 2010 or above with ASP.NET MVC 4 installed.
