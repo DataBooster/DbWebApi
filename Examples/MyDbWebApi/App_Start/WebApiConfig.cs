@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using DataBooster.DbWebApi;
 
 namespace MyDbWebApi
@@ -12,11 +11,10 @@ namespace MyDbWebApi
 				name: "DbWebApi",
 				routeTemplate: "{sp}/{ext}",
 				defaults: new { controller = "DbWebApi", ext = RouteParameter.Optional },
-				constraints: new { ext = @"|json|xml|csv" }
+				constraints: new { ext = @"|json|xml|csv|xlsx" }
 			);
 
-			config.SupportCsvMediaType();
-			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
+			config.RegisterDbWebApi();
 		}
 	}
 }

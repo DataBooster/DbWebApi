@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace DataBooster.DbWebApi.Csv
 {
-	class CsvFormatPlug : IFormatPlug
+	public class CsvFormatPlug : IFormatPlug
 	{
 		private readonly MediaTypeHeaderValue _DefaultMediaType;
 		private readonly MediaTypeHeaderValue[] _SupportedMediaTypes;

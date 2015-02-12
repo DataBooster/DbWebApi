@@ -12,6 +12,8 @@ using System.Web.Http;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DbParallel.DataAccess;
+using DataBooster.DbWebApi.Csv;
+using DataBooster.DbWebApi.Excel;
 
 namespace DataBooster.DbWebApi
 {
@@ -26,6 +28,13 @@ namespace DataBooster.DbWebApi
 		{
 			_FormatPlugs = new Collection<IFormatPlug>();
 			_PseudoContentNegotiator = new PseudoContentNegotiator();
+		}
+
+		public static void RegisterDbWebApi(this HttpConfiguration config)
+		{
+			config.AddFormatPlug(new CsvFormatPlug());
+			config.AddFormatPlug(new XlsxFormatPlug());
+			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
 		}
 
 		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = DefaultQueryStringMediaTypeParameterName)
@@ -106,7 +115,7 @@ namespace DataBooster.DbWebApi
 				return null;
 
 			foreach (IFormatPlug formatPlug in _FormatPlugs)
-				if (formatPlug.DefaultMediaType == mediaType || formatPlug.SupportedMediaTypes.Contains(mediaType))
+				if (formatPlug.DefaultMediaType.Equals(mediaType) || formatPlug.SupportedMediaTypes.Contains(mediaType))
 					return formatPlug;
 
 			foreach (IFormatPlug formatPlug in _FormatPlugs)
