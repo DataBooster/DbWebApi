@@ -2,43 +2,64 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.IO;
+using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
 using System.Web.Http;
-using System.Linq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi
 {
 	public static class WebApiExtensions
 	{
-		const string CsvMediaTypeString = "text/csv";
-		private static readonly MediaTypeHeaderValue CsvMediaType;
+		public const string DefaultQueryStringMediaTypeParameterName = "format";
+		private static Collection<IFormatPlug> _FormatPlugs;
+		private static PseudoMediaTypeFormatter _PseudoFormatter;
+		private static PseudoContentNegotiator _PseudoContentNegotiator;
 
 		static WebApiExtensions()
 		{
-			CsvMediaType = new MediaTypeHeaderValue(CsvMediaTypeString) { CharSet = "utf-8" };
+			_FormatPlugs = new Collection<IFormatPlug>();
+			_PseudoContentNegotiator = new PseudoContentNegotiator();
 		}
 
-		public static void SupportCsvMediaType(this HttpConfiguration config, string queryStringParameterName = "format")
+		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = DefaultQueryStringMediaTypeParameterName)
 		{
-			MediaTypeFormatter mediaTypeFormatter = config.Formatters.JsonFormatter;
+			if (formatPlug == null)
+				throw new ArgumentNullException("formatPlug");
 
-			mediaTypeFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
-
-			if (config.Formatters.XmlFormatter != null)
+			if (_FormatPlugs.Count == 0)
 			{
-				mediaTypeFormatter = config.Formatters.XmlFormatter;
-				mediaTypeFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
-			}
+				config.SupportMediaTypeShortMapping(queryStringParameterName);
 
-			mediaTypeFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(CsvMediaTypeString));
-			mediaTypeFormatter.AddMediaTypeMapping("csv", CsvMediaType, queryStringParameterName);
+				_PseudoFormatter = new PseudoMediaTypeFormatter();
+				config.Formatters.Add(_PseudoFormatter);
+			}
+			else
+				if (_FormatPlugs.Contains(formatPlug))
+					return;
+
+			_FormatPlugs.Add(formatPlug);
+
+			if (!_PseudoFormatter.SupportedMediaTypes.Contains(formatPlug.DefaultMediaType))
+				_PseudoFormatter.SupportedMediaTypes.Add(formatPlug.DefaultMediaType);
+
+			foreach (var mediaType in formatPlug.SupportedMediaTypes)
+				if (!_PseudoFormatter.SupportedMediaTypes.Contains(mediaType))
+					_PseudoFormatter.SupportedMediaTypes.Add(mediaType);
+
+			_PseudoFormatter.AddMediaTypeMapping(formatPlug.FormatShortName, formatPlug.DefaultMediaType, queryStringParameterName);
+		}
+
+		public static void SupportMediaTypeShortMapping(this HttpConfiguration config, string queryStringParameterName = DefaultQueryStringMediaTypeParameterName)
+		{
+			config.Formatters.JsonFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
+			config.Formatters.XmlFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
 		}
 
 		private static void AddMediaTypeMapping(this MediaTypeFormatter mediaTypeFormatter, string type, MediaTypeHeaderValue mediaType, string queryStringParameterName)
@@ -65,54 +86,53 @@ namespace DataBooster.DbWebApi
 			return false;
 		}
 
-		internal static MediaTypeHeaderValue NegotiateMediaType(this HttpRequestMessage request)
+		internal static ContentNegotiationResult Negotiate(this HttpRequestMessage request)
 		{
 			HttpConfiguration configuration = request.GetConfiguration();
 			IContentNegotiator contentNegotiator = configuration.Services.GetContentNegotiator();
 			IEnumerable<MediaTypeFormatter> formatters = configuration.Formatters;
-			ContentNegotiationResult result = contentNegotiator.Negotiate(typeof(StoredProcedureResponse), request, formatters);
 
-			return (result == null) ? null : result.MediaType;
+			return contentNegotiator.Negotiate(typeof(StoredProcedureResponse), request, formatters);
+		}
+
+		internal static Encoding NegotiateEncoding(this HttpRequestMessage request, MediaTypeFormatter negotiatedFormatter)
+		{
+			return (negotiatedFormatter == null) ? null : _PseudoContentNegotiator.NegotiateEncoding(request, negotiatedFormatter);
+		}
+
+		private static IFormatPlug MatchFormatPlug(MediaTypeHeaderValue mediaType)
+		{
+			if (mediaType == null)
+				return null;
+
+			foreach (IFormatPlug formatPlug in _FormatPlugs)
+				if (formatPlug.DefaultMediaType == mediaType || formatPlug.SupportedMediaTypes.Contains(mediaType))
+					return formatPlug;
+
+			foreach (IFormatPlug formatPlug in _FormatPlugs)
+				if (formatPlug.DefaultMediaType.MediaType == mediaType.MediaType || formatPlug.SupportedMediaTypes.Any(m => m.MediaType == mediaType.MediaType))
+					return formatPlug;
+
+			return null;
 		}
 
 		public static HttpResponseMessage ExecuteDbApi(this ApiController apiController, string sp, IDictionary<string, object> parameters)
 		{
-			var mediaType = apiController.Request.NegotiateMediaType();
+			var negotiationResult = apiController.Request.Negotiate();
 
-			if (mediaType != null && mediaType.MediaType == CsvMediaTypeString)
+			if (negotiationResult != null && negotiationResult.Formatter is PseudoMediaTypeFormatter)
 			{
-				HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
+				Encoding negotiatedEncoding = apiController.Request.NegotiateEncoding((negotiationResult == null) ? null : negotiationResult.Formatter);
+				IFormatPlug formatPlug = MatchFormatPlug(negotiationResult.MediaType);
 
-				csvResponse.Content = new PushStreamContent((stream, httpContent, transportContext) =>
-				{
-					StreamWriter textWriter = new StreamWriter(stream, new UTF8Encoding());
-
-					using (DbContext dbContext = new DbContext())
-					{
-						dbContext.ExecuteDbApi_CSV(sp, parameters, textWriter);
-					}
-
-					stream.Close();
-				}, CsvMediaType);
-
-				csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = "[save_as].csv" };
-
-				return csvResponse;
+				if (formatPlug != null)
+					return formatPlug.Respond(apiController, sp, parameters, negotiationResult.MediaType, negotiatedEncoding);
 			}
-			else
+
+			using (DbContext dbContext = new DbContext())
 			{
-				try
-				{
-					using (DbContext dbContext = new DbContext())
-					{
-						return apiController.Request.CreateResponse(HttpStatusCode.OK,
-							dbContext.ExecuteDbApi(sp, parameters));
-					}
-				}
-				catch (Exception e)
-				{
-					return apiController.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
-				}
+				return apiController.Request.CreateResponse(HttpStatusCode.OK,
+					dbContext.ExecuteDbApi(sp, parameters));
 			}
 		}
 	}

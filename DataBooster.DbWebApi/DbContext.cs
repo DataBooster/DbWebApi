@@ -2,12 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.IO;
 using System.Data.Common;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
 using DataBooster.DbWebApi.DataAccess;
-using DataBooster.DbWebApi.Csv;
 
 namespace DataBooster.DbWebApi
 {
@@ -30,31 +28,18 @@ namespace DataBooster.DbWebApi
 			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters));
 		}
 
-		public void ExecuteDbApi_CSV(string sp, IDictionary<string, object> parameters, TextWriter textWriter)
+		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, Func<int, bool> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, bool exportOnlyOneResultSet = false, bool bulkRead = false)
 		{
-			CsvExporter csvExporter = new CsvExporter(textWriter);
+			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters),
+				exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag,
+				outputParametersContainer, exportOnlyOneResultSet, bulkRead);
+		}
 
-			_DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters), true, null,
-				reader =>
-				{
-					string[] headers = new string[reader.VisibleFieldCount];
-
-					for (int i = 0; i < headers.Length; i++)
-						headers[i] = reader.GetName(i);
-
-					csvExporter.WriteHeader(headers);
-				},
-				reader =>
-				{
-					object[] values = new object[reader.VisibleFieldCount];
-
-					reader.GetValues(values);
-
-					csvExporter.WriteRow(values);
-				},
-				null, null);
-
-			textWriter.Flush();
+		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, bool exportFirstResultSetOnly, Action<int> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, bool bulkRead = false)
+		{
+			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters),
+				exportFirstResultSetOnly, exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag,
+				outputParametersContainer, bulkRead);
 		}
 
 		#region IDisposable Members
