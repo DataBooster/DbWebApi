@@ -17,7 +17,7 @@ namespace DataBooster.DbWebApi.Csv
 
 		public CsvFormatPlug()
 		{
-			_DefaultMediaType = new MediaTypeHeaderValue("text/csv") { CharSet = "utf-8" };
+			_DefaultMediaType = new MediaTypeHeaderValue("text/csv");
 			_SupportedMediaTypes = new MediaTypeHeaderValue[] { _DefaultMediaType };
 		}
 

@@ -16,7 +16,7 @@ namespace DataBooster.DbWebApi.Excel
 
 		public XlsxFormatPlug()
 		{
-			_DefaultMediaType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { CharSet = "utf-8" };
+			_DefaultMediaType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			_SupportedMediaTypes = new MediaTypeHeaderValue[] { _DefaultMediaType,
 				new MediaTypeHeaderValue("application/ms-excel"), new MediaTypeHeaderValue("application/xlsx") };
 		}
