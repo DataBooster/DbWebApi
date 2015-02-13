@@ -28,18 +28,9 @@ namespace DataBooster.DbWebApi
 			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters));
 		}
 
-		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, Func<int, bool> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, bool exportOnlyOneResultSet = false, bool bulkRead = false)
+		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, Action<int> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, int[] resultSetChoices = null, bool bulkRead = false)
 		{
-			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters),
-				exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag,
-				outputParametersContainer, exportOnlyOneResultSet, bulkRead);
-		}
-
-		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, bool exportFirstResultSetOnly, Action<int> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, bool bulkRead = false)
-		{
-			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters),
-				exportFirstResultSetOnly, exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag,
-				outputParametersContainer, bulkRead);
+			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
 		}
 
 		#region IDisposable Members

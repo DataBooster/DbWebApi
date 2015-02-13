@@ -43,8 +43,11 @@
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\..\packages\CsvHelper.2.10.0\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.3.0\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.1.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.1.8-beta\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="DbParallel.DataAccess, Version=1.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.5.0\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
@@ -157,12 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DataBooster.DbWebApi\DataBooster.DbWebApi.csproj">
-      <Project>{37F01AC2-C486-4E32-838C-E0F23BE16B5A}</Project>
-      <Name>DataBooster.DbWebApi</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

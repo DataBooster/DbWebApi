@@ -47,7 +47,7 @@ namespace DataBooster.DbWebApi.Excel
 
 			using (DbContext dbContext = new DbContext())
 			{
-				dbContext.ExecuteDbApi(sp, parameters, false, rs =>
+				dbContext.ExecuteDbApi(sp, parameters, rs =>
 					{
 						currentWorksheet = workbook.AddWorksheet(string.Format("Sheet{0}", rs + 1));
 					},
@@ -62,7 +62,7 @@ namespace DataBooster.DbWebApi.Excel
 						if (currentWorksheet != null)
 							currentWorksheet.Cell(2, 1).Value = rows;
 					},
-					null, null, true);
+					null, null, null, true);
 			}
 
 			// TBD: To find a more efficient way later

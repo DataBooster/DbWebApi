@@ -49,7 +49,7 @@ namespace DataBooster.DbWebApi.Csv
 				{
 					CsvExporter csvExporter = new CsvExporter(textWriter);
 
-					dbContext.ExecuteDbApi(sp, parameters, true, null,
+					dbContext.ExecuteDbApi(sp, parameters, null,
 						readHeader =>
 						{
 							string[] headers = new string[readHeader.VisibleFieldCount];
@@ -67,7 +67,7 @@ namespace DataBooster.DbWebApi.Csv
 
 							csvExporter.WriteRow(values);
 						},
-						null, null);
+						null, null, new int[] {0});
 
 					textWriter.Flush();
 				}
