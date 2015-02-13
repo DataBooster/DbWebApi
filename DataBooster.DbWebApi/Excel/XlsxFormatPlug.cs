@@ -49,33 +49,33 @@ namespace DataBooster.DbWebApi.Excel
 			{
 				dbContext.ExecuteDbApi(sp, parameters, false, rs =>
 					{
-						currentWorksheet = workbook.AddWorksheet(string.Format("Sheet{0}", rs));
+						currentWorksheet = workbook.AddWorksheet(string.Format("Sheet{0}", rs + 1));
 					},
 					header =>
 					{
 						if (currentWorksheet != null)
 							for (int col = 0; col < header.VisibleFieldCount; col++)
-								currentWorksheet.Cell(1, col + 1).SetValue(header.GetName(col));
+								currentWorksheet.Cell(1, col + 1).SetValue(header.GetName(col)).Style.Font.Bold = true;
 					},
 					rows =>
 					{
 						if (currentWorksheet != null)
-							currentWorksheet.Cell(2, 1).SetValue(rows);
+							currentWorksheet.Cell(2, 1).Value = rows;
 					},
 					null, null, true);
 			}
 
+			// TBD: To find a more efficient way later
 			MemoryStream memoryStream = new MemoryStream();
 			workbook.SaveAs(memoryStream);
 			memoryStream.Seek(0, SeekOrigin.Begin);
-			csvResponse.Content = new StreamContent(memoryStream);
-			csvResponse.Content.Headers.ContentLength = memoryStream.Length;
 
+			csvResponse.Content = new StreamContent(memoryStream);
+			csvResponse.Content.Headers.ContentType = negotiatedMediaType;
+			csvResponse.Content.Headers.ContentLength = memoryStream.Length;
 			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = "[save_as]." + FormatShortName };
 
 			return csvResponse;
 		}
 	}
-
-
 }
