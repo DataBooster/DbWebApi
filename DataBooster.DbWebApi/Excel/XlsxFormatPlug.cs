@@ -42,11 +42,13 @@ namespace DataBooster.DbWebApi.Excel
 			MediaTypeHeaderValue negotiatedMediaType, Encoding negotiatedEncoding)
 		{
 			HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
-			XLWorkbook workbook = new XLWorkbook();
-			IXLWorksheet currentWorksheet = null;
+			MemoryStream memoryStream = new MemoryStream();	// TBD: To find a more efficient way later
 
+			using (XLWorkbook workbook = new XLWorkbook())
 			using (DbContext dbContext = new DbContext())
 			{
+				IXLWorksheet currentWorksheet = null;
+
 				dbContext.ExecuteDbApi(sp, parameters, rs =>
 					{
 						currentWorksheet = workbook.AddWorksheet(string.Format("Sheet{0}", rs + 1));
@@ -63,12 +65,10 @@ namespace DataBooster.DbWebApi.Excel
 							currentWorksheet.Cell(2, 1).Value = rows;
 					},
 					null, null, null, true);
-			}
 
-			// TBD: To find a more efficient way later
-			MemoryStream memoryStream = new MemoryStream();
-			workbook.SaveAs(memoryStream);
-			memoryStream.Seek(0, SeekOrigin.Begin);
+				workbook.SaveAs(memoryStream);
+				memoryStream.Seek(0, SeekOrigin.Begin);
+			}
 
 			csvResponse.Content = new StreamContent(memoryStream);
 			csvResponse.Content.Headers.ContentType = negotiatedMediaType;
