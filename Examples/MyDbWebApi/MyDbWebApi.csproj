@@ -46,8 +46,9 @@
     <Reference Include="DataBooster.DbWebApi, Version=1.1.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.1.8-beta\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.5.0\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.7.5.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.5.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
