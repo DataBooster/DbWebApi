@@ -125,6 +125,13 @@ namespace DataBooster.DbWebApi
 			return null;
 		}
 
+		/// <summary>
+		/// ExecuteDbApi is the DbWebApi extension method to ApiController, 
+		/// </summary>
+		/// <param name="apiController">Your ApiController to invoke this extension method</param>
+		/// <param name="sp">Specifies the fully qualified name of database stored procedure or function</param>
+		/// <param name="parameters">Specifies required parameters as name-value pairs</param>
+		/// <returns>A complete HttpResponseMessage contains result data returned by the database.</returns>
 		public static HttpResponseMessage ExecuteDbApi(this ApiController apiController, string sp, IDictionary<string, object> parameters)
 		{
 			var negotiationResult = apiController.Request.Negotiate();
