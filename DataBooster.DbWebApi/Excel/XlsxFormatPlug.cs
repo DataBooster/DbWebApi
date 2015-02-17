@@ -64,7 +64,11 @@ namespace DataBooster.DbWebApi.Excel
 						if (currentWorksheet != null)
 							currentWorksheet.Cell(2, 1).Value = rows;
 					},
-					null, null, null, true);
+					foot =>
+					{
+						if (currentWorksheet != null)
+							currentWorksheet.Columns().AdjustToContents();
+					}, null, null, true);
 
 				workbook.SaveAs(memoryStream);
 				memoryStream.Seek(0, SeekOrigin.Begin);
