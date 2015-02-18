@@ -46,7 +46,7 @@ namespace DataBooster.DbWebApi
 			{
 				config.SupportMediaTypeShortMapping(queryStringParameterName);
 
-				_PseudoFormatter = new PseudoMediaTypeFormatter();
+				_PseudoFormatter = new PseudoMediaTypeFormatter(config.Formatters.JsonFormatter);
 				config.Formatters.Add(_PseudoFormatter);
 			}
 			else
@@ -147,9 +147,66 @@ namespace DataBooster.DbWebApi
 
 			using (DbContext dbContext = new DbContext())
 			{
-				return apiController.Request.CreateResponse(HttpStatusCode.OK,
-					dbContext.ExecuteDbApi(sp, parameters));
+				return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
 			}
+		}
+
+		public static Dictionary<string, string> GetQueryStringDictionary(this HttpRequestMessage request)
+		{
+			if (request == null)
+				return null;
+
+			var queryNameValuePairs = request.GetQueryNameValuePairs();
+			if (queryNameValuePairs == null)
+				return null;
+
+			Dictionary<string, string> queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+			string strName, strValue;
+
+			foreach (var pair in queryNameValuePairs)
+				if (pair.Value != null)
+				{
+					strName = pair.Key.Trim();
+					strValue = pair.Value.Trim();
+
+					if (strName.Length > 0 && strValue.Length > 0)
+						queryStrings[strName] = strValue;
+				}
+
+			return queryStrings;
+		}
+
+		internal static string GetQueryFileName(this Dictionary<string, string> queryStrings, string queryName, string filenameExtension)
+		{
+			if (queryStrings != null && queryStrings.Count > 0)
+			{
+				string queryFileName;
+
+				if (queryStrings.TryGetValue(queryName, out queryFileName))
+				{
+					if (queryFileName[0] == '.' || queryFileName[0] == '"')
+						queryFileName = queryFileName.TrimStart('.', '"');
+
+					if (queryFileName.Length > 0 && queryFileName[queryFileName.Length - 1] == '"')
+						queryFileName = queryFileName.TrimEnd('"');
+
+					if (queryFileName.Length > 0)
+					{
+						int dotPos = queryFileName.LastIndexOf('.');
+
+						if (dotPos < 0)
+							return queryFileName + '.' + filenameExtension;
+
+						if (dotPos > 0)
+							if (dotPos == queryFileName.Length - 1)
+								return queryFileName + filenameExtension;
+							else
+								return queryFileName;
+					}
+				}
+			}
+
+			return "[save_as]." + filenameExtension;
 		}
 	}
 }

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="DataBooster.DbWebApi.Csv.CsvDateTimeConverter">
-    <Position X="6.75" Y="0.5" Width="2" />
+    <Position X="7.75" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Csv\CsvDateTimeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.DbContext">
-    <Position X="0.5" Y="4.25" Width="2.25" />
+    <Position X="1" Y="5.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
       <FileName>DbContext.cs</FileName>
@@ -16,36 +16,36 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DataBooster.DbWebApi.WebApiExtensions">
-    <Position X="0.5" Y="0.5" Width="2.25" />
+    <Position X="0.5" Y="0.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>ggAAEAIAAAAAAAAEAAAAAgQAAAAAAAAAACAAAAAQAAg=</HashCode>
+      <HashCode>ggIAEAIAAAAAAAAECAAAAgQAAAAgAAABACAAAQAQAAg=</HashCode>
       <FileName>WebApiExtensions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.DbWebApiOptions">
-    <Position X="3.25" Y="0.5" Width="2.75" />
+    <Position X="4.25" Y="0.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAAAAAAAACAAIAAAAAIAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DbWebApiOptions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.Csv.CsvExporter">
-    <Position X="7" Y="2.25" Width="1.5" />
+    <Position X="8" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAgAAAAAAA=</HashCode>
       <FileName>Csv\CsvExporter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.Csv.CsvFormatPlug">
-    <Position X="6.75" Y="4.75" Width="2" />
+    <Position X="7.75" Y="4.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAEAAACAAAQAAAAAAAAAAAIgAABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAEABACAAAQAAAAAAAAAAAIgAABAAAA=</HashCode>
       <FileName>Csv\CsvFormatPlug.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DataBooster.DbWebApi.Excel.XlsxFormatPlug">
-    <Position X="9.5" Y="4.75" Width="2" />
+    <Position X="10.5" Y="4.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEAAACAAAQAAAAAAAAAAAIgAABAAAA=</HashCode>
       <FileName>Excel\XlsxFormatPlug.cs</FileName>
@@ -53,28 +53,28 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DataBooster.DbWebApi.PseudoMediaTypeFormatter">
-    <Position X="0.5" Y="6.75" Width="2.25" />
+    <Position X="1" Y="8" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAEEAAAA=</HashCode>
       <FileName>PseudoMediaTypeFormatter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.PseudoContentNegotiator">
-    <Position X="3.5" Y="7.25" Width="2" />
+    <Position X="4.5" Y="7.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PseudoContentNegotiator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="DataBooster.DbWebApi.IDbWebApiAuthorization">
-    <Position X="3.5" Y="3.25" Width="2" />
+    <Position X="4.5" Y="3.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>IDbWebApiAuthorization.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="DataBooster.DbWebApi.IFormatPlug">
-    <Position X="3.5" Y="4.75" Width="2" />
+    <Position X="4.5" Y="4.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEAAAAAAAQAAAAAAAAAAAIAAABAAAA=</HashCode>
       <FileName>IFormatPlug.cs</FileName>

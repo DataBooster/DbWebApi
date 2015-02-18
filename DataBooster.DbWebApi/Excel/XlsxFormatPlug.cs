@@ -42,6 +42,7 @@ namespace DataBooster.DbWebApi.Excel
 			MediaTypeHeaderValue negotiatedMediaType, Encoding negotiatedEncoding)
 		{
 			HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
+			Dictionary<string, string> queryStrings = apiController.Request.GetQueryStringDictionary();
 			MemoryStream memoryStream = new MemoryStream();	// TBD: To find a more efficient way later
 
 			using (XLWorkbook workbook = new XLWorkbook())
@@ -77,7 +78,7 @@ namespace DataBooster.DbWebApi.Excel
 			csvResponse.Content = new StreamContent(memoryStream);
 			csvResponse.Content.Headers.ContentType = negotiatedMediaType;
 			csvResponse.Content.Headers.ContentLength = memoryStream.Length;
-			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = "[save_as]." + FormatShortName };
+			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName("FileName", FormatShortName) };
 
 			return csvResponse;
 		}

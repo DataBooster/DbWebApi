@@ -36,10 +36,31 @@ namespace DataBooster.DbWebApi.Csv
 			get { return "csv"; }
 		}
 
+		private int GetQueryResultSetIndex(Dictionary<string, string> queryStrings, string queryName)
+		{
+			if (queryStrings == null || queryStrings.Count == 0)
+				return 0;
+
+			string queryResultSet;
+
+			if (queryStrings.TryGetValue(queryName, out queryResultSet))
+			{
+				int resultSetIndex;
+
+				if (int.TryParse(queryResultSet, out resultSetIndex))
+					if (resultSetIndex > 0 && resultSetIndex < 1024)
+						return resultSetIndex;
+			}
+
+			return 0;
+		}
+
 		public HttpResponseMessage Respond(ApiController apiController, string sp, IDictionary<string, object> parameters,
 			MediaTypeHeaderValue negotiatedMediaType, Encoding negotiatedEncoding)
 		{
 			HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
+			Dictionary<string, string> queryStrings = apiController.Request.GetQueryStringDictionary();
+			int[] resultSetChoices = new int[] { GetQueryResultSetIndex(queryStrings, "ResultSet") };
 
 			csvResponse.Content = new PushStreamContent((stream, httpContent, transportContext) =>
 			{
@@ -67,7 +88,7 @@ namespace DataBooster.DbWebApi.Csv
 
 							csvExporter.WriteRow(values);
 						},
-						null, null, new int[] {0});
+						null, null, resultSetChoices);
 
 					textWriter.Flush();
 				}
@@ -75,7 +96,7 @@ namespace DataBooster.DbWebApi.Csv
 				stream.Close();
 			}, negotiatedMediaType ?? _DefaultMediaType);
 
-			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = "[save_as]." + FormatShortName };
+			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName("FileName", FormatShortName) };
 
 			return csvResponse;
 		}

@@ -15,6 +15,7 @@ namespace MyDbWebApi
 			);
 
 			config.RegisterDbWebApi();
+		//	config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Default;
 		}
 	}
 }
