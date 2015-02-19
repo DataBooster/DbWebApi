@@ -2,7 +2,7 @@
 
 ### What is it?
 
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for web clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit the first result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
+DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for web clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
@@ -81,6 +81,7 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=json)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)  
+
 2. XML  
     Specify in request header:  
     Accept: application/xml  
@@ -90,6 +91,7 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xml)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xml)  
+
 3. xlsx (Excel 2007/2010)  
     Specify in request header:  
     Accept: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet  
@@ -101,6 +103,8 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xlsx)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)  
+    Notes: Since xlsx content presents as aattachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
+
 4. CSV
     Specify in request header:  
     Accept: text/csv  
@@ -108,8 +112,9 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=csv)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/csv)  
-    Notes: current implementation CSV response will only return the first result set if your stored procedure has multiple result sets. It's considering to allow client to specify which result set to return in future releases.  
-5. Other MediaTypes
+    Notes: CSV response will only return the first (or one specified zero indexed result set in query string: ResultSet=i) result set if your stored procedure has multiple result sets. Since CSV content presents as aattachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].csv).  
+
+5. Other MediaTypes  
     To support other MediaType, you can create a new class that implements the interface **IFormatPlug**, and register it in your HttpConfiguration. Just like following CSV and xlsx did:
 ``` CSharp
     public static void RegisterDbWebApi(this HttpConfiguration config)
