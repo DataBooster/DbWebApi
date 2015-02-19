@@ -103,7 +103,7 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xlsx)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)  
-    Notes: Since xlsx content presents as a attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
+    Notes: Since xlsx content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
 
 4. CSV
     Specify in request header:  
@@ -112,7 +112,7 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=csv)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/csv)  
-    Notes: CSV response will only return the first (or one specified zero indexed result set in query string: ResultSet=i) result set if your stored procedure has multiple result sets. Since CSV content presents as a attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].csv).  
+    Notes: CSV response will only return the first (or one specified zero indexed result set in query string: ResultSet=i) result set if your stored procedure has multiple result sets. Since CSV content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].csv).  
 
 5. Other MediaTypes  
     To support other MediaType, you can create a new class that implements the interface **IFormatPlug**, and register it in your HttpConfiguration. Just like following CSV and xlsx did:
