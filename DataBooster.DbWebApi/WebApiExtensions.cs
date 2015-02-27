@@ -147,7 +147,10 @@ namespace DataBooster.DbWebApi
 
 			using (DbContext dbContext = new DbContext())
 			{
-				return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
+				if (negotiationResult != null && negotiationResult.Formatter is XmlMediaTypeFormatter)
+					return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
+				else
+					return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
 			}
 		}
 
