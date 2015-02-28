@@ -170,66 +170,66 @@ The request JSON should like:
 ##### application/xml, text/xml  
     Sample:
 ``` XML
-<StoredProcedureResponse xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/DbParallel.DataAccess">
+<StoredProcedureResponse xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/DbParallel.DataAccess">
   <OutputParameters>
-    <outRuleDesc xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">This is a test output parameter value.</outRuleDesc>
-    <outSumTotal xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">888888.88</outSumTotal>
+    <outRuleDesc i:type="x:string" xmlns="">This is a test output parameter value.</outRuleDesc>
+    <outSumTotal i:type="x:decimal" xmlns="">888888.88</outSumTotal>
     <outRC1 i:nil="true" xmlns="" />
   </OutputParameters>
   <ResultSets>
     <ArrayOfBindableDynamicObject>
       <BindableDynamicObject>
-        <COL_1 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:dateTime" xmlns="">2015-02-03T00:00:00</COL_1>
-        <COL_2 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">3.14159</COL_2>
-        <COL_3 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">Hello World1</COL_3>
+        <COL_1 i:type="x:dateTime" xmlns="">2015-02-03T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
+        <COL_3 i:type="x:string" xmlns="">Hello World1</COL_3>
         <COL_4 i:nil="true" xmlns=""/>
-        <COL_5 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">0</COL_5>
+        <COL_5 i:type="x:int" xmlns="">0</COL_5>
       </BindableDynamicObject>
       <BindableDynamicObject>
-        <COL_1 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:dateTime" xmlns="">2015-02-02T00:00:00</COL_1>
-        <COL_2 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">3.14159</COL_2>
+        <COL_1 i:type="x:dateTime" xmlns="">2015-02-02T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
         <COL_3 i:nil="true" xmlns=""/>
-        <COL_4 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">1234567.800099</COL_4>
-        <COL_5 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">1</COL_5>
+        <COL_4 i:type="x:decimal" xmlns="">1234567.800099</COL_4>
+        <COL_5 i:type="x:int" xmlns="">1</COL_5>
       </BindableDynamicObject>
       <BindableDynamicObject>
-        <COL_1 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:dateTime" xmlns="">2015-02-01T00:00:00</COL_1>
-        <COL_2 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">3.14159</COL_2>
-        <COL_3 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">Hello World3</COL_3>
+        <COL_1 i:type="x:dateTime" xmlns="">2015-02-01T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
+        <COL_3 i:type="x:string" xmlns="">Hello World3</COL_3>
         <COL_4 i:nil="true" xmlns=""/>
-        <COL_5 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">2</COL_5>
+        <COL_5 i:type="x:int" xmlns="">2</COL_5>
       </BindableDynamicObject>
       <BindableDynamicObject>
-        <COL_1 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:dateTime" xmlns="">2015-01-31T00:00:00</COL_1>
-        <COL_2 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">3.14159</COL_2>
+        <COL_1 i:type="x:dateTime" xmlns="">2015-01-31T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
         <COL_3 i:nil="true" xmlns=""/>
-        <COL_4 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:decimal" xmlns="">9876541.230091</COL_4>
-        <COL_5 xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">3</COL_5>
+        <COL_4 i:type="x:decimal" xmlns="">9876541.230091</COL_4>
+        <COL_5 i:type="x:int" xmlns="">3</COL_5>
       </BindableDynamicObject>
     </ArrayOfBindableDynamicObject>
     <ArrayOfBindableDynamicObject>
       <BindableDynamicObject>
-        <COL_A xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">100</COL_A>
-        <COL_B xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">fooA</COL_B>
-        <COL_C xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">0</COL_C>
+        <COL_A i:type="x:int" xmlns="">100</COL_A>
+        <COL_B i:type="x:string" xmlns="">fooA</COL_B>
+        <COL_C i:type="x:int" xmlns="">0</COL_C>
       </BindableDynamicObject>
       <BindableDynamicObject>
-        <COL_A xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">200</COL_A>
-        <COL_B xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">fooB</COL_B>
+        <COL_A i:type="x:int" xmlns="">200</COL_A>
+        <COL_B i:type="x:string" xmlns="">fooB</COL_B>
         <COL_C i:nil="true" xmlns=""/>
       </BindableDynamicObject>
       <BindableDynamicObject>
-        <COL_A xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">300</COL_A>
-        <COL_B xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">fooC</COL_B>
-        <COL_C xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:int" xmlns="">1</COL_C>
+        <COL_A i:type="x:int" xmlns="">300</COL_A>
+        <COL_B i:type="x:string" xmlns="">fooC</COL_B>
+        <COL_C i:type="x:int" xmlns="">1</COL_C>
       </BindableDynamicObject>
     </ArrayOfBindableDynamicObject>
     <ArrayOfBindableDynamicObject>
       <BindableDynamicObject>
-        <NOTE xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">Test1 for the third result set</NOTE>
+        <NOTE i:type="x:string" xmlns="">Test1 for the third result set</NOTE>
       </BindableDynamicObject>
       <BindableDynamicObject>
-        <NOTE xmlns:d5p1="http://www.w3.org/2001/XMLSchema" i:type="d5p1:string" xmlns="">Test2 for the third result set</NOTE>
+        <NOTE i:type="x:string" xmlns="">Test2 for the third result set</NOTE>
       </BindableDynamicObject>
     </ArrayOfBindableDynamicObject>
   </ResultSets>
