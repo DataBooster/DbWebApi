@@ -91,7 +91,7 @@ The request JSON should like:
 ```
 ##### Accept Response MediaType:  
 1. JSON (default)  
-    Specify in request heade:  
+    Specify in request header:  
     Accept: application/json  
     or  
     Accept: text/json  
