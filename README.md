@@ -2,25 +2,25 @@
 
 ### What is it?
 
-Access SQL Server or Oracle package, stored procedure or function in this way:  
-http://BaseUrl/fully_qualified_name_of_stored_procedure/mediatype  
+Access SQL Server or Oracle package, stored procedure or function in this way: 
+`http://BaseUrl/fully_qualified_name_of_stored_procedure/mediatype`  
 from any http client. For examples,
 
 **SQL Server**:
-* http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/json
-* http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xml
-* http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xlsx?filename=Rpt2015
-* http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/csv?resultset=0&filename=Rpt2015
+* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/json`
+* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xml`
+* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xlsx?filename=Rpt2015`
+* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/csv?resultset=0&filename=Rpt2015`
 
 **Oracle**:
-* http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/json
-* http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xml
-* http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xlsx?filename=Rpt2015
-* http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/csv?resultset=0&filename=Rpt2015
+* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/json`
+* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xml`
+* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xlsx?filename=Rpt2015`
+* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/csv?resultset=0&filename=Rpt2015`
 
 ***
 
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for web clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
+The DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for http clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
