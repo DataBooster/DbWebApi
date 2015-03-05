@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>DataBooster.DbWebApi.Client.Net</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>$author$</authors>
+		<owners>https://github.com/DataBooster/DbWebApi</owners>
+		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>$description$</description>
+		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
+		<copyright>Copyright 2015 Abel Cheng</copyright>
+		<tags>DbWebApi Client Net40 Web API HttpClient Database JSON XML CSV Excel xlsx</tags>
+	</metadata>
+</package>

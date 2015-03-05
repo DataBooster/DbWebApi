@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DataBooster.DbWebApi.Client")]
-[assembly: AssemblyDescription("DbWebApi .Net Client Library. https://github.com/DataBooster/DbWebApi")]
+[assembly: AssemblyTitle("DbWebApi Client .Net Library")]
+[assembly: AssemblyDescription("DbWebApi .Net(≥ 4.0) Client Library. https://github.com/DataBooster/DbWebApi")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Abel Cheng")]
 [assembly: AssemblyProduct("DataBooster.DbWebApi.Client")]
