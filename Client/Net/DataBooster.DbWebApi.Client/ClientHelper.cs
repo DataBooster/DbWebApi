@@ -2,11 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace DataBooster.DbWebApi.Client
 {
@@ -19,12 +17,7 @@ namespace DataBooster.DbWebApi.Client
 
 		public static Task<DbWebApiResponse> RequestJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
-			return client.RequestJsonAsync(requestUri, inputParameters, CancellationToken.None);
-		}
-
-		public static Task<DbWebApiResponse> RequestJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
-		{
-			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary(), cancellationToken).
+			return client.RequestRawAsync(requestUri, inputParameters).
 				ContinueWith<DbWebApiResponse>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
@@ -32,36 +25,22 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					HttpResponseMessage httpResponse = requestTask.Result;
-					var content = httpResponse.Content;
-					var contentType = content.GetContentType();
-
-					if (contentType != null && contentType.ToLower().EndsWith("/json") == false)
-						throw new HttpRequestException("Response Content-Type is not JSON");
-
-					if (httpResponse.IsSuccessStatusCode)
-						return content.ReadAsAsync<DbWebApiResponse>().Result;
-					else
-					{
-						var errorDictionary = content.ReadAsAsync<HttpErrorClient>().Result;
-
-						if (errorDictionary.Count == 0)
-							throw new HttpRequestException(string.Format("{0} ({1})", (int)httpResponse.StatusCode, httpResponse.ReasonPhrase));
-						else
-							throw new HttpResponseClientException(errorDictionary);
-					}
-				}, cancellationToken);
+					return requestTask.Result.ReadJson();
+				});
 		}
 
-		private static string GetContentType(this HttpContent content)
+		public static Task<DbWebApiResponse> RequestJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
 		{
-			if (content == null)
-				return null;
-			if (content.Headers == null)
-				return null;
-			if (content.Headers.ContentType == null)
-				return null;
-			return content.Headers.ContentType.MediaType;
+			return client.RequestRawAsync(requestUri, inputParameters, cancellationToken).
+				ContinueWith<DbWebApiResponse>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadJson();
+				});
 		}
 
 		public static DbWebApiResponse RequestJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
@@ -86,48 +65,46 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public static Task<Tuple<HttpContentHeaders, Stream>> RequestStreamAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		public static Task<HttpResponseMessage> RequestRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
 		{
-			return client.RequestStreamAsync(requestUri, inputParameters, CancellationToken.None);
+			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary(), cancellationToken);
 		}
 
-		public static Task<Tuple<HttpContentHeaders, Stream>> RequestStreamAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		public static Task<HttpResponseMessage> RequestRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
-			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary(), cancellationToken).
-				ContinueWith<Tuple<HttpContentHeaders, Stream>>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					HttpResponseMessage httpResponse = requestTask.Result;
-					HttpContent content = httpResponse.EnsureSuccessStatusCode().Content;
-
-					return Tuple.Create(content.Headers, content.ReadAsStreamAsync().Result);
-				}, cancellationToken);
+			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary());
 		}
 
-		public static Task<Tuple<HttpContentHeaders, string>> RequestStringAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		public static DbWebApiResponse ReadJson(this HttpResponseMessage httpResponse)
 		{
-			return client.RequestStringAsync(requestUri, inputParameters, CancellationToken.None);
+			var content = httpResponse.Content;
+			var contentType = content.GetContentType();
+
+			if (contentType != null && contentType.ToLower().EndsWith("/json") == false)
+				throw new HttpRequestException("Response Content-Type is not JSON");
+
+			if (httpResponse.IsSuccessStatusCode)
+				return content.ReadAsAsync<DbWebApiResponse>().Result;
+			else
+			{
+				var errorDictionary = content.ReadAsAsync<HttpErrorClient>().Result;
+
+				if (errorDictionary.Count == 0)
+					throw new HttpRequestException(string.Format("{0} ({1})", (int)httpResponse.StatusCode, httpResponse.ReasonPhrase));
+				else
+					throw new HttpResponseClientException(errorDictionary);
+			}
 		}
 
-		public static Task<Tuple<HttpContentHeaders, string>> RequestStringAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		private static string GetContentType(this HttpContent content)
 		{
-			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary(), cancellationToken).
-				ContinueWith<Tuple<HttpContentHeaders, String>>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					HttpResponseMessage httpResponse = requestTask.Result;
-					HttpContent content = httpResponse.EnsureSuccessStatusCode().Content;
-
-					return Tuple.Create(content.Headers, content.ReadAsStringAsync().Result);
-				}, cancellationToken);
+			if (content == null)
+				return null;
+			if (content.Headers == null)
+				return null;
+			if (content.Headers.ContentType == null)
+				return null;
+			return content.Headers.ContentType.MediaType;
 		}
 	}
 }
