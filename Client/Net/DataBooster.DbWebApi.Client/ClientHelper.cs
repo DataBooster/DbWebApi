@@ -15,6 +15,16 @@ namespace DataBooster.DbWebApi.Client
 			return new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
 		}
 
+		public static HttpClient CreateClient(string baseAddress)
+		{
+			HttpClient client = CreateClient();
+
+			if (!string.IsNullOrWhiteSpace(baseAddress))
+				client.BaseAddress = new Uri(baseAddress);
+
+			return client;
+		}
+
 		public static Task<DbWebApiResponse> RequestJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
 			return client.RequestRawAsync(requestUri, inputParameters).
