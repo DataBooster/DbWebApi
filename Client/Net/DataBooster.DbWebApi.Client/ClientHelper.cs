@@ -85,12 +85,13 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				var readTask = content.ReadAsAsync<DbWebApiResponse>();
+				Task<DbWebApiResponse> readTask = content.ReadAsAsync<DbWebApiResponse>();
+				DbWebApiResponse dbWebApiResponse = readTask.Result;
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
 
-				return readTask.Result;
+				return dbWebApiResponse;
 			}
 			else
 			{
