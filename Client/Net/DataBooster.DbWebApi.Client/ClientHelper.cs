@@ -84,7 +84,14 @@ namespace DataBooster.DbWebApi.Client
 				throw new HttpRequestException("Response Content-Type is not JSON");
 
 			if (httpResponse.IsSuccessStatusCode)
-				return content.ReadAsAsync<DbWebApiResponse>().Result;
+			{
+				var readTask = content.ReadAsAsync<DbWebApiResponse>();
+
+				if (readTask.IsFaulted)
+					throw readTask.Exception;
+
+				return readTask.Result;
+			}
 			else
 			{
 				var errorDictionary = content.ReadAsAsync<HttpErrorClient>().Result;
