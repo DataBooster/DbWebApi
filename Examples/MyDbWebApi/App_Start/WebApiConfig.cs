@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using DataBooster.DbWebApi;
+using MyDbWebApi.Handlers;
 
 namespace MyDbWebApi
 {
@@ -18,6 +19,7 @@ namespace MyDbWebApi
 #if DEBUG
 			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 #endif
+			config.MessageHandlers.Add(new CorsHandler());
 		}
 	}
 }

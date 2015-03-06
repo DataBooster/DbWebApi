@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Code based on: https://github.com/ASP-NET-MVC/aspnetwebstack/blob/master/src/System.Web.Http/HttpError.cs
+
+using System;
 using System.Collections.Generic;
 
 namespace DataBooster.DbWebApi.Client

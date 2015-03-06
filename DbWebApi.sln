@@ -61,6 +61,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Client
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2524A6C9-0B54-4334-9817-86CE3FFB5271}"
 	ProjectSection(SolutionItems) = preProject
+		Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec = Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec
 		Client\Net\nupkg\Pack-Client.Net.bat = Client\Net\nupkg\Pack-Client.Net.bat
 	EndProjectSection
 EndProject

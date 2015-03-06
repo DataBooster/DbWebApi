@@ -117,12 +117,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authorization\MyDbWebApiAuthorization.cs" />
+    <Compile Include="Filters\MyDbWebApiAuthorization.cs" />
     <Compile Include="Controllers\DbWebApiController.cs" />
-    <Compile Include="Authorization\DbWebApiAuthorizeAttribute.cs" />
+    <Compile Include="Filters\DbWebApiAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\CorsHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

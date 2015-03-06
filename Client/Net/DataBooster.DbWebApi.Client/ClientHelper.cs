@@ -10,14 +10,17 @@ namespace DataBooster.DbWebApi.Client
 {
 	public static class ClientHelper
 	{
-		public static HttpClient CreateClient()
+		public static HttpClient CreateClient(bool useDefaultCredentials = true)
 		{
-			return new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
+			if (useDefaultCredentials)
+				return new HttpClient(new HttpClientHandler() { UseDefaultCredentials = useDefaultCredentials });
+			else
+				return new HttpClient();
 		}
 
-		public static HttpClient CreateClient(string baseAddress)
+		public static HttpClient CreateClient(string baseAddress, bool useDefaultCredentials = true)
 		{
-			HttpClient client = CreateClient();
+			HttpClient client = CreateClient(useDefaultCredentials);
 
 			if (!string.IsNullOrWhiteSpace(baseAddress))
 				client.BaseAddress = new Uri(baseAddress);
@@ -53,7 +56,7 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public static DbWebApiResponse RequestJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		public static DbWebApiResponse RequestJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters = null)
 		{
 			try
 			{
@@ -73,6 +76,11 @@ namespace DataBooster.DbWebApi.Client
 				else
 					throw;
 			}
+		}
+
+		public static DbWebApiResponse RequestJson(this HttpClient client, string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return client.RequestJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
 		}
 
 		public static Task<HttpResponseMessage> RequestRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
