@@ -11,6 +11,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 using DbParallel.DataAccess;
 using DataBooster.DbWebApi.Csv;
 using DataBooster.DbWebApi.Excel;
@@ -210,6 +211,27 @@ namespace DataBooster.DbWebApi
 			}
 
 			return "[save_as]." + filenameExtension;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="request"></param>
+		/// <param name="parametersFromBody"></param>
+		/// <param name="jsonInput"></param>
+		/// <returns></returns>
+		public static Dictionary<string, object> GatherInputParameters(this HttpRequestMessage request, Dictionary<string, object> parametersFromBody, string jsonInput = "JsonInput")
+		{
+			if (parametersFromBody != null)
+				return parametersFromBody;
+
+			Dictionary<string, string> queryStringDictionary = request.GetQueryStringDictionary();
+			string jsonInputString;
+
+			if (queryStringDictionary.TryGetValue(jsonInput, out jsonInputString))
+				return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonInputString);
+			else
+				return queryStringDictionary.ToDictionary<KeyValuePair<string, string>, string, object>(t => t.Key, t => t.Value as object, StringComparer.OrdinalIgnoreCase);
 		}
 	}
 }
