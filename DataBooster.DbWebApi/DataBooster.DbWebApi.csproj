@@ -48,7 +48,7 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess">
+    <Reference Include="DbParallel.DataAccess, Version=1.7.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DataBooster.SqlServer.1.7.5.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
@@ -99,9 +99,7 @@
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="app.config" />
     <None Include="DbWebApi.cd" />
     <None Include="packages.config" />
   </ItemGroup>

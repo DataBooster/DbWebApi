@@ -11,7 +11,7 @@ namespace MyDbWebApi.Controllers
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")]
 		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
 		{
-			return this.ExecuteDbApi(sp, parameters);
+			return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
 		}
 	}
 }
