@@ -89,6 +89,7 @@
     <Compile Include="DataAccess\MyBizMain.sample.cs" />
     <Compile Include="DbContext.cs" />
     <Compile Include="DbWebApiOptions.cs" />
+    <Compile Include="DeunderscorePropertyNamesContractResolver.cs" />
     <Compile Include="Excel\XlsxFormatPlug.cs" />
     <Compile Include="IDbWebApiAuthorization.cs" />
     <Compile Include="IFormatPlug.cs" />
