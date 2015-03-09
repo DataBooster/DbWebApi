@@ -65,6 +65,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2524A6C9
 		Client\Net\nupkg\Pack-Client.Net.bat = Client\Net\nupkg\Pack-Client.Net.bat
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Js", "Js", "{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{85B148EC-10C1-4109-9072-BEA4F698E9EF}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Js\src\dbwebapi_client.js = Client\Js\src\dbwebapi_client.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2D4600AA-6985-4B27-A317-6757BC0298F1}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Js\nupkg\DataBooster.DbWebApi.Client.JS.nuspec = Client\Js\nupkg\DataBooster.DbWebApi.Client.JS.nuspec
+		Client\Js\nupkg\Pack-Client.JS.bat = Client\Js\nupkg\Pack-Client.JS.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,7 +109,10 @@ Global
 		{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
 		{1C81D605-AADC-4EDE-B99C-60E544105118} = {D3B28B2F-4E2B-4299-B2A7-FC9FBE0273A3}
 		{9C621537-BFDD-4F0C-9308-925AE75320EC} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
 		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219} = {9C621537-BFDD-4F0C-9308-925AE75320EC}
 		{2524A6C9-0B54-4334-9817-86CE3FFB5271} = {9C621537-BFDD-4F0C-9308-925AE75320EC}
+		{85B148EC-10C1-4109-9072-BEA4F698E9EF} = {AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}
+		{2D4600AA-6985-4B27-A317-6757BC0298F1} = {AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}
 	EndGlobalSection
 EndGlobal
