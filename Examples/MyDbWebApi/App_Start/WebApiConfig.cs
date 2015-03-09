@@ -20,6 +20,8 @@ namespace MyDbWebApi
 			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 #endif
 			config.MessageHandlers.Add(new CorsHandler());
+
+			config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DeunderscorePropertyNamesContractResolver();
 		}
 	}
 }

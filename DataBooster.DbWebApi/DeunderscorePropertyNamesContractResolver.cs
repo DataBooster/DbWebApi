@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿// Copyright (c) 2015 Abel Cheng <abelcys@gmail.com> and other contributors.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System.Globalization;
 using Newtonsoft.Json.Serialization;
 
 namespace DataBooster.DbWebApi
@@ -20,8 +23,14 @@ namespace DataBooster.DbWebApi
 		/// <returns>Name of the property.</returns>
 		protected override string ResolvePropertyName(string propertyName)
 		{
-			if (string.IsNullOrEmpty(propertyName) || propertyName.Length == 1)
+			if (string.IsNullOrEmpty(propertyName))
 				return propertyName;
+
+			if (propertyName.Length == 1)
+				if (_CamelCase && char.IsUpper(propertyName[0]))
+					return propertyName.ToLower(CultureInfo.InvariantCulture);
+				else
+					return propertyName;
 
 			char[] pascalChars = new char[propertyName.Length];
 			int cntUpper = 0, cntLower = 0, lenFragment = 0, lenPascal = 0;
@@ -57,10 +66,15 @@ namespace DataBooster.DbWebApi
 			if (lenPascal == 0)
 				return string.Empty;
 			else
-				if (_CamelCase && char.IsUpper(pascalChars[0]))
-					pascalChars[0] = char.ToLower(pascalChars[0], CultureInfo.InvariantCulture);
+				if (_CamelCase)
+				{
+					if (char.IsUpper(pascalChars[0]))
+						pascalChars[0] = char.ToLower(pascalChars[0], CultureInfo.InvariantCulture);
 
-			return (cntUpper > 0 && cntLower > 0) ? propertyName : new string(pascalChars, 0, lenPascal);
+					return new string(pascalChars, 0, lenPascal);
+				}
+				else
+					return (cntUpper > 0 && cntLower > 0) ? propertyName : new string(pascalChars, 0, lenPascal);
 		}
 	}
 }
