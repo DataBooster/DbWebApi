@@ -18,7 +18,7 @@
   <Class Name="DataBooster.DbWebApi.WebApiExtensions">
     <Position X="0.5" Y="0.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>ggIAEAIAAAAAAAAECAAAAgQAAAAgAAABACAAAQAQAAg=</HashCode>
+      <HashCode>ggIAEAIAIAAAAAAECAAAAgQAAAAgAAABACAAAQAQAAg=</HashCode>
       <FileName>WebApiExtensions.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -64,6 +64,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PseudoContentNegotiator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataBooster.DbWebApi.DeunderscorePropertyNamesContractResolver">
+    <Position X="10.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DeunderscorePropertyNamesContractResolver.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="DataBooster.DbWebApi.IDbWebApiAuthorization">

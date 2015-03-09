@@ -10,6 +10,7 @@ namespace DataBooster.DbWebApi.Client
 {
 	public static class ClientHelper
 	{
+		#region CreateClient extension methods
 		public static HttpClient CreateClient(bool useDefaultCredentials = true)
 		{
 			if (useDefaultCredentials)
@@ -27,10 +28,11 @@ namespace DataBooster.DbWebApi.Client
 
 			return client;
 		}
+		#endregion
 
-		public static Task<DbWebApiResponse> RequestJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		public static Task<DbWebApiResponse> ExecDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
-			return client.RequestRawAsync(requestUri, inputParameters).
+			return client.ExecDbRawAsync(requestUri, inputParameters).
 				ContinueWith<DbWebApiResponse>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
@@ -38,13 +40,13 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadJson();
+					return requestTask.Result.ReadDbJson();
 				});
 		}
 
-		public static Task<DbWebApiResponse> RequestJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		public static Task<DbWebApiResponse> ExecDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
 		{
-			return client.RequestRawAsync(requestUri, inputParameters, cancellationToken).
+			return client.ExecDbRawAsync(requestUri, inputParameters, cancellationToken).
 				ContinueWith<DbWebApiResponse>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
@@ -52,15 +54,15 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadJson();
+					return requestTask.Result.ReadDbJson();
 				});
 		}
 
-		public static DbWebApiResponse RequestJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters = null)
+		public static DbWebApiResponse ExecDbAsJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters = null)
 		{
 			try
 			{
-				return client.RequestJsonAsync(requestUri, inputParameters).Result;
+				return client.ExecDbAsJsonAsync(requestUri, inputParameters).Result;
 			}
 			catch (AggregateException ae)
 			{
@@ -78,22 +80,22 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public static DbWebApiResponse RequestJson(this HttpClient client, string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public static DbWebApiResponse ExecDbAsJson(this HttpClient client, string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return client.RequestJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
+			return client.ExecDbAsJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
 		}
 
-		public static Task<HttpResponseMessage> RequestRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		public static Task<HttpResponseMessage> ExecDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
 		{
 			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary(), cancellationToken);
 		}
 
-		public static Task<HttpResponseMessage> RequestRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		public static Task<HttpResponseMessage> ExecDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
 			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary());
 		}
 
-		public static DbWebApiResponse ReadJson(this HttpResponseMessage httpResponse)
+		public static DbWebApiResponse ReadDbJson(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 			var contentType = content.GetContentType();
