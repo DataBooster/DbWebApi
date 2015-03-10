@@ -20,7 +20,7 @@ from any http client. For examples,
 
 ***
 
-The DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for http clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
+DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for web clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
@@ -46,7 +46,7 @@ namespace SampleDbWebApi.Controllers
         [AcceptVerbs("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")]
         public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
         {
-            return this.ExecuteDbApi(sp, parameters);
+            return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
         }
     }
 }
@@ -188,7 +188,7 @@ The request JSON should like:
 ##### application/xml, text/xml  
     Sample:
 ``` XML
-<StoredProcedureResponse xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/DbParallel.DataAccess">
+<ResponseRoot xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/DbParallel.DataAccess">
   <OutputParameters>
     <outRuleDesc i:type="x:string" xmlns="">This is a test output parameter value.</outRuleDesc>
     <outSumTotal i:type="x:decimal" xmlns="">888888.88</outSumTotal>
@@ -252,7 +252,7 @@ The request JSON should like:
     </ArrayOfBindableDynamicObject>
   </ResultSets>
   <ReturnValue i:nil="true" />
-</StoredProcedureResponse>
+</ResponseRoot>
 ```
 
 ##### text/csv  
@@ -291,7 +291,19 @@ The example project shows using an authorization filter [DbWebApiAuthorize] to r
     }
 ```
 
+## Clients
+#### .Net Client
+``` CSharp
+
+```
+
+#### JavaScript Client
+``` CSharp
+
+```
+
 ## NuGet
+#### Server side
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
 - [DbWebApi for SQL Server](http://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
 - [DbWebApi for Oracle (use ODP.NET Managed Driver)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.Managed)
@@ -300,6 +312,9 @@ There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
 
 For-Oracle versions always contain the support for SQL Server. To switch from Oracle to SQL Server, simply change the providerName and connectionString of connectionStrings "DataBooster.DbWebApi.MainConnection" in your web.config.  
 To switch above from one NuGet package to another NuGet Package, simply uninstall one and install another from NuGet Package Manager.
+#### Clients
+- [DbWebApi Client .Net Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net)
+- [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS)
 
 ## Examples
 
