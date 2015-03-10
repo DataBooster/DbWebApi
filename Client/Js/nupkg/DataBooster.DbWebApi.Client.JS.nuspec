@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>DataBooster.DbWebApi.Client.JS</id>
-		<version>1.0.1-alpha</version>
+		<version>1.0.2-alpha</version>
 		<title>DbWebApi Client JavaScript Library</title>
 		<authors>Abel Cheng</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
@@ -12,12 +12,12 @@
 		<description>DbWebApi Client JavaScript (jQuery) Library. https://github.com/DataBooster/DbWebApi </description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
 		<copyright>Copyright 2015 Abel Cheng</copyright>
-		<tags>DbWebApi JavaScript Client jQuery </tags>
+		<tags>DbWebApi JavaScript Client jQuery</tags>
 		<dependencies>
 			<dependency id="jQuery"/>
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\src\dbwebapi_client.js" target="content\Scripts\dbwebapi_client-1.0.1-alpha.js" />
+		<file src="..\src\dbwebapi_client.js" target="content\Scripts\dbwebapi_client-1.0.2-alpha.js" />
 	</files>
 </package>

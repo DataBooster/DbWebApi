@@ -184,6 +184,19 @@ The request JSON should like:
   "ReturnValue":0
 }
 ```
+If your database uses underscore_case naming convention, you can apply DeunderscorePropertyNamesContractResolver to write JSON property names with PascalCase or camelCase.
+``` CShare
+public static class WebApiConfig
+{
+    public static void Register(HttpConfiguration config)
+    {
+        ....
+        config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
+            new DeunderscorePropertyNamesContractResolver();
+    }
+}
+```
+.  
 
 ##### application/xml, text/xml  
     Sample:
@@ -292,15 +305,46 @@ The example project shows using an authorization filter [DbWebApiAuthorize] to r
 ```
 
 ## Clients
-#### .Net Client
+#### .Net Client  
+[DbWebApi Client .Net Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net) can be used to simplify the client call. See following sample:
 ``` CSharp
-
+using DataBooster.DbWebApi.Client;
 ```
-
-#### JavaScript Client
 ``` CSharp
+HttpClient client = ClientHelper.CreateClient("http://dbwebapi.dev.com/oradev/");
 
+// Synchronous call. If need asynchronous call, please use ExecDbAsJsonAsync(..) instead.
+DbWebApiResponse data = client.ExecDbAsJson("test_schema.prj_package.foo",
+    new InputParameterDictionary(new {
+        inDate = new DateTime(2015, 3, 10)
+        //, ... other input parameters, if any.
+    }));
+
+// You can either consume JObject[] (LINQ to JSON) directly or convert to your strong-type business class as below:
+IEnumerable<MyStrongTypeCls> strongTypeObjs = data.ResultSets[0].Select(j => j.ToObject<MyStrongTypeCls>());
 ```
+By default, the _ClientHelper.CreateClient_ uses Windows authentication for the convenience of intranet usage scenarios.
+
+#### JavaScript Client  
+You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
+    Sample:
+``` javascript
+<script type="text/javascript">
+    ....
+    $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
+             '{"inDate":"2015-03-10T00:00:00.000Z"}',
+             function (data) {
+                 // Bind data.ResultSets[0] with some contorls,
+                 // or iterate through each JSON object in data.
+             });
+    ....
+</script>
+```
+The second argument of $.postDb - inputJson can be either a JSON string or a plain object. If it's a plain object, it will be converted by JSON.stringify before sending to the server.  
+By default, the $.postDb sets the internal withCredentials property of the xhrFields object to true so it will pass the user credentials with cross-domain requests.
+
+##### Cross-domain
+
 
 ## NuGet
 #### Server side
