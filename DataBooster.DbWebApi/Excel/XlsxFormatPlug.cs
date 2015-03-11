@@ -48,6 +48,8 @@ namespace DataBooster.DbWebApi.Excel
 			using (XLWorkbook workbook = new XLWorkbook())
 			using (DbContext dbContext = new DbContext())
 			{
+				dbContext.SetNamingConvention(queryStrings);
+
 				IXLWorksheet currentWorksheet = null;
 
 				dbContext.ExecuteDbApi(sp, parameters, rs =>
@@ -78,7 +80,7 @@ namespace DataBooster.DbWebApi.Excel
 			csvResponse.Content = new StreamContent(memoryStream);
 			csvResponse.Content.Headers.ContentType = negotiatedMediaType;
 			csvResponse.Content.Headers.ContentLength = memoryStream.Length;
-			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName("FileName", FormatShortName) };
+			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName(DbWebApiOptions.QueryStringContract.FileNameParameterName, FormatShortName) };
 
 			return csvResponse;
 		}

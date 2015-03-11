@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2015 Abel Cheng <abelcys@gmail.com> and other contributors.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Globalization;
 using Newtonsoft.Json.Serialization;
+using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi
 {
@@ -23,58 +23,7 @@ namespace DataBooster.DbWebApi
 		/// <returns>Name of the property.</returns>
 		protected override string ResolvePropertyName(string propertyName)
 		{
-			if (string.IsNullOrEmpty(propertyName))
-				return propertyName;
-
-			if (propertyName.Length == 1)
-				if (_CamelCase && char.IsUpper(propertyName[0]))
-					return propertyName.ToLower(CultureInfo.InvariantCulture);
-				else
-					return propertyName;
-
-			char[] pascalChars = new char[propertyName.Length];
-			int cntUpper = 0, cntLower = 0, lenFragment = 0, lenPascal = 0;
-
-			foreach (char c in propertyName)
-			{
-				if (char.IsUpper(c))
-				{
-					pascalChars[lenPascal] = (lenFragment == 0) ? c : char.ToLower(c, CultureInfo.InvariantCulture);
-					lenPascal++;
-					lenFragment++;
-					cntUpper++;
-				}
-				else if (char.IsLower(c))
-				{
-					pascalChars[lenPascal] = (lenFragment == 0) ? char.ToUpper(c, CultureInfo.InvariantCulture) : c;
-					lenPascal++;
-					lenFragment++;
-					cntLower++;
-				}
-				else if (char.IsPunctuation(c) || char.IsWhiteSpace(c))
-				{
-					lenFragment = 0;
-				}
-				else
-				{
-					pascalChars[lenPascal] = c;
-					lenPascal++;
-					lenFragment = 0;
-				}
-			}
-
-			if (lenPascal == 0)
-				return string.Empty;
-			else
-				if (_CamelCase)
-				{
-					if (char.IsUpper(pascalChars[0]))
-						pascalChars[0] = char.ToLower(pascalChars[0], CultureInfo.InvariantCulture);
-
-					return new string(pascalChars, 0, lenPascal);
-				}
-				else
-					return (cntUpper > 0 && cntLower > 0) ? propertyName : new string(pascalChars, 0, lenPascal);
+			return propertyName.DeunderscoreFieldName(_CamelCase);
 		}
 	}
 }

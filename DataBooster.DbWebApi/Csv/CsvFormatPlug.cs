@@ -60,7 +60,7 @@ namespace DataBooster.DbWebApi.Csv
 		{
 			HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
 			Dictionary<string, string> queryStrings = apiController.Request.GetQueryStringDictionary();
-			int[] resultSetChoices = new int[] { GetQueryResultSetIndex(queryStrings, "ResultSet") };
+			int[] resultSetChoices = new int[] { GetQueryResultSetIndex(queryStrings, DbWebApiOptions.QueryStringContract.ResultSetParameterName) };
 
 			csvResponse.Content = new PushStreamContent((stream, httpContent, transportContext) =>
 			{
@@ -68,6 +68,8 @@ namespace DataBooster.DbWebApi.Csv
 
 				using (DbContext dbContext = new DbContext())
 				{
+					dbContext.SetNamingConvention(queryStrings);
+
 					CsvExporter csvExporter = new CsvExporter(textWriter);
 
 					dbContext.ExecuteDbApi(sp, parameters, null,
@@ -96,7 +98,7 @@ namespace DataBooster.DbWebApi.Csv
 				stream.Close();
 			}, negotiatedMediaType ?? _DefaultMediaType);
 
-			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName("FileName", FormatShortName) };
+			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName(DbWebApiOptions.QueryStringContract.FileNameParameterName, FormatShortName) };
 
 			return csvResponse;
 		}

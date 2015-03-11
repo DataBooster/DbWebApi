@@ -16,11 +16,40 @@ namespace DataBooster.DbWebApi
 		public DbContext(DbProviderFactory dbProviderFactory, string connectionString)
 		{
 			_DbAccess = new DbAccess(dbProviderFactory, connectionString);
+			_DbAccess.DynamicPropertyNamingConvention = DbWebApiOptions.DefaultPropertyNamingConvention;
 		}
 
 		public DbContext()
 			: this(ConfigHelper.DbProviderFactory, ConfigHelper.ConnectionString)
 		{
+		}
+
+		public void SetNamingConvention(Dictionary<string, string> queryStrings)
+		{
+			if (queryStrings != null && queryStrings.Count > 0)
+			{
+				string queryNamingCase;
+
+				if (queryStrings.TryGetValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName, out queryNamingCase))
+					SetDynamicPropertyNamingConvention(queryNamingCase);
+			}
+		}
+
+		private void SetDynamicPropertyNamingConvention(string queryNamingCase)
+		{
+			if (!string.IsNullOrEmpty(queryNamingCase))
+				switch (char.ToUpper(queryNamingCase[0]))
+				{
+					case 'N':
+						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.None;
+						break;
+					case 'P':
+						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.PascalCase;
+						break;
+					case 'C':
+						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.CamelCase;
+						break;
+				}
 		}
 
 		public StoredProcedureResponse ExecuteDbApi(string sp, IDictionary<string, object> parameters)

@@ -8,9 +8,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.DbContext">
-    <Position X="1" Y="5.5" Width="2.25" />
+    <Position X="0.5" Y="8" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAA=</HashCode>
       <FileName>DbContext.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -18,14 +18,24 @@
   <Class Name="DataBooster.DbWebApi.WebApiExtensions">
     <Position X="0.5" Y="0.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>ggIAEAIAIAAAAAAECAAAAgQAAAAgAAABACAAAQAQAAg=</HashCode>
+      <HashCode>ggIAEAIAIAAAAAAECAAAAgQAAAAgAAABACAAAAAQAAg=</HashCode>
       <FileName>WebApiExtensions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.DbWebApiOptions">
-    <Position X="4.25" Y="0.5" Width="2.75" />
+    <Position X="4.25" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="DataBooster.DbWebApi.DbWebApiOptions.QueryStringContract">
+        <TypeIdentifier>
+          <NewMemberFileName>DbWebApiOptions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAAAAAAACAAIAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAEAEAAAAAAAAAAACAAIAAAAAIAAAAAAAAAAAAAEA=</HashCode>
       <FileName>DbWebApiOptions.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -53,14 +63,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DataBooster.DbWebApi.PseudoMediaTypeFormatter">
-    <Position X="1" Y="8" Width="2.25" />
+    <Position X="1" Y="5.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAEEAAAA=</HashCode>
       <FileName>PseudoMediaTypeFormatter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.PseudoContentNegotiator">
-    <Position X="4.5" Y="7.25" Width="2" />
+    <Position X="10.5" Y="8.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PseudoContentNegotiator.cs</FileName>
@@ -69,19 +79,19 @@
   <Class Name="DataBooster.DbWebApi.DeunderscorePropertyNamesContractResolver">
     <Position X="10.5" Y="0.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DeunderscorePropertyNamesContractResolver.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="DataBooster.DbWebApi.IDbWebApiAuthorization">
-    <Position X="4.5" Y="3.25" Width="2" />
+    <Position X="7.75" Y="8.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>IDbWebApiAuthorization.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="DataBooster.DbWebApi.IFormatPlug">
-    <Position X="4.5" Y="4.75" Width="2" />
+    <Position X="5" Y="8" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEAAAAAAAQAAAAAAAAAAAIAAABAAAA=</HashCode>
       <FileName>IFormatPlug.cs</FileName>

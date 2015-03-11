@@ -20,7 +20,6 @@ namespace DataBooster.DbWebApi
 {
 	public static class WebApiExtensions
 	{
-		public const string DefaultQueryStringMediaTypeParameterName = "format";
 		private static Collection<IFormatPlug> _FormatPlugs;
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 		private static PseudoContentNegotiator _PseudoContentNegotiator;
@@ -38,7 +37,7 @@ namespace DataBooster.DbWebApi
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
 		}
 
-		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = DefaultQueryStringMediaTypeParameterName)
+		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = null)
 		{
 			if (formatPlug == null)
 				throw new ArgumentNullException("formatPlug");
@@ -66,8 +65,11 @@ namespace DataBooster.DbWebApi
 			_PseudoFormatter.AddMediaTypeMapping(formatPlug.FormatShortName, formatPlug.DefaultMediaType, queryStringParameterName);
 		}
 
-		public static void SupportMediaTypeShortMapping(this HttpConfiguration config, string queryStringParameterName = DefaultQueryStringMediaTypeParameterName)
+		public static void SupportMediaTypeShortMapping(this HttpConfiguration config, string queryStringParameterName = null)
 		{
+			if (string.IsNullOrEmpty(queryStringParameterName))
+				queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
+
 			config.Formatters.JsonFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
 			config.Formatters.XmlFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
 		}
@@ -76,6 +78,9 @@ namespace DataBooster.DbWebApi
 		{
 			if (mediaTypeFormatter != null && !mediaTypeFormatter.MediaTypeMappings.Any(m => m.ExistMediaTypeMapping(type)))
 			{
+				if (string.IsNullOrEmpty(queryStringParameterName))
+					queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
+
 				mediaTypeFormatter.AddQueryStringMapping(queryStringParameterName, type, mediaType);
 				mediaTypeFormatter.AddUriPathExtensionMapping(type, mediaType);
 			}
@@ -149,6 +154,8 @@ namespace DataBooster.DbWebApi
 
 			using (DbContext dbContext = new DbContext())
 			{
+				dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
+
 				if (negotiationResult != null && negotiationResult.Formatter is XmlMediaTypeFormatter)
 					return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
 				else
