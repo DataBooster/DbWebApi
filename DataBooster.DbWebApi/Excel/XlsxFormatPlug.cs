@@ -60,7 +60,7 @@ namespace DataBooster.DbWebApi.Excel
 					{
 						if (currentWorksheet != null)
 							for (int col = 0; col < header.VisibleFieldCount; col++)
-								currentWorksheet.Cell(1, col + 1).SetValue(header.GetName(col)).Style.Font.Bold = true;
+								currentWorksheet.Cell(1, col + 1).SetValue(dbContext.ResolvePropertyName(header.GetName(col))).Style.Font.Bold = true;
 					},
 					rows =>
 					{

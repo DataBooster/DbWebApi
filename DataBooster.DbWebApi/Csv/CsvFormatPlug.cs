@@ -78,7 +78,7 @@ namespace DataBooster.DbWebApi.Csv
 							string[] headers = new string[readHeader.VisibleFieldCount];
 
 							for (int i = 0; i < headers.Length; i++)
-								headers[i] = readHeader.GetName(i);
+								headers[i] = dbContext.ResolvePropertyName(readHeader.GetName(i));
 
 							csvExporter.WriteHeader(headers);
 						},
