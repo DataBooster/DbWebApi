@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DbWebApi")]
-[assembly: AssemblyDescription("Invoking database stored procedures via the generic Web API - DbWebApi. Please visit https://github.com/DataBooster/DbWebApi")]
+[assembly: AssemblyDescription("Invoking database stored procedures through the generic Web API - DbWebApi. Please visit https://github.com/DataBooster/DbWebApi")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Abel Cheng")]
 [assembly: AssemblyProduct("DataBooster.DbWebApi")]
