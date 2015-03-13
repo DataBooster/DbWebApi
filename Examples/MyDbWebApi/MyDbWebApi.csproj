@@ -43,13 +43,13 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\packages\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.3.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.3.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.3.1\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
+      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.3.2\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.6.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DbParallel.DataAccess, Version=1.7.6.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.6.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.6.2\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
@@ -119,6 +119,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\MiscController.cs" />
     <Compile Include="Filters\MyDbWebApiAuthorization.cs" />
     <Compile Include="Controllers\DbWebApiController.cs" />
     <Compile Include="Filters\DbWebApiAuthorizeAttribute.cs" />

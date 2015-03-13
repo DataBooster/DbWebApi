@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using DbParallel.DataAccess;
 using DataBooster.DbWebApi;
 using MyDbWebApi.Handlers;
 
@@ -15,11 +16,18 @@ namespace MyDbWebApi
 				constraints: new { ext = @"|json|xml|csv|xlsx" }
 			);
 
+			config.Routes.MapHttpRoute(
+				name: "MiscApi",
+				routeTemplate: "api/{controller}/{method}"
+			);
+
 			config.RegisterDbWebApi();
 #if DEBUG
 			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 #endif
 			config.MessageHandlers.Add(new CorsHandler());
+
+		//	DbWebApiOptions.DefaultPropertyNamingConvention = PropertyNamingConvention.PascalCase;
 		}
 	}
 }
