@@ -85,8 +85,8 @@ AS  ...
 The request JSON should like:  
 ``` JSON
 {
-    inRuleDate: "2015-02-03T00:00:00Z",
-    inRuleId: 108
+    "inRuleDate":"2015-02-03T00:00:00Z",
+    "inRuleId":108
 }
 ```
 ##### Accept Response MediaType:  
@@ -184,19 +184,6 @@ The request JSON should like:
   "ReturnValue":0
 }
 ```
-If your database uses underscore_case naming convention, you can apply DeunderscorePropertyNamesContractResolver to write JSON property names with PascalCase or camelCase.
-``` CShare
-public static class WebApiConfig
-{
-    public static void Register(HttpConfiguration config)
-    {
-        ....
-        config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
-            new DeunderscorePropertyNamesContractResolver();
-    }
-}
-```
-.  
 
 ##### application/xml, text/xml  
     Sample:
@@ -287,6 +274,32 @@ Notes:
 
 >CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled.
 
+####  Property Naming Convention
+Database side may use a different naming convention other than .NET side or JavaScript side. For example, most Oracle works use underscores naming convention, like above output examples, from a .NET or JavaScript point of view, they could look really ugly. So DbWebApi provides 2+None built-in naming convention resolvers:
+- PropertyNamingConvention.None
+- PropertyNamingConvention.PascalCase
+- PropertyNamingConvention.CamelCase
+
+You can set the DefaultPropertyNamingConvention globally in your WebApiConfig:
+``` CSharp
+public static class WebApiConfig
+{
+    public static void Register(HttpConfiguration config)
+    {
+        ....
+        DbWebApiOptions.DefaultPropertyNamingConvention =
+            PropertyNamingConvention.PascalCase;
+    }
+}
+```
+You can also specify the output Property Naming Convention in Uri Query String of each individual request:
+- NamingCase=N (or None)     -------- As it is in database 
+- NamingCase=P (or Pascal) -------- PascalCase
+- NamingCase=C (or Camel) -------- CamelCase
+
+If you don't specify the NamingCase in later request, the global set before will back into effect.
+
+
 ### Exceptions
 For JSON, XML and xlsx responses, detail exception will be encapsulated into HttpResponseMessage with HTTP 500 error status if the Web API service encounters any problems. For the verbosity of errors to show in client side, it depends on your IncludeErrorDetailPolicy in HttpConfiguration. However, because CSV respone uses a push stream, the client side will always receive a HTTP 200 OK header without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection and the client would get a Receive Failure without any detail exception message.
 
@@ -303,6 +316,13 @@ The example project shows using an authorization filter [DbWebApiAuthorize] to r
         }
     }
 ```
+
+### UserName
+Recording current username is a common auditing requirement. Since the Web API never trust any self-identify username sent from client request data. So if a stored procedure requires the username as a parameter, the Web API should always replace that parameter sent from the client (or add that parameter if a client didn't send it) by the server side authentication. Any practical way as long as you think it's simple enough can be apply in your Web API implementation. For examples,
+* Make a naming convention for this special parameter in database within your enterprise, then the Web API always set (replace/add) this special parameter before pass the whole input parameters dictionary to ExecuteDbApi extension method. It won't hurt anything, because in its low level DataBooster will match stored procedure parameter names with the input parameters dictionary that you pass in, and discard non-matched parameters.
+* Or in a traditional way, create separate Controllers for those stored procedures individually, in their internal implementation set current username and then call the ExecuteDbApi extension method. :(
+* Or in a centralized table, register that which stored procedures which parameter require current UserName input, so that in the Web API can know when it need to replace/add which input parameter.
+* etc.
 
 ## Clients
 #### .Net Client  
@@ -340,11 +360,26 @@ You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Cli
     ....
 </script>
 ```
-The second argument of $.postDb - inputJson can be either a JSON string or a plain object. If it's a plain object, it will be converted by JSON.stringify before sending to the server.  
-By default, the $.postDb sets the internal withCredentials property of the xhrFields object to true so it will pass the user credentials with cross-domain requests.
+The second argument of $.postDb - inputJson can be either a JSON string or a plain object. If it's a plain object, it will be converted by JSON.stringify before sending to the server. Below sample is equivalent to above sample.
+``` javascript
+    ....
+    var input = {
+        inDate: $.utcDate(2015,03,10)
+    };
+    $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
+             input,
+             function (data) {
+                 ....
+             });
+    ....
+```
+By default, the $.postDb sets the withCredentials property of the internal xhrFields object to true so it will pass the user credentials with cross-domain requests.  
+For the moment, the Client JavaScript Library (prerelease version 1.0.2-alpha) was tested on IE9 only.
 
 ##### Cross-domain
-
+``` javascript
+```
+![](/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
 
 ## NuGet
 #### Server side
