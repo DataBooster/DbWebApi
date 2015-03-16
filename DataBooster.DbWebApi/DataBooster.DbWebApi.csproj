@@ -100,9 +100,7 @@
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="app.config" />
     <None Include="DbWebApi.cd" />
     <None Include="packages.config" />
   </ItemGroup>
