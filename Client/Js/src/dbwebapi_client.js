@@ -1,7 +1,7 @@
 ﻿/*!
-* DbWebApi Client JavaScript Library v1.0.3-alpha
+* DbWebApi Client JavaScript Library v1.0.6-alpha
 * https://github.com/databooster/dbwebapi
-* Date: 2015-03-15
+* Date: 2015-03-16
 */
 (function (window, undefined) {
 	jQuery.support.cors = true;
