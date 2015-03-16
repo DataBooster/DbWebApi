@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientHelper.cs" />
+    <Compile Include="DbWebApiClient.cs" />
     <Compile Include="DbWebApiResponse.cs" />
     <Compile Include="HttpErrorClient.cs" />
     <Compile Include="HttpResponseClientException.cs" />

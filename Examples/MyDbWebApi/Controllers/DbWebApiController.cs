@@ -8,7 +8,7 @@ namespace MyDbWebApi.Controllers
 	public class DbWebApiController : ApiController
 	{
 		[DbWebApiAuthorize]
-		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")]
+		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
 		{
 			return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
