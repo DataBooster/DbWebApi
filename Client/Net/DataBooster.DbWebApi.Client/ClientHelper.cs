@@ -2,14 +2,24 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Text;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DataBooster.DbWebApi.Client
 {
 	public static class ClientHelper
 	{
+		const string _DefaultJsonInputParameterName = "JsonInput";
+		private static string _JsonInputParameterName = _DefaultJsonInputParameterName;
+		public static string JsonInputParameterName
+		{
+			get { return _JsonInputParameterName; }
+			set { _JsonInputParameterName = string.IsNullOrEmpty(value) ? _DefaultJsonInputParameterName : value; }
+		}
+
 		#region CreateClient extension methods
 		public static HttpClient CreateClient(bool useDefaultCredentials = true)
 		{
@@ -30,9 +40,10 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		public static Task<DbWebApiResponse> ExecDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		#region Http Post
+		public static Task<DbWebApiResponse> PostDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
-			return client.ExecDbRawAsync(requestUri, inputParameters).
+			return client.PostDbRawAsync(requestUri, inputParameters).
 				ContinueWith<DbWebApiResponse>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
@@ -44,9 +55,9 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public static Task<DbWebApiResponse> ExecDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		public static Task<DbWebApiResponse> PostDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
 		{
-			return client.ExecDbRawAsync(requestUri, inputParameters, cancellationToken).
+			return client.PostDbRawAsync(requestUri, inputParameters, cancellationToken).
 				ContinueWith<DbWebApiResponse>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
@@ -58,11 +69,11 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public static DbWebApiResponse ExecDbAsJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters = null)
+		public static DbWebApiResponse PostDbAsJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters = null)
 		{
 			try
 			{
-				return client.ExecDbAsJsonAsync(requestUri, inputParameters).Result;
+				return client.PostDbAsJsonAsync(requestUri, inputParameters).Result;
 			}
 			catch (AggregateException ae)
 			{
@@ -80,20 +91,104 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public static DbWebApiResponse ExecDbAsJson(this HttpClient client, string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public static DbWebApiResponse PostDbAsJson(this HttpClient client, string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return client.ExecDbAsJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
+			return client.PostDbAsJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
 		}
 
-		public static Task<HttpResponseMessage> ExecDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		public static Task<HttpResponseMessage> PostDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
 		{
 			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary(), cancellationToken);
 		}
 
-		public static Task<HttpResponseMessage> ExecDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		public static Task<HttpResponseMessage> PostDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
 		{
 			return client.PostAsJsonAsync(requestUri, inputParameters ?? new InputParameterDictionary());
 		}
+		#endregion
+
+		#region Http Get
+		public static Task<DbWebApiResponse> GetDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		{
+			return client.GetDbRawAsync(requestUri, inputParameters).
+				ContinueWith<DbWebApiResponse>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadDbJson();
+				});
+		}
+
+		public static Task<DbWebApiResponse> GetDbAsJsonAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		{
+			return client.GetDbRawAsync(requestUri, inputParameters, cancellationToken).
+				ContinueWith<DbWebApiResponse>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadDbJson();
+				});
+		}
+
+		public static DbWebApiResponse GetDbAsJson(this HttpClient client, string requestUri, InputParameterDictionary inputParameters = null)
+		{
+			try
+			{
+				return client.GetDbAsJsonAsync(requestUri, inputParameters).Result;
+			}
+			catch (AggregateException ae)
+			{
+				if (ae.InnerExceptions.Count == 1)
+				{
+					Exception eInner = ae.InnerException;
+
+					if (eInner.InnerException != null)
+						eInner = eInner.InnerException;
+
+					throw eInner;
+				}
+				else
+					throw;
+			}
+		}
+
+		public static DbWebApiResponse GetDbAsJson(this HttpClient client, string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return client.GetDbAsJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
+		}
+
+		public static Task<HttpResponseMessage> GetDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
+		{
+			return client.GetAsync(requestUri.SpliceInputParameters(inputParameters), cancellationToken);
+		}
+
+		public static Task<HttpResponseMessage> GetDbRawAsync(this HttpClient client, string requestUri, InputParameterDictionary inputParameters)
+		{
+			return client.GetAsync(requestUri.SpliceInputParameters(inputParameters));
+		}
+
+		private static string SpliceInputParameters(this string requestUri, InputParameterDictionary inputParameters)
+		{
+			if (inputParameters == null || inputParameters.Count == 0)
+				return requestUri;
+
+			char[] ps = new char[] { '?', '=' };
+			StringBuilder uriWithJsonInput = new StringBuilder(requestUri);
+
+			uriWithJsonInput.Append((requestUri.LastIndexOfAny(ps) == -1) ? "?" : "&");
+			uriWithJsonInput.Append(JsonInputParameterName);
+			uriWithJsonInput.Append("=");
+			uriWithJsonInput.Append(Uri.EscapeDataString(JsonConvert.SerializeObject(inputParameters)));
+
+			return uriWithJsonInput.ToString();
+		}
+		#endregion
 
 		public static DbWebApiResponse ReadDbJson(this HttpResponseMessage httpResponse)
 		{

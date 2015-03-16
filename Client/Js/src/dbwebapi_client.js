@@ -6,22 +6,22 @@
 (function (window, undefined) {
 	jQuery.support.cors = true;
 
+	function toJsonString(inputJson) {
+		if (jQuery.isPlainObject(inputJson))
+			return JSON.stringify(inputJson);
+		else if (typeof inputJson === "string")
+			return inputJson;
+		else
+			return "{}";
+	}
+
 	jQuery.extend({
 		postDb: function (url, inputJson, successCallback, errorCallback) {
-			var jsonContent;
-
-			if (jQuery.isPlainObject(inputJson))
-				jsonContent = JSON.stringify(inputJson);
-			else if (typeof inputJson === "string")
-				jsonContent = inputJson;
-			else
-				jsonContent = "{}";
-
 			return jQuery.ajax({
 				type: "POST",
 				url: url,
 				contentType: "application/json;charset=utf-8",
-				data: jsonContent,
+				data: toJsonString(inputJson),
 				processData: false,
 				xhrFields: { withCredentials: true },
 				success: successCallback,
@@ -30,20 +30,18 @@
 		},
 
 		getDb: function (url, inputJson, successCallback, errorCallback) {
-			var jsonContent;
+			var requestUri;
 
-			if (jQuery.isPlainObject(inputJson))
-				jsonContent = JSON.stringify(inputJson);
-			else if (typeof inputJson === "string")
-				jsonContent = inputJson;
-			else
-				jsonContent = "{}";
-
-			var tie = (url.lastIndexOf("?") === -1) ? "?" : "&";
+			if (inputJson == null || inputJson === "")
+				requestUri = url;
+			else {
+				var tie = (url.lastIndexOf("?") === -1) ? "?" : "&";
+				requestUri = url + tie + "JsonInput=" + encodeURIComponent(toJsonString(inputJson));
+			}
 
 			return jQuery.ajax({
 				type: "GET",
-				url: url + tie + "JsonInput=" + encodeURIComponent(jsonContent),
+				url: requestUri,
 				processData: false,
 				xhrFields: { withCredentials: true },
 				success: successCallback,
