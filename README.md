@@ -26,8 +26,10 @@ In other words, DbWebApi provides an alternative way to implement your Web APIs 
 
 ### What are the benefits of DbWebApi?
 
+- The underlying tenet:  
+Less coding, less configuration, less deployment, less maintenance.
 - In data-driven applications area, there are a large number of scenarios without substantial logic in data access web services, however they wasted a lot of our efforts on very boring data moving coding or configurations, we've had enough of it. Since now on, most of thus repetitive works can be dumped onto DbWebApi.
-- DbWebApi can coexist within your existing ASP.NET Web API, as a supplementary service to reduce new boring manual works for most common of application scenarios. DbWebApi does not attempt to replace any existing methods or cover much specific application scenarios.
+- DbWebApi can coexist within your existing ASP.NET Web API, as a supplementary service to reduce new boring manual works for most common of application scenarios.
 
 ## Usage
 
@@ -43,7 +45,7 @@ namespace SampleDbWebApi.Controllers
     public class DbWebApiController : ApiController
     {
         [DbWebApiAuthorize]
-        [AcceptVerbs("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")]
+        [AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
         public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
         {
             return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
@@ -331,19 +333,23 @@ Recording current username is a common auditing requirement. Since the Web API n
 using DataBooster.DbWebApi.Client;
 ```
 ``` CSharp
-HttpClient client = ClientHelper.CreateClient("http://dbwebapi.dev.com/oradev/");
+DbWebApiClient client = new DbWebApiClient("http://dbwebapi.dev.com/oradev/");
 
-// Synchronous call. If need asynchronous call, please use ExecDbAsJsonAsync(..) instead.
-DbWebApiResponse data = client.ExecDbAsJson("test_schema.prj_package.foo",
+//  client.HttpMethod = HttpMethod.Get;    // Default is POST
+
+// Synchronous call. If need asynchronous call, please use ExecAsJsonAsync(..) instead.
+DbWebApiResponse data = client.ExecAsJson("test_schema.prj_package.foo",
     new InputParameterDictionary(new {
-        inDate = new DateTime(2015, 3, 10)
+        inDate = new DateTime(2015, 3, 16)
         //, ... other input parameters, if any.
     }));
 
-// You can either consume JObject[] (LINQ to JSON) directly or convert to your strong-type business class as below:
+// You can either consume JObject[] (LINQ to JSON) directly or cast to your strong-type business class as below:
 IEnumerable<MyStrongTypeCls> strongTypeObjs = data.ResultSets[0].Select(j => j.ToObject<MyStrongTypeCls>());
 ```
-By default, the _ClientHelper.CreateClient_ uses Windows authentication for the convenience of intranet usage scenarios.
+By default, the DbWebApiClient uses Windows authentication for the convenience of intranet usage scenarios. Please see its constructor overrides for other options.
+
+All Exec... methods will use HTTP POST method by default. You can change the default behavior to HTTP GET if need be. (as the comment line in above example code)
 
 #### JavaScript Client  
 You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
@@ -374,12 +380,17 @@ The second argument of $.postDb - inputJson can be either a JSON string or a pla
     ....
 ```
 By default, the $.postDb sets the withCredentials property of the internal xhrFields object to true so it will pass the user credentials with cross-domain requests.  
+As the name implies, $.postDb uses HTTP POST to send a request;  
+Alternatively, $.getDb can be used for HTTP GET if need be.
+
+
 For the moment, the Client JavaScript Library (prerelease version 1.0.2-alpha) was tested on IE9 only.
+
 
 ##### Cross-domain
 ``` javascript
 ```
-![](/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
+![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
 
 ## NuGet
 #### Server side
