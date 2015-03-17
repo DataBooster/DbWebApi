@@ -15,6 +15,15 @@
 			return "{}";
 	}
 
+	function appendJsonInputToUrl(url, inputObject, paramName) {
+		if (!inputObject || inputObject === "")
+			return url;
+		if (!paramName)
+			paramName = "JsonInput";
+		var tie = (url.lastIndexOf("?") === -1) ? "?" : "&";
+		return url + tie + paramName + "=" + encodeURIComponent((typeof inputObject === "string") ? inputObject : toJsonString(inputObject));
+	}
+
 	jQuery.extend({
 		postDb: function (url, inputJson, successCallback, errorCallback) {
 			return jQuery.ajax({
@@ -30,24 +39,17 @@
 		},
 
 		getDb: function (url, inputJson, successCallback, errorCallback) {
-			var requestUri;
-
-			if (inputJson == null || inputJson === "")
-				requestUri = url;
-			else {
-				var tie = (url.lastIndexOf("?") === -1) ? "?" : "&";
-				requestUri = url + tie + "JsonInput=" + encodeURIComponent(toJsonString(inputJson));
-			}
-
 			return jQuery.ajax({
 				type: "GET",
-				url: requestUri,
+				url: appendJsonInputToUrl(url, inputJson),
 				processData: false,
 				xhrFields: { withCredentials: true },
 				success: successCallback,
 				error: errorCallback
 			});
 		},
+
+		appendJsonToUrl: appendJsonInputToUrl,
 
 		utcDate: function (year, month/* 1-12 */, day, hour, minute, second, millisecond) {
 			var date = new Date();
