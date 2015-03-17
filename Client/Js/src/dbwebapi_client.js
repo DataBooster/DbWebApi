@@ -1,5 +1,5 @@
 ﻿/*!
-* DbWebApi Client JavaScript Library v1.0.6-alpha
+* DbWebApi Client JavaScript Library v1.0.7-alpha
 * https://github.com/databooster/dbwebapi
 * Date: 2015-03-16
 */
@@ -67,6 +67,14 @@
 										year = date.getFullYear();
 										month = date.getMonth() + 1; // 0-11 --> 1-12
 										day = date.getDate();
+									} else if ($.type(year) === "date") {
+										millisecond = year.getMilliseconds();
+										second = year.getSeconds();
+										minute = year.getMinutes();
+										hour = year.getHours();
+										day = year.getDate();
+										month = year.getMonth() + 1; // 0-11 --> 1-12
+										year = year.getFullYear();
 									}
 								}
 							}
