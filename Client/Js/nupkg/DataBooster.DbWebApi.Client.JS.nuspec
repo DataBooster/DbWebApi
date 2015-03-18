@@ -12,7 +12,7 @@
 		<description>DbWebApi Client JavaScript (jQuery) Library. https://github.com/DataBooster/DbWebApi </description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
 		<copyright>Copyright 2015 Abel Cheng</copyright>
-		<tags>DbWebApi JavaScript Client jQuery</tags>
+		<tags>DbWebApi JavaScript Client jQuery JSONP</tags>
 		<dependencies>
 			<dependency id="jQuery"/>
 		</dependencies>

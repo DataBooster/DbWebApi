@@ -23,17 +23,17 @@ namespace DataBooster.DbWebApi.Jsonp
 
 		public override double TryMatchMediaType(HttpRequestMessage request)
 		{
-			return string.IsNullOrEmpty(GetCallback(request, QueryStringParameterName)) ? 0.0 : 1.0;
+			return string.IsNullOrEmpty(GetParameterValue(request, QueryStringParameterName)) ? 0.0 : 1.0;
 		}
 
-		internal static string GetCallback(HttpRequestMessage request, string callbackQueryParameter)
+		private string GetParameterValue(HttpRequestMessage request, string parameterName)
 		{
 			var queryStrings = request.GetQueryNameValuePairs();
 
-			if (queryStrings == null || string.IsNullOrEmpty(callbackQueryParameter))
+			if (queryStrings == null || string.IsNullOrEmpty(parameterName))
 				return null;
 
-			return queryStrings.FirstOrDefault(p => p.Key.Equals(callbackQueryParameter, StringComparison.OrdinalIgnoreCase)).Value;
+			return queryStrings.FirstOrDefault(p => p.Key.Equals(parameterName, StringComparison.OrdinalIgnoreCase)).Value;
 		}
 	}
 }

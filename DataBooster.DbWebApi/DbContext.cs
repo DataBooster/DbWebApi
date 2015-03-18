@@ -26,17 +26,8 @@ namespace DataBooster.DbWebApi
 
 		public void SetNamingConvention(Dictionary<string, string> queryStrings)
 		{
-			if (queryStrings != null && queryStrings.Count > 0)
-			{
-				string queryNamingCase;
+			string queryNamingCase = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName);
 
-				if (queryStrings.TryGetValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName, out queryNamingCase))
-					SetDynamicPropertyNamingConvention(queryNamingCase);
-			}
-		}
-
-		private void SetDynamicPropertyNamingConvention(string queryNamingCase)
-		{
 			if (!string.IsNullOrEmpty(queryNamingCase))
 				switch (char.ToUpper(queryNamingCase[0]))
 				{

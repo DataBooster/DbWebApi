@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataBooster.DbWebApi.Jsonp
@@ -14,23 +15,26 @@ namespace DataBooster.DbWebApi.Jsonp
 	public class JsonpMediaTypeFormatter : JsonMediaTypeFormatter
 	{
 		const string _FormatShortName = "jsonp";
-		private static readonly MediaTypeHeaderValue _textJavaScript = new MediaTypeHeaderValue("text/javascript");
-		private static readonly MediaTypeHeaderValue _applicationJavaScript = new MediaTypeHeaderValue("application/javascript");
-		private static readonly MediaTypeHeaderValue _applicationJsonp = new MediaTypeHeaderValue("application/json-p");
+		private static readonly MediaTypeHeaderValue _TextJavaScript = new MediaTypeHeaderValue("text/javascript");
+		private static readonly MediaTypeHeaderValue _ApplicationJavaScript = new MediaTypeHeaderValue("application/javascript");
+		private static readonly MediaTypeHeaderValue _ApplicationJsonp = new MediaTypeHeaderValue("application/json-p");
 		private readonly string _CallbackQueryParameter;
+		private readonly string _JsonpStateQueryParameter;
 		private string _Callback;
+		private string _JsonpState;
 
-		public JsonpMediaTypeFormatter(string callbackQueryParameter = null)
+		public JsonpMediaTypeFormatter(string callbackQueryParameter = null, string jsonpStateQueryParameter = null)
 		{
 			_CallbackQueryParameter = string.IsNullOrEmpty(callbackQueryParameter) ? DbWebApiOptions.QueryStringContract.JsonpCallbackParameterName : callbackQueryParameter;
+			_JsonpStateQueryParameter = string.IsNullOrEmpty(jsonpStateQueryParameter) ? DbWebApiOptions.QueryStringContract.JsonpStateParameterName : jsonpStateQueryParameter;
 
-			SupportedMediaTypes.Add(_textJavaScript);
-			SupportedMediaTypes.Add(_applicationJavaScript);
-			SupportedMediaTypes.Add(_applicationJsonp);
+			SupportedMediaTypes.Add(_TextJavaScript);
+			SupportedMediaTypes.Add(_ApplicationJavaScript);
+			SupportedMediaTypes.Add(_ApplicationJsonp);
 
-			MediaTypeMappings.Add(new JsonpQueryStringMapping(_CallbackQueryParameter, _textJavaScript));
-			MediaTypeMappings.Add(new QueryStringMapping(DbWebApiOptions.QueryStringContract.MediaTypeParameterName, _FormatShortName, _textJavaScript));
-			MediaTypeMappings.Add(new UriPathExtensionMapping(_FormatShortName, _textJavaScript));
+			MediaTypeMappings.Add(new JsonpQueryStringMapping(_CallbackQueryParameter, _TextJavaScript));
+			MediaTypeMappings.Add(new QueryStringMapping(DbWebApiOptions.QueryStringContract.MediaTypeParameterName, _FormatShortName, _TextJavaScript));
+			MediaTypeMappings.Add(new UriPathExtensionMapping(_FormatShortName, _TextJavaScript));
 		}
 
 		/// <param name="type">The type to format.</param>
@@ -44,7 +48,10 @@ namespace DataBooster.DbWebApi.Jsonp
 			if (request == null)
 				throw new ArgumentNullException("request");
 
-			_Callback = JsonpQueryStringMapping.GetCallback(request, _CallbackQueryParameter);
+			Dictionary<string, string> queryStrings = request.GetQueryStringDictionary();
+
+			_Callback = queryStrings.GetQueryParameterValue(_CallbackQueryParameter);
+			_JsonpState = queryStrings.GetQueryParameterValue(_JsonpStateQueryParameter);
 
 			return this;
 		}
@@ -62,7 +69,31 @@ namespace DataBooster.DbWebApi.Jsonp
 			if (writeStream == null)
 				throw new ArgumentNullException("writeStream");
 
+			if (string.IsNullOrEmpty(_Callback))
+				return base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
 
+			var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
+			var writer = new StreamWriter(writeStream, encoding);
+
+			writer.Write(_Callback + "(");
+			writer.Flush();
+
+			return base.WriteToStreamAsync(type, value, writeStream, content, transportContext).ContinueWith(jsonTask =>
+				{
+					if (jsonTask.IsCanceled)
+						return;
+					if (jsonTask.IsFaulted)
+						throw jsonTask.Exception;
+
+					if (!string.IsNullOrEmpty(_JsonpState))
+					{
+						writer.Write(", ");
+						writer.Write(_JsonpState);
+					}
+
+					writer.Write(");");
+					writer.Flush();
+				});
 		}
 	}
 }

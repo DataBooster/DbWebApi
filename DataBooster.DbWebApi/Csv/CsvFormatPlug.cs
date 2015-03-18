@@ -38,12 +38,9 @@ namespace DataBooster.DbWebApi.Csv
 
 		private int GetQueryResultSetIndex(Dictionary<string, string> queryStrings, string queryName)
 		{
-			if (queryStrings == null || queryStrings.Count == 0)
-				return 0;
+			string queryResultSet = queryStrings.GetQueryParameterValue(queryName);
 
-			string queryResultSet;
-
-			if (queryStrings.TryGetValue(queryName, out queryResultSet))
+			if (!string.IsNullOrEmpty(queryResultSet))
 			{
 				int resultSetIndex;
 

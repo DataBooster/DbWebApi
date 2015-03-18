@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using DbParallel.DataAccess;
 using DataBooster.DbWebApi.Csv;
 using DataBooster.DbWebApi.Excel;
+using DataBooster.DbWebApi.Jsonp;
 
 namespace DataBooster.DbWebApi
 {
@@ -30,10 +31,12 @@ namespace DataBooster.DbWebApi
 			_PseudoContentNegotiator = new PseudoContentNegotiator();
 		}
 
+		#region Registration
 		public static void RegisterDbWebApi(this HttpConfiguration config)
 		{
 			config.AddFormatPlug(new CsvFormatPlug());
 			config.AddFormatPlug(new XlsxFormatPlug());
+			config.Formatters.Add(new JsonpMediaTypeFormatter());
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
 		}
 
@@ -100,7 +103,9 @@ namespace DataBooster.DbWebApi
 
 			return false;
 		}
+		#endregion
 
+		#region Negotiation
 		internal static ContentNegotiationResult Negotiate(this HttpRequestMessage request)
 		{
 			HttpConfiguration configuration = request.GetConfiguration();
@@ -130,6 +135,7 @@ namespace DataBooster.DbWebApi
 
 			return null;
 		}
+		#endregion
 
 		/// <summary>
 		/// ExecuteDbApi is the DbWebApi extension method to ApiController.
@@ -163,6 +169,8 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
+		#region QueryString Utilities
+
 		public static Dictionary<string, string> GetQueryStringDictionary(this HttpRequestMessage request)
 		{
 			if (request == null)
@@ -190,36 +198,48 @@ namespace DataBooster.DbWebApi
 
 		internal static string GetQueryFileName(this Dictionary<string, string> queryStrings, string queryName, string filenameExtension)
 		{
-			if (queryStrings != null && queryStrings.Count > 0)
+			string queryFileName = queryStrings.GetQueryParameterValue(queryName);
+
+			if (!string.IsNullOrEmpty(queryFileName))
 			{
-				string queryFileName;
+				if (queryFileName[0] == '.' || queryFileName[0] == '"')
+					queryFileName = queryFileName.TrimStart('.', '"');
 
-				if (queryStrings.TryGetValue(queryName, out queryFileName))
+				if (queryFileName.Length > 0 && queryFileName[queryFileName.Length - 1] == '"')
+					queryFileName = queryFileName.TrimEnd('"');
+
+				if (queryFileName.Length > 0)
 				{
-					if (queryFileName[0] == '.' || queryFileName[0] == '"')
-						queryFileName = queryFileName.TrimStart('.', '"');
+					int dotPos = queryFileName.LastIndexOf('.');
 
-					if (queryFileName.Length > 0 && queryFileName[queryFileName.Length - 1] == '"')
-						queryFileName = queryFileName.TrimEnd('"');
+					if (dotPos < 0)
+						return queryFileName + '.' + filenameExtension;
 
-					if (queryFileName.Length > 0)
-					{
-						int dotPos = queryFileName.LastIndexOf('.');
-
-						if (dotPos < 0)
-							return queryFileName + '.' + filenameExtension;
-
-						if (dotPos > 0)
-							if (dotPos == queryFileName.Length - 1)
-								return queryFileName + filenameExtension;
-							else
-								return queryFileName;
-					}
+					if (dotPos > 0)
+						if (dotPos == queryFileName.Length - 1)
+							return queryFileName + filenameExtension;
+						else
+							return queryFileName;
 				}
 			}
 
 			return "[save_as]." + filenameExtension;
 		}
+
+		internal static string GetQueryParameterValue(this Dictionary<string, string> queryStringDictionary, string parameterName)
+		{
+			if (queryStringDictionary == null || queryStringDictionary.Count == 0 || string.IsNullOrEmpty(parameterName))
+				return null;
+
+			string parameterValue;
+
+			if (queryStringDictionary.TryGetValue(parameterName, out parameterValue))
+				return parameterValue;
+			else
+				return null;
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Gather required parameters of database stored procedure/function either from body or from uri query string.
