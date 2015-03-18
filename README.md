@@ -8,19 +8,21 @@ from any http client. For examples,
 
 **SQL Server**:
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/json`
+* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/jsonp?callback=jsFunction&jsonpState=100`
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xml`
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xlsx?filename=Rpt2015`
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/csv?resultset=0&filename=Rpt2015`
 
 **Oracle**:
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/json`
+* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/jsonp?callback=jsFunction&jsonpState=100`
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xml`
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xlsx?filename=Rpt2015`
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/csv?resultset=0&filename=Rpt2015`
 
 ***
 
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for web clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
+DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications. It acts as a proxy service for web clients to call database (Oracle + SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
@@ -102,7 +104,19 @@ The request JSON should like:
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)  
 
-2. XML  
+2. JSONP  
+    QueryString contains **callback** parameter _(the name can be configured)_  
+    or  
+    Specify in request header:  
+    Accept: text/javascript  
+    or  
+    Accept: application/json-p  
+    or specify in query string: ?format=jsonp  
+       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=jsonp)  
+    or specify in UriPathExtension which depends on your url routing  
+       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/jsonp)  
+
+3. XML  
     Specify in request header:  
     Accept: application/xml  
     or  
@@ -112,7 +126,7 @@ The request JSON should like:
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xml)  
 
-3. xlsx (Excel 2007/2010)  
+4. xlsx (Excel 2007/2010)  
     Specify in request header:  
     Accept: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet  
     or  
@@ -125,7 +139,7 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)  
     Notes: Since xlsx content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
 
-4. CSV
+5. CSV
     Specify in request header:  
     Accept: text/csv  
     or specify in query string: ?format=csv  
@@ -134,7 +148,7 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/csv)  
     Notes: CSV response will only return the first (or one specified zero indexed result set in query string: ResultSet=i) result set if your stored procedure has multiple result sets. Since CSV content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].csv).  
 
-5. Other MediaTypes  
+6. Other MediaTypes  
     To support other MediaType, you can create a new class that implements the interface **IFormatPlug**, and register it in your HttpConfiguration. Just like following CSV and xlsx did:
 ``` CSharp
     public static void RegisterDbWebApi(this HttpConfiguration config)
@@ -295,9 +309,9 @@ public static class WebApiConfig
 }
 ```
 You can also specify the output Property Naming Convention in Uri Query String of each individual request:
-- NamingCase=N (or None)     -------- As it is in database 
+- NamingCase=N (or None) ---------- As it is in database 
 - NamingCase=P (or Pascal) -------- PascalCase
-- NamingCase=C (or Camel) -------- CamelCase
+- NamingCase=C (or Camel) --------- CamelCase
 
 If you don't specify the NamingCase in later request, the global set before will back into effect.
 
@@ -355,6 +369,10 @@ All Exec... methods will use HTTP POST method by default. You can change the def
 You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
     Sample:
 ``` javascript
+    <script src="Scripts/jquery-2.1.3.js" type="text/javascript"></script>
+    <script src="Scripts/dbwebapi_client-1.0.6-alpha.js" type="text/javascript"></script>
+```
+``` javascript
 <script type="text/javascript">
     ....
     $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
@@ -381,16 +399,22 @@ The second argument of $.postDb - inputJson can be either a JSON string or a pla
 ```
 By default, the $.postDb sets the withCredentials property of the internal xhrFields object to true so it will pass the user credentials with cross-domain requests.  
 As the name implies, $.postDb uses HTTP POST to send a request;  
-Alternatively, $.getDb can be used for HTTP GET if need be.
-
+Alternatively, $.getDb can be used for HTTP GET if need be. All input parameters are encapsulated into a special query string, and appended to the url for GET-requests.
 
 For the moment, the Client JavaScript Library (prerelease version 1.0.2-alpha) was tested on IE9 only.
 
-
 ##### Cross-domain
+###### JSONP  
+The server side supports JSONP since v1.2.4.
+
+``` javascript
+```
+
+###### CORS
 ``` javascript
 ```
 ![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
+
 
 ## NuGet
 #### Server side
