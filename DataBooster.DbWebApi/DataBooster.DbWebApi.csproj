@@ -93,6 +93,8 @@
     <Compile Include="Excel\XlsxFormatPlug.cs" />
     <Compile Include="IDbWebApiAuthorization.cs" />
     <Compile Include="IFormatPlug.cs" />
+    <Compile Include="Jsonp\JsonpMediaTypeFormatter.cs" />
+    <Compile Include="Jsonp\JsonpQueryStringMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PseudoContentNegotiator.cs" />
     <Compile Include="PseudoMediaTypeFormatter.cs" />

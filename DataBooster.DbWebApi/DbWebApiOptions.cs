@@ -18,6 +18,7 @@ namespace DataBooster.DbWebApi
 			const string _DefaultResultSetParameterName = "ResultSet";
 			const string _DefaultFileNameParameterName = "FileName";
 			const string _DefaultJsonInputParameterName = "JsonInput";
+			const string _DefaultJsonpCallbackParameterName = "callback";
 
 			private static string _MediaTypeParameterName = _DefaultMediaTypeParameterName;
 			public static string MediaTypeParameterName
@@ -52,6 +53,13 @@ namespace DataBooster.DbWebApi
 			{
 				get { return _JsonInputParameterName; }
 				set { _JsonInputParameterName = string.IsNullOrEmpty(value) ? _DefaultJsonInputParameterName : value; }
+			}
+
+			private static string _JsonpCallbackParameterName = _DefaultJsonpCallbackParameterName;
+			public static string JsonpCallbackParameterName
+			{
+				get { return _JsonpCallbackParameterName; }
+				set { _JsonpCallbackParameterName = string.IsNullOrEmpty(value) ? _DefaultJsonpCallbackParameterName : value; }
 			}
 		}
 
