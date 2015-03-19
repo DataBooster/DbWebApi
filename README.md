@@ -8,14 +8,14 @@ from any http client. For examples,
 
 **SQL Server**:
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/json`
-* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/jsonp?callback=jsFunction&jsonpState=100`
+* `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/jsonp?callback=jsFunc1`
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xml`
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/xlsx?filename=Rpt2015`
 * `http://dbwebapi.dev.com/sqldev/TestDb.dbo.sp_GetData/csv?resultset=0&filename=Rpt2015`
 
 **Oracle**:
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/json`
-* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/jsonp?callback=jsFunction&jsonpState=100`
+* `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/jsonp?callback=jsFunc1`
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xml`
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/xlsx?filename=Rpt2015`
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.get_data/csv?resultset=0&filename=Rpt2015`
@@ -105,16 +105,19 @@ The request JSON should like:
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)  
 
 2. JSONP  
-    QueryString contains **callback** parameter _(the name can be configured)_  
-    or  
+    QueryString must contain **callback** parameter _(the name can be configured)_  
+    and (  
     Specify in request header:  
     Accept: text/javascript  
+    or  
+    Accept: application/javascript  
     or  
     Accept: application/json-p  
     or specify in query string: ?format=jsonp  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=jsonp)  
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/jsonp)  
+    )  
 
 3. XML  
     Specify in request header:  
@@ -291,7 +294,7 @@ Notes:
 >CSV respone emerges as text stream pushing to the client, it just use very little memory in Web API server to push a few text lines as long as their CSV rows have been constructed, so on and so forth, until all complete. So the server's memory is not a limitation of how many records can be handled.
 
 ####  Property Naming Convention
-Database side may use a different naming convention other than .NET side or JavaScript side. For example, most Oracle works use underscores naming convention, like above output examples, from a .NET or JavaScript point of view, they could look really ugly. So DbWebApi provides 2+None built-in naming convention resolvers:
+Database side may use a different naming convention other than .NET side or JavaScript side. For example, most Oracle works use underscores naming convention, like above output examples, from a .NET or JavaScript point of view, they could look really ugly. So DbWebApi provides 2 + _None_ built-in naming convention resolvers:
 - PropertyNamingConvention.None
 - PropertyNamingConvention.PascalCase
 - PropertyNamingConvention.CamelCase
@@ -311,7 +314,7 @@ public static class WebApiConfig
 You can also specify the output Property Naming Convention in Uri Query String of each individual request:
 - NamingCase=N (or None) ---------- As it is in database 
 - NamingCase=P (or Pascal) -------- PascalCase
-- NamingCase=C (or Camel) --------- CamelCase
+- NamingCase=C (or Camel) -------- CamelCase
 
 If you don't specify the NamingCase in later request, the global set before will back into effect.
 
@@ -370,7 +373,7 @@ You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Cli
     Sample:
 ``` javascript
     <script src="Scripts/jquery-2.1.3.js" type="text/javascript"></script>
-    <script src="Scripts/dbwebapi_client-1.0.6-alpha.js" type="text/javascript"></script>
+    <script src="Scripts/dbwebapi_client-1.0.8-alpha.js" type="text/javascript"></script>
 ```
 ``` javascript
 <script type="text/javascript">
@@ -397,23 +400,43 @@ The second argument of $.postDb - inputJson can be either a JSON string or a pla
              });
     ....
 ```
+If there is no input parameter to pass to the server, please put _**null**_ in the second argument.  
 By default, the $.postDb sets the withCredentials property of the internal xhrFields object to true so it will pass the user credentials with cross-domain requests.  
 As the name implies, $.postDb uses HTTP POST to send a request;  
 Alternatively, $.getDb can be used for HTTP GET if need be. All input parameters are encapsulated into a special query string, and appended to the url for GET-requests.
 
-For the moment, the Client JavaScript Library (prerelease version 1.0.2-alpha) was tested on IE9 only.
+For the moment, the Client JavaScript Library (prerelease version 1.0.8-alpha) was tested on IE9 only.
 
-##### Cross-domain
-###### JSONP  
-The server side supports JSONP since v1.2.4.
-
-``` javascript
-```
-
-###### CORS
-``` javascript
-```
+##### Cross-domain  
 ![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
+For intranet scenarios, browsers settings can be managed by your system administrator centralizedly. However, for internet scenarios, we can't just assume that end users will set their browsers to allow cross-domain calls.  
+
+###### JSONP for now (Added: Server Lib v1.2.4, Client JS v1.0.8-alpha) 
+JSONP is a practicable way _(although it seems a little rascal)_ to solve the cross-domain access puzzle before CORS (Cross-Origin Resource Sharing) is supported by all popular browsers.  
+Below example is a JSONP approach of above example,
+``` javascript
+    ....
+    var input = {
+        inDate: $.utcDate(2015,03,10)
+    };
+    $.jsonpDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
+             input,
+             function (data) {
+                 ....
+             });
+    ....
+```
+The server side:
+``` CSharp
+    config.RegisterDbWebApi();
+```
+will include JSONP support by default. If you don't want to support JSONP, you can remove the JsonpMediaTypeFormatter from the config.Formatters collection after that.  
+
+
+###### CORS later  
+Currently, the example server project in this repository supports _(untested)_ CORS in server side. However, IE's security setting _(Access data sources across domains)_ still disables CORS requests by default.
+``` javascript
+```
 
 
 ## NuGet
