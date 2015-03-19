@@ -1,7 +1,7 @@
 ﻿/*!
-* DbWebApi Client JavaScript Library v1.0.7-alpha
+* DbWebApi Client JavaScript Library v1.0.8-alpha
 * https://github.com/databooster/dbwebapi
-* Date: 2015-03-16
+* Date: 2015-03-19
 */
 (function (window, undefined) {
 	jQuery.support.cors = true;
@@ -42,6 +42,19 @@
 			return jQuery.ajax({
 				type: "GET",
 				url: appendJsonInputToUrl(url, inputJson),
+				processData: false,
+				xhrFields: { withCredentials: true },
+				success: successCallback,
+				error: errorCallback
+			});
+		},
+
+		jsonpDb: function (url, inputJson, successCallback, errorCallback) {
+			var jpUrl = appendJsonInputToUrl(url, inputJson);
+			return jQuery.ajax({
+				type: "GET",
+				url: jpUrl,
+				dataType: "jsonp",
 				processData: false,
 				xhrFields: { withCredentials: true },
 				success: successCallback,
