@@ -93,6 +93,8 @@ The request JSON should like:
     "inRuleId":108
 }
 ```
+Parameter names are case-insensitive.
+
 ##### Accept Response MediaType:  
 1. JSON (default)  
     Specify in request header:  
@@ -161,7 +163,7 @@ The request JSON should like:
     }
 ```
 
-#### Response internal structure
+#### Response data internal structure
 ``` CSharp
     public class StoredProcedureResponse
     {
@@ -342,6 +344,18 @@ Recording current username is a common auditing requirement. Since the Web API n
 * Or in a traditional way, create separate Controllers for those stored procedures individually, in their internal implementation set current username and then call the ExecuteDbApi extension method. :(
 * Or in a centralized table, register that which stored procedures which parameter require current UserName input, so that in the Web API can know when it need to replace/add which input parameter.
 * etc.
+
+### Performance  
+* Connection Pool Tuning  
+Facing with concurrent requests from different clients in different business contexts. DbWebApi server opens a new database connection per request. All requests are using the same connection string. So the Connection Pool Tuning is very important to the performance of the whole responsiveness.
+
+* Load Balancing  
+As a completely generic web service, DbWebApi makes the distributed deployment much simpler, every nodes in the distributed environment are equivalent. It is easier to apply any of today's existing web server load balance techniques.
+
+* For front-end applications and systems integration  
+As a Web API, the target clients are still front-end applications mainly, plus some data formats transform for systems integration convenience.  
+The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](http://databooster.codeplex.com/) directly for high-performance database access.  
+  
 
 ## Clients
 #### .Net Client  
