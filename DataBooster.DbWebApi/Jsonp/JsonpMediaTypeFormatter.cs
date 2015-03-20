@@ -15,26 +15,45 @@ namespace DataBooster.DbWebApi.Jsonp
 	public class JsonpMediaTypeFormatter : JsonMediaTypeFormatter
 	{
 		const string _FormatShortName = "jsonp";
-		private static readonly MediaTypeHeaderValue _TextJavaScript = new MediaTypeHeaderValue("text/javascript");
 		private static readonly MediaTypeHeaderValue _ApplicationJavaScript = new MediaTypeHeaderValue("application/javascript");
 		private static readonly MediaTypeHeaderValue _ApplicationJsonp = new MediaTypeHeaderValue("application/json-p");
+		private static readonly MediaTypeHeaderValue _TextJavaScript = new MediaTypeHeaderValue("text/javascript");
 		private readonly string _CallbackQueryParameter;
 		private readonly string _JsonpStateQueryParameter;
-		private string _Callback;
-		private string _JsonpState;
+		private readonly string _Callback;
+		private readonly string _JsonpState;
 
 		public JsonpMediaTypeFormatter(string callbackQueryParameter = null, string jsonpStateQueryParameter = null)
 		{
 			_CallbackQueryParameter = string.IsNullOrEmpty(callbackQueryParameter) ? DbWebApiOptions.QueryStringContract.JsonpCallbackParameterName : callbackQueryParameter;
 			_JsonpStateQueryParameter = string.IsNullOrEmpty(jsonpStateQueryParameter) ? DbWebApiOptions.QueryStringContract.JsonpStateParameterName : jsonpStateQueryParameter;
 
-			SupportedMediaTypes.Add(_TextJavaScript);
 			SupportedMediaTypes.Add(_ApplicationJavaScript);
 			SupportedMediaTypes.Add(_ApplicationJsonp);
+			SupportedMediaTypes.Add(_TextJavaScript);
 
-			MediaTypeMappings.Add(new JsonpQueryStringMapping(_CallbackQueryParameter, _TextJavaScript));
-			MediaTypeMappings.Add(new QueryStringMapping(DbWebApiOptions.QueryStringContract.MediaTypeParameterName, _FormatShortName, _TextJavaScript));
-			MediaTypeMappings.Add(new UriPathExtensionMapping(_FormatShortName, _TextJavaScript));
+			MediaTypeMappings.Add(new JsonpQueryStringMapping(_CallbackQueryParameter, _ApplicationJavaScript));
+			MediaTypeMappings.Add(new QueryStringMapping(DbWebApiOptions.QueryStringContract.MediaTypeParameterName, _FormatShortName, _ApplicationJavaScript));
+			MediaTypeMappings.Add(new UriPathExtensionMapping(_FormatShortName, _ApplicationJavaScript));
+		}
+
+		private JsonpMediaTypeFormatter(JsonpMediaTypeFormatter parent, string callback, string jsonpState, string callbackQueryParameter, string jsonpStateQueryParameter)
+			: this(callbackQueryParameter, jsonpStateQueryParameter)
+		{
+			if (parent == null)
+				throw new ArgumentNullException("parent");
+			if (string.IsNullOrEmpty(callback))
+				throw new ArgumentNullException("callback");
+
+			SerializerSettings = parent.SerializerSettings;
+
+			_Callback = callback;
+			_JsonpState = jsonpState;
+		}
+
+		new public static MediaTypeHeaderValue DefaultMediaType
+		{
+			get { return _ApplicationJavaScript; }
 		}
 
 		/// <param name="type">The type to format.</param>
@@ -50,10 +69,15 @@ namespace DataBooster.DbWebApi.Jsonp
 
 			Dictionary<string, string> queryStrings = request.GetQueryStringDictionary();
 
-			_Callback = queryStrings.GetQueryParameterValue(_CallbackQueryParameter);
-			_JsonpState = queryStrings.GetQueryParameterValue(_JsonpStateQueryParameter);
+			string callback = queryStrings.GetQueryParameterValue(_CallbackQueryParameter);
 
-			return this;
+			if (string.IsNullOrWhiteSpace(callback))
+				return this;
+			else
+			{
+				string jsonpState = queryStrings.GetQueryParameterValue(_JsonpStateQueryParameter);
+				return new JsonpMediaTypeFormatter(this, callback, jsonpState, _CallbackQueryParameter, _JsonpStateQueryParameter);
+			}
 		}
 
 		/// <param name="type">The type of object to write.</param>
