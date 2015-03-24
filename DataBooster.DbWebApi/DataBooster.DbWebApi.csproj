@@ -105,6 +105,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PseudoContentNegotiator.cs" />
     <Compile Include="PseudoMediaTypeFormatter.cs" />
+    <Compile Include="Razor\DataModel.cs" />
+    <Compile Include="Razor\IsolatedRazor.cs" />
     <Compile Include="WebApiExtensions.cs" />
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
@@ -113,9 +115,7 @@
     <None Include="DbWebApi.cd" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Razor\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
