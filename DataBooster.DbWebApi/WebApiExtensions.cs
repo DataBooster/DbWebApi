@@ -16,6 +16,7 @@ using DbParallel.DataAccess;
 using DataBooster.DbWebApi.Csv;
 using DataBooster.DbWebApi.Excel;
 using DataBooster.DbWebApi.Jsonp;
+using DataBooster.DbWebApi.Razor;
 
 namespace DataBooster.DbWebApi
 {
@@ -32,12 +33,18 @@ namespace DataBooster.DbWebApi
 		}
 
 		#region Registration
-		public static void RegisterDbWebApi(this HttpConfiguration config)
+		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true)
 		{
-			config.AddFormatPlug(new CsvFormatPlug());
-			config.AddFormatPlug(new XlsxFormatPlug());
-			config.Formatters.Add(new JsonpMediaTypeFormatter());
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
+
+			if (supportCsv)
+				config.AddFormatPlug(new CsvFormatPlug());
+			if (supportXlsx)
+				config.AddFormatPlug(new XlsxFormatPlug());
+			if (supportJsonp)
+				config.Formatters.Add(new JsonpMediaTypeFormatter());
+			if (supportRazor)
+				config.Formatters.Add(new RazorMediaTypeFormatter());
 		}
 
 		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = null)
@@ -162,10 +169,15 @@ namespace DataBooster.DbWebApi
 			{
 				dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
 
-				if (negotiationResult != null && negotiationResult.Formatter is XmlMediaTypeFormatter)
-					return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
-				else
-					return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
+				if (negotiationResult != null)
+				{
+					if (negotiationResult.Formatter is XmlMediaTypeFormatter)
+						return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
+					else if (negotiationResult.Formatter is RazorMediaTypeFormatter)
+						return apiController.Request.CreateResponse(HttpStatusCode.OK, new RazorContext(dbContext.ExecuteDbApi(sp, parameters), parameters));
+				}
+
+				return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
 			}
 		}
 

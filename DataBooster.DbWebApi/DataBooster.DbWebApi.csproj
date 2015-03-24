@@ -105,13 +105,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PseudoContentNegotiator.cs" />
     <Compile Include="PseudoMediaTypeFormatter.cs" />
-    <Compile Include="Razor\DataModel.cs" />
-    <Compile Include="Razor\IsolatedRazor.cs" />
+    <Compile Include="Razor\RazorContext.cs" />
+    <Compile Include="Razor\SerializableResponseData.cs" />
+    <Compile Include="Razor\RazorMediaTypeFormatter.cs" />
     <Compile Include="WebApiExtensions.cs" />
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DbWebApi.cd" />
     <None Include="packages.config" />
   </ItemGroup>
