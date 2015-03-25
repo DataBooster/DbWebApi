@@ -16,7 +16,6 @@ namespace DataBooster.DbWebApi.Razor
 		const string _FormatShortName = "razor";
 		private static readonly MediaTypeHeaderValue _TextRazor = new MediaTypeHeaderValue("text/razor");
 		private static readonly MediaTypeHeaderValue _ApplicationRazor = new MediaTypeHeaderValue("application/razor");
-		private static int _RazorTemplatingCacheId = 0;
 
 		public RazorMediaTypeFormatter()
 		{
@@ -42,16 +41,6 @@ namespace DataBooster.DbWebApi.Razor
 			return (type == typeof(RazorContext));
 		}
 
-		private string NextRazorTemplatingCacheId
-		{
-			get
-			{
-				int nextId = Interlocked.Increment(ref _RazorTemplatingCacheId);
-
-				return (nextId % 1000).ToString("000");
-			}
-		}
-
 		/// <param name="type">The type of the object to serialize.</param>
 		/// <param name="value">The object value to write. Can be null.</param>
 		/// <param name="writeStream">The stream to which to write.</param>
@@ -71,7 +60,13 @@ namespace DataBooster.DbWebApi.Razor
 
 			using (var isolatedRazor = IsolatedRazorEngineService.Create(razorContext.GetConfigCreator()))
 			{
-				resultText = isolatedRazor.RunCompile(razorContext.RazorTemplate, NextRazorTemplatingCacheId, null, razorContext.Model);
+				string cacheKey = string.Format("x{0:X8}", razorContext.RazorTemplate.GetHashCode());
+				object model = razorContext.Model;
+
+				if (isolatedRazor.IsTemplateCached(cacheKey, null))
+					resultText = isolatedRazor.Run(cacheKey, null, model);
+				else
+					resultText = isolatedRazor.RunCompile(razorContext.RazorTemplate, cacheKey, null, model);
 			}
 
 			if (string.IsNullOrEmpty(resultText))

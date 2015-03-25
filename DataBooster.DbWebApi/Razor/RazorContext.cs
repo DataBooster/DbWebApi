@@ -14,7 +14,7 @@ namespace DataBooster.DbWebApi.Razor
 		private readonly SerializableResponseData _Model;
 		public SerializableResponseData Model { get { return _Model; } }
 
-		private readonly string _RazorTemplate;
+		private string _RazorTemplate;
 		public string RazorTemplate { get { return _RazorTemplate; } }
 
 		private readonly Encoding _RazorEncoding;
@@ -41,6 +41,30 @@ namespace DataBooster.DbWebApi.Razor
 				_RazorLanguage = DbWebApiOptions.DefaultRazorLanguage;
 
 			_Model = new SerializableResponseData(spResponse);
+
+			ResolveRazorTemplate();
+		}
+
+		private bool ResolveRazorTemplate()
+		{
+			if (_RazorTemplate.Length > 116)
+				return false;
+
+			IDictionary<string, object> dbOutputParameters = _Model.OutputParameters;
+			object outValue;
+
+			if (dbOutputParameters.TryGetValue(_RazorTemplate, out outValue))
+			{
+				string strTemplate = outValue as string;
+
+				if (!string.IsNullOrEmpty(strTemplate))
+				{
+					_RazorTemplate = strTemplate;
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private string TryGetParameter(IDictionary<string, object> razorParameters, string parameterName)
