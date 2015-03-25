@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DbWebApi")]
-[assembly: AssemblyDescription("Invoking database stored procedures through the generic Web API - DbWebApi. Please visit https://github.com/DataBooster/DbWebApi")]
+[assembly: AssemblyDescription("Invoking database stored procedures through the generic Web API - DbWebApi, getting the results as JSON, XML, CSV, Excel xlsx, or JSONP, and support Razor dynamic template. Please visit https://github.com/DataBooster/DbWebApi for detail.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Abel Cheng")]
 [assembly: AssemblyProduct("DataBooster.DbWebApi")]
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.4.3")]
-[assembly: AssemblyFileVersion("1.2.4.3")]
-[assembly: AssemblyInformationalVersion("1.2.4.3")]
+[assembly: AssemblyVersion("1.2.5.0")]
+[assembly: AssemblyFileVersion("1.2.5.0")]
+[assembly: AssemblyInformationalVersion("1.2.5.0")]

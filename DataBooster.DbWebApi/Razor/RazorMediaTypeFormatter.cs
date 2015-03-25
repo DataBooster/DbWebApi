@@ -3,10 +3,11 @@
 
 using System;
 using System.IO;
-using System.Threading;
+using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
+using DbParallel.DataAccess;
 using RazorEngine.Templating;
 
 namespace DataBooster.DbWebApi.Razor
@@ -21,6 +22,9 @@ namespace DataBooster.DbWebApi.Razor
 		{
 			SupportedMediaTypes.Add(_TextRazor);
 			SupportedMediaTypes.Add(_ApplicationRazor);
+
+			SupportedEncodings.Add(new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true));
+			SupportedEncodings.Add(new UnicodeEncoding(bigEndian: false, byteOrderMark: true, throwOnInvalidBytes: true));
 
 			MediaTypeMappings.Add(new QueryStringMapping(DbWebApiOptions.QueryStringContract.MediaTypeParameterName, _FormatShortName, _TextRazor));
 			MediaTypeMappings.Add(new UriPathExtensionMapping(_FormatShortName, _TextRazor));
@@ -38,7 +42,7 @@ namespace DataBooster.DbWebApi.Razor
 
 		public override bool CanWriteType(Type type)
 		{
-			return (type == typeof(RazorContext));
+			return (type == typeof(RazorContext) || type == typeof(StoredProcedureResponse));
 		}
 
 		/// <param name="type">The type of the object to serialize.</param>
@@ -56,27 +60,15 @@ namespace DataBooster.DbWebApi.Razor
 			if (razorContext == null)
 				throw new ArgumentException("value is not RazorContext");
 
-			string resultText;
+			Encoding encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
 
 			using (var isolatedRazor = IsolatedRazorEngineService.Create(razorContext.GetConfigCreator()))
-			{
-				string cacheKey = string.Format("x{0:X8}", razorContext.RazorTemplate.GetHashCode());
-				object model = razorContext.Model;
-
-				if (isolatedRazor.IsTemplateCached(cacheKey, null))
-					resultText = isolatedRazor.Run(cacheKey, null, model);
-				else
-					resultText = isolatedRazor.RunCompile(razorContext.RazorTemplate, cacheKey, null, model);
-			}
-
-			if (string.IsNullOrEmpty(resultText))
-				return;
-
-			var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
-
 			using (var writer = new StreamWriter(writeStream, encoding))
 			{
-				writer.Write(resultText);
+				string cacheKey = razorContext.RazorTemplate.GetHashCode().ToString("X8");
+				object model = razorContext.Model;
+
+				isolatedRazor.RunCompile(razorContext.RazorTemplate, cacheKey, writer, null, model);
 				writer.Flush();
 			}
 		}

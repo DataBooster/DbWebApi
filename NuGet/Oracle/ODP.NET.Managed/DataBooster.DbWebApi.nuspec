@@ -12,7 +12,7 @@
 		<description>$description$</description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
 		<copyright>Copyright 2015 Abel Cheng</copyright>
-		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle ODP.NET Managed Database Stored Procedure DataAccess JSON XML CSV Excel xlsx JSONP</tags>
+		<tags>DataBooster generic Web API for data driven ADO.NET Booster Oracle ODP.NET Managed Database Stored Procedure DataAccess JSON XML CSV Excel xlsx JSONP Razor CsvHelper ClosedXML RazorEngine</tags>
 	</metadata>
 	<files>
 		<file src="..\NuGet\Oracle\ODP.NET.Managed\web.config.transform" target="content" />

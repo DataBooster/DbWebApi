@@ -13,7 +13,7 @@ namespace MyDbWebApi
 				name: "DbWebApi",
 				routeTemplate: "{sp}/{ext}",
 				defaults: new { controller = "DbWebApi", ext = RouteParameter.Optional },
-				constraints: new { ext = @"|json|xml|csv|xlsx|jsonp" }
+				constraints: new { ext = @"|json|xml|csv|xlsx|jsonp|razor" }
 			);
 
 			config.Routes.MapHttpRoute(
