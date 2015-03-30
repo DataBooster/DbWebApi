@@ -23,14 +23,15 @@ With DbWebApi you can access SQL Server or Oracle package stored procedure like
 
 ***
 
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet).
+DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet). While being regarded as a proxy service, DbWebApi reflects in two directions: Data Access Proxy and Media Format Proxy.
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
 ### What are the benefits of DbWebApi?
 
 - The underlying tenet:  
-Less coding, less configuration, less deployment, less maintenance.
+Less coding, less configuration, less deployment, less maintenance.  
+The conciseness of using DbWebApi is down-to-earth for hands-on developers, to access database stored procedures or functions is completely coding-free and configuration-free. Don't need to explicitly specify any metadata about database objects (such as parameters type, size, direction... or columns attributes) by coding or configuration, don't need to write any controller for handling new data models from database, don't need to write any method for calling new stored procedures or functions ... No more dazzling _The Emperor's New Services(Clothes)_ to test(fitting), deploy or maintain.
 - In data-driven applications area, there are a large number of scenarios without substantial logic in data access web services, however they wasted a lot of our efforts on very boring data moving coding or configurations, we've had enough of it. Since now on, most of thus repetitive works can be dumped onto DbWebApi.
 - DbWebApi can coexist within your existing ASP.NET Web API, as a supplementary service to reduce new boring manual works for most common of application scenarios.
 
