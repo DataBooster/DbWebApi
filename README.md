@@ -396,6 +396,20 @@ DbWebApiResponse data = client.ExecAsJson("test_schema.prj_package.foo",
 // You can either consume JObject[] (LINQ to JSON) directly or cast to your strong-type business class as below:
 IEnumerable<MyStrongTypeCls> strongTypeObjs = data.ResultSets[0].Select(j => j.ToObject<MyStrongTypeCls>());
 ```
+If you just need the response content stream (E.g. CSV, Excel xlsx or generated text) to be stored as a file or transfer forward to somewhere else on the network, see below example, replacing ExecAsJson() by ExecRawAsync(), then [write the HTTP content to a stream](https://msdn.microsoft.com/en-us/library/hh138076.aspx) dicectly.
+``` CSharp
+....
+var task = client.ExecRawAsync("test_schema.prj_package.foo",
+    new InputParameterDictionary(new {
+        inDate = new DateTime(2015, 3, 16)
+        //, ... other input parameters, if any.
+    }));
+using (FileStream file = File.Create(...))
+{
+    task.Result.Content.CopyToAsync(file).Wait();
+}
+```
+
 By default, the DbWebApiClient uses Windows authentication for the convenience of intranet usage scenarios. Please see its constructor overrides for other options.
 
 All Exec... methods will use HTTP POST method by default. You can change the default behavior to HTTP GET if need be. (as the comment line in above example code)
@@ -489,5 +503,7 @@ To switch above from one NuGet package to another NuGet Package, simply uninstal
 
 Please refer to example project - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Examples/MyDbWebApi
 
-The example project also requires Visual Studio 2010 or above with ASP.NET MVC 4 installed.
-Base on the example (MyDbWebApi.csproj), it's easy to customize your own DbWebApi server.
+If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://dbwebapi.codeplex.com/releases/view/612912 simplicity.
+
+The example project requires Visual Studio 2010 or above with ASP.NET MVC 4 installed.
+Base on the example, it's easy to customize your own DbWebApi server.
