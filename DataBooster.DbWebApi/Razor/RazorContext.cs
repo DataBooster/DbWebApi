@@ -50,21 +50,27 @@ namespace DataBooster.DbWebApi.Razor
 			if (_RazorTemplate.Length > 116)
 				return false;
 
-			IDictionary<string, object> dbOutputParameters = _Model.OutputParameters;
+			string strTemplate = TryGetValueIgnoreCase(_Model.OutputParameters, _RazorTemplate) as string;
+
+			if (string.IsNullOrEmpty(strTemplate))
+				return false;
+
+			_RazorTemplate = strTemplate;
+			return true;
+		}
+
+		private object TryGetValueIgnoreCase(IDictionary<string, object> caseSensitiveDictionary, string key)
+		{
 			object outValue;
 
-			if (dbOutputParameters.TryGetValue(_RazorTemplate, out outValue))
-			{
-				string strTemplate = outValue as string;
+			if (caseSensitiveDictionary.TryGetValue(key, out outValue))
+				return outValue;
 
-				if (!string.IsNullOrEmpty(strTemplate))
-				{
-					_RazorTemplate = strTemplate;
-					return true;
-				}
-			}
+			foreach (var kvp in caseSensitiveDictionary)
+				if (kvp.Key.Equals(key, StringComparison.OrdinalIgnoreCase))
+					return kvp.Value;
 
-			return false;
+			return null;
 		}
 
 		private string TryGetParameter(IDictionary<string, object> razorParameters, string parameterName)
