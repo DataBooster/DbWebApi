@@ -43,9 +43,9 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\packages\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.5.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.5.0\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
+      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.5.1\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
     </Reference>
     <Reference Include="DbParallel.DataAccess, Version=1.7.6.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -59,8 +59,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine">
-      <HintPath>..\..\packages\RazorEngine.3.6.3\lib\net40\RazorEngine.dll</HintPath>
+    <Reference Include="RazorEngine, Version=3.6.4.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RazorEngine.3.6.4\lib\net40\RazorEngine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
