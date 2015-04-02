@@ -95,7 +95,12 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, InputParameterDictionary inputParameters)
+		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+		}
+
+		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, InputParameterDictionary inputParameters = null)
 		{
 			return ExecRawAsync(requestUri, inputParameters).
 				ContinueWith<DbWebApiResponse>(requestTask =>
@@ -107,6 +112,11 @@ namespace DataBooster.DbWebApi.Client
 
 					return requestTask.Result.ReadDbJson();
 				});
+		}
+
+		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
 
 		public DbWebApiResponse ExecAsJson(string requestUri, InputParameterDictionary inputParameters = null)
@@ -133,7 +143,7 @@ namespace DataBooster.DbWebApi.Client
 
 		public DbWebApiResponse ExecAsJson(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return ExecAsJson(requestUri, new InputParameterDictionary(anonymousTypeInstanceAsInputParameters));
+			return ExecAsJson(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
 		#endregion
 
@@ -146,12 +156,29 @@ namespace DataBooster.DbWebApi.Client
 				return PostRawAsync(requestUri, inputParameters, cancellationToken);
 		}
 
+		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecRawAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+		}
+
 		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, InputParameterDictionary inputParameters)
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				return GetRawAsync(requestUri, inputParameters);
 			else
 				return PostRawAsync(requestUri, inputParameters);
+		}
+
+		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecRawAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+		}
+
+		protected InputParameterDictionary AsInputParameters(object anonymousTypeInstanceAsInputParameters)
+		{
+			InputParameterDictionary inputParameterDictionary = anonymousTypeInstanceAsInputParameters as InputParameterDictionary;
+
+			return inputParameterDictionary ?? new InputParameterDictionary(anonymousTypeInstanceAsInputParameters);
 		}
 
 		protected Task<HttpResponseMessage> PostRawAsync(string requestUri, InputParameterDictionary inputParameters, CancellationToken cancellationToken)
