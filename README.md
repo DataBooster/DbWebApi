@@ -1,4 +1,4 @@
-# DbWebApi
+﻿# DbWebApi
 
 ### What is it?
 
@@ -388,10 +388,10 @@ DbWebApiClient client = new DbWebApiClient("http://dbwebapi.dev.com/oradev/");
 
 // Synchronous call. If need asynchronous call, please use ExecAsJsonAsync(..) instead.
 DbWebApiResponse data = client.ExecAsJson("test_schema.prj_package.foo",
-    new InputParameterDictionary(new {
+    new {
         inDate = new DateTime(2015, 3, 16)
         //, ... other input parameters, if any.
-    }));
+    });
 
 // You can either consume JObject[] (LINQ to JSON) directly or cast to your strong-type business class as below:
 IEnumerable<MyStrongTypeCls> strongTypeObjs = data.ResultSets[0].Select(j => j.ToObject<MyStrongTypeCls>());
@@ -400,10 +400,10 @@ If you just need the response content stream (E.g. CSV, Excel xlsx or generated 
 ``` CSharp
 ....
 var task = client.ExecRawAsync("test_schema.prj_package.foo",
-    new InputParameterDictionary(new {
+    new {
         inDate = new DateTime(2015, 3, 16)
         //, ... other input parameters, if any.
-    }));
+    });
 using (FileStream file = File.Create(...))
 {
     task.Result.Content.CopyToAsync(file).Wait();
@@ -505,5 +505,5 @@ Please refer to example project - MyDbWebApi in https://github.com/DataBooster/D
 
 If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://dbwebapi.codeplex.com/releases/view/612912 simplicity.
 
-The example project requires Visual Studio 2010 or above with ASP.NET MVC 4 installed.
-Base on the example, it's easy to customize your own DbWebApi server.
+The example project requires Visual Studio 2010 at lowest with ASP.NET MVC 4 installed.
+Hopefully, base on the example, it's easier to customize your own DbWebApi server.
