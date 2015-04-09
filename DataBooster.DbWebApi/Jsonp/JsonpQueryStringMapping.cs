@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
+using System.Collections.Generic;
 
 namespace DataBooster.DbWebApi.Jsonp
 {
@@ -28,12 +29,17 @@ namespace DataBooster.DbWebApi.Jsonp
 
 		private string GetParameterValue(HttpRequestMessage request, string parameterName)
 		{
-			var queryStrings = request.GetQueryNameValuePairs();
+			Dictionary<string, string> queryStrings = request.GetQueryStringDictionary();
 
 			if (queryStrings == null || string.IsNullOrEmpty(parameterName))
 				return null;
 
-			return queryStrings.FirstOrDefault(p => p.Key.Equals(parameterName, StringComparison.OrdinalIgnoreCase)).Value;
+			string parameterValue;
+
+			if (queryStrings.TryGetValue(parameterName, out parameterValue))
+				return parameterValue;
+			else
+				return null;
 		}
 	}
 }

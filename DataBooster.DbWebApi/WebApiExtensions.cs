@@ -25,11 +25,13 @@ namespace DataBooster.DbWebApi
 		private static Collection<IFormatPlug> _FormatPlugs;
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 		private static PseudoContentNegotiator _PseudoContentNegotiator;
+		private static CacheDictionary<Uri, Dictionary<string, string>> _QueryStringCache;
 
 		static WebApiExtensions()
 		{
 			_FormatPlugs = new Collection<IFormatPlug>();
 			_PseudoContentNegotiator = new PseudoContentNegotiator();
+			_QueryStringCache = new CacheDictionary<Uri, Dictionary<string, string>>();
 		}
 
 		#region Registration
@@ -154,30 +156,38 @@ namespace DataBooster.DbWebApi
 		/// <returns>A complete HttpResponseMessage contains result data returned by the database</returns>
 		public static HttpResponseMessage ExecuteDbApi(this ApiController apiController, string sp, IDictionary<string, object> parameters)
 		{
-			var negotiationResult = apiController.Request.Negotiate();
-
-			if (negotiationResult != null && negotiationResult.Formatter is PseudoMediaTypeFormatter)
+			try
 			{
-				Encoding negotiatedEncoding = apiController.Request.NegotiateEncoding((negotiationResult == null) ? null : negotiationResult.Formatter);
-				IFormatPlug formatPlug = MatchFormatPlug(negotiationResult.MediaType);
+				var negotiationResult = apiController.Request.Negotiate();
 
-				if (formatPlug != null)
-					return formatPlug.Respond(apiController, sp, parameters, negotiationResult.MediaType, negotiatedEncoding);
-			}
-
-			using (DbContext dbContext = new DbContext())
-			{
-				dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
-
-				if (negotiationResult != null)
+				if (negotiationResult != null && negotiationResult.Formatter is PseudoMediaTypeFormatter)
 				{
-					if (negotiationResult.Formatter is XmlMediaTypeFormatter)
-						return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
-					else if (negotiationResult.Formatter is RazorMediaTypeFormatter)
-						return apiController.Request.CreateResponse(HttpStatusCode.OK, new RazorContext(dbContext.ExecuteDbApi(sp, parameters), parameters));
+					Encoding negotiatedEncoding = apiController.Request.NegotiateEncoding((negotiationResult == null) ? null : negotiationResult.Formatter);
+					IFormatPlug formatPlug = MatchFormatPlug(negotiationResult.MediaType);
+
+					if (formatPlug != null)
+						return formatPlug.Respond(apiController, sp, parameters, negotiationResult.MediaType, negotiatedEncoding);
 				}
 
-				return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
+				using (DbContext dbContext = new DbContext())
+				{
+					dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
+
+					if (negotiationResult != null)
+					{
+						if (negotiationResult.Formatter is XmlMediaTypeFormatter)
+							return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
+						else if (negotiationResult.Formatter is RazorMediaTypeFormatter)
+							return apiController.Request.CreateResponse(HttpStatusCode.OK, new RazorContext(dbContext.ExecuteDbApi(sp, parameters), parameters));
+					}
+
+					return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
+				}
+			}
+			finally
+			{
+				_QueryStringCache.TryRemove(apiController.Request.RequestUri);
+				_QueryStringCache.RemoveExpiredKeys(TimeSpan.FromSeconds(60));
 			}
 		}
 
@@ -188,11 +198,16 @@ namespace DataBooster.DbWebApi
 			if (request == null)
 				return null;
 
+			Dictionary<string, string> queryStrings;
+
+			if (_QueryStringCache.TryGetValue(request.RequestUri, out queryStrings))
+				return queryStrings;
+
 			var queryNameValuePairs = request.GetQueryNameValuePairs();
 			if (queryNameValuePairs == null)
 				return null;
 
-			Dictionary<string, string> queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+			queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 			string strName, strValue;
 
 			foreach (var pair in queryNameValuePairs)
@@ -204,6 +219,8 @@ namespace DataBooster.DbWebApi
 					if (strName.Length > 0 && strValue.Length > 0)
 						queryStrings[strName] = strValue;
 				}
+
+			_QueryStringCache.TryAdd(request.RequestUri, queryStrings);
 
 			return queryStrings;
 		}
