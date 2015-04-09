@@ -58,6 +58,16 @@ namespace DataBooster.DbWebApi
 			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
 		}
 
+		internal ICollection<string> ListCachedStoredProcedures()
+		{
+			return _DbAccess.ListCachedStoredProcedures();
+		}
+
+		internal void RemoveCachedStoredProcedures(IEnumerable<string> storedProcedures)
+		{
+			_DbAccess.RemoveCachedStoredProcedures(storedProcedures);
+		}
+
 		#region IDisposable Members
 		public void Dispose()
 		{

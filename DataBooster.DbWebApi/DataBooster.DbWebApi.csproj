@@ -48,8 +48,8 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.6.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DataBooster.SqlServer.1.7.6.2\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess">
+      <HintPath>..\packages\DataBooster.SqlServer.1.7.7.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>

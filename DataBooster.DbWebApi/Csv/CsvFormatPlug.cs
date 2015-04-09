@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
+using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi.Csv
 {
@@ -83,7 +84,7 @@ namespace DataBooster.DbWebApi.Csv
 						{
 							object[] values = new object[readRow.VisibleFieldCount];
 
-							readRow.GetValues(values);
+							readRow.GetColumnValues(values);
 
 							csvExporter.WriteRow(values);
 						},
