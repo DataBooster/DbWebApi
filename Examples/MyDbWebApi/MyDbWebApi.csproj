@@ -43,13 +43,13 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\packages\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.5.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.5.1\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.5.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.5.3\lib\net40-Client\DataBooster.DbWebApi.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.6.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.6.2\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.7.7.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.7.2\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
