@@ -1,8 +1,8 @@
-﻿####################################################
-# Please global replace following "TargetSchema"   #
-# with your actual target schema for installation, #
-# And then remove this block of comment (5 lines). #
-####################################################
+﻿@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Please global replace following "TargetSchema"   @
+@ with your actual target schema for installation, @
+@ and then remove this block of comment (5 lines). @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 CREATE OR REPLACE PACKAGE "TargetSchema".DBWEBAPI IS
 
@@ -10,6 +10,7 @@ CREATE OR REPLACE PACKAGE "TargetSchema".DBWEBAPI IS
 -- Author:		Abel Cheng <abelcys@gmail.com>
 -- Create date: 2015-04-15
 -- Description:	StoredProcedures/Functions DDL Change Detection
+-- Repository:	https://github.com/DataBooster/DbWebApi
 -- ==============================================================
 
 TYPE SP_DDL_STATE	IS RECORD
@@ -44,6 +45,7 @@ CREATE OR REPLACE PACKAGE BODY "TargetSchema".DBWEBAPI IS
 
 -- Copyright (c) 2015 Abel Cheng <abelcys@gmail.com> and other contributors.
 -- Licensed under the MIT license. See LICENSE file in the project root for full license information.
+-- Repository:	https://github.com/DataBooster/DbWebApi
 
 FUNCTION NORMALIZE_NAME
 (

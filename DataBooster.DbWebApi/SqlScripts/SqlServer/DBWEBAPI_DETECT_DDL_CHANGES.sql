@@ -1,5 +1,8 @@
 ﻿IF OBJECT_ID(N'dbo.DBWEBAPI_DETECT_DDL_CHANGES') IS NULL
-	EXECUTE ('CREATE PROCEDURE dbo.DBWEBAPI_DETECT_DDL_CHANGES AS BEGIN END');
+	EXECUTE ('CREATE PROCEDURE dbo.DBWEBAPI_DETECT_DDL_CHANGES AS
+BEGIN
+	SET NOCOUNT ON;
+END');
 GO
 
 -- Copyright (c) 2015 Abel Cheng <abelcys@gmail.com> and other contributors.
@@ -9,7 +12,9 @@ GO
 -- Author:		Abel Cheng <abelcys@gmail.com>
 -- Create date: 2015-04-15
 -- Description:	StoredProcedures/Functions DDL Change Detection
+-- Repository:	https://github.com/DataBooster/DbWebApi
 -- ==============================================================
+
 ALTER PROCEDURE dbo.DBWEBAPI_DETECT_DDL_CHANGES
 	@inCommaDelimitedString	NVARCHAR(4000),
 	@inElapsedMinutes		INT
