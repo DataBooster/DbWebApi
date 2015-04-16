@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Data.Common;
 using DbParallel.DataAccess;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using DataBooster.DbWebApi.Csv;
+using DataBooster.DbWebApi.DataAccess;
 
 namespace DataBooster.DbWebApi
 {
@@ -145,5 +147,25 @@ namespace DataBooster.DbWebApi
 			get { return DbWebApiOptions._DefaultRazorLanguage; }
 			set { DbWebApiOptions._DefaultRazorLanguage = value; }
 		}
+
+		#region Database Connection
+		public static DbProviderFactory DbProviderFactory
+		{
+			get { return ConfigHelper.DbProviderFactory; }
+			set { ConfigHelper.DbProviderFactory = value; }
+		}
+
+		public static string ConnectionString
+		{
+			get { return ConfigHelper.ConnectionString; }
+			set { ConfigHelper.ConnectionString = value; }
+		}
+
+		public static string ConnectionSettingKey
+		{
+			get { return ConfigHelper.ConnectionSettingKey; }
+			set { ConfigHelper.ConnectionSettingKey = value; }
+		}
+		#endregion
 	}
 }

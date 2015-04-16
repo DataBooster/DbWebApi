@@ -26,12 +26,20 @@ namespace DataBooster.DbWebApi
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 		private static PseudoContentNegotiator _PseudoContentNegotiator;
 		private static CacheDictionary<Uri, Dictionary<string, string>> _QueryStringCache;
+		private static TimeSpan _QueryStringCacheLifetime;
+
+		public static TimeSpan QueryStringCacheLifetime
+		{
+			get { return _QueryStringCacheLifetime; }
+			set { _QueryStringCacheLifetime = value; }
+		}
 
 		static WebApiExtensions()
 		{
 			_FormatPlugs = new Collection<IFormatPlug>();
 			_PseudoContentNegotiator = new PseudoContentNegotiator();
 			_QueryStringCache = new CacheDictionary<Uri, Dictionary<string, string>>();
+			_QueryStringCacheLifetime = TimeSpan.FromSeconds(180);
 		}
 
 		#region Registration
@@ -187,7 +195,7 @@ namespace DataBooster.DbWebApi
 			finally
 			{
 				_QueryStringCache.TryRemove(apiController.Request.RequestUri);
-				_QueryStringCache.RemoveExpiredKeys(TimeSpan.FromSeconds(60));
+				_QueryStringCache.RemoveExpiredKeys(_QueryStringCacheLifetime);
 			}
 		}
 

@@ -91,6 +91,7 @@
     <Compile Include="Csv\CsvDateTimeConverter.cs" />
     <Compile Include="Csv\CsvExporter.cs" />
     <Compile Include="Csv\CsvFormatPlug.cs" />
+    <Compile Include="DataAccess\ConfigHelper.partial.cs" />
     <Compile Include="DataAccess\ConfigHelper.sample.cs" />
     <Compile Include="DataAccess\DbPackage.partial.sample.cs" />
     <Compile Include="DataAccess\DbPackage.sample.cs" />
@@ -113,11 +114,21 @@
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DbWebApi.cd" />
     <None Include="packages.config" />
+    <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
