@@ -3,12 +3,10 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
-using System.Data.Common;
 using DbParallel.DataAccess;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using DataBooster.DbWebApi.Csv;
-using DataBooster.DbWebApi.DataAccess;
 
 namespace DataBooster.DbWebApi
 {
@@ -149,6 +147,7 @@ namespace DataBooster.DbWebApi
 			set { DbWebApiOptions._DefaultRazorLanguage = value; }
 		}
 
+		/*
 		#region Database Connection
 		public static DbProviderFactory DbProviderFactory
 		{
@@ -168,5 +167,6 @@ namespace DataBooster.DbWebApi
 			set { ConfigHelper.ConnectionSettingKey = value; }
 		}
 		#endregion
+		*/
 	}
 }
