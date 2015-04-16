@@ -117,8 +117,6 @@ namespace DataBooster.DbWebApi
 
 		static DbWebApiOptions()
 		{
-			DerivedParametersCacheExpireInterval = new TimeSpan(0, 10, 0);
-
 			_CsvConfiguration = new CsvConfiguration();
 
 			SetCsvDateTimeConverter();
@@ -136,15 +134,15 @@ namespace DataBooster.DbWebApi
 		private static RazorEngine.Encoding _DefaultRazorEncoding = RazorEngine.Encoding.Raw;
 		public static RazorEngine.Encoding DefaultRazorEncoding
 		{
-			get { return DbWebApiOptions._DefaultRazorEncoding; }
-			set { DbWebApiOptions._DefaultRazorEncoding = value; }
+			get { return _DefaultRazorEncoding; }
+			set { _DefaultRazorEncoding = value; }
 		}
 
 		private static RazorEngine.Language _DefaultRazorLanguage = RazorEngine.Language.CSharp;
 		public static RazorEngine.Language DefaultRazorLanguage
 		{
-			get { return DbWebApiOptions._DefaultRazorLanguage; }
-			set { DbWebApiOptions._DefaultRazorLanguage = value; }
+			get { return _DefaultRazorLanguage; }
+			set { _DefaultRazorLanguage = value; }
 		}
 
 		/*
