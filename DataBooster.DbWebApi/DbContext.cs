@@ -3,6 +3,7 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.Linq;
 using System.Data.Common;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
@@ -59,14 +60,27 @@ namespace DataBooster.DbWebApi
 			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
 		}
 
-		internal ICollection<string> ListCachedStoredProcedures()
+		// Invalidate Altered Stored Procedures from DerivedParametersCache
+		internal int InvalidateAlteredSpFromCache(string spDetectDdlChanges, TimeSpan elapsedTime)
 		{
-			return _DbAccess.ListCachedStoredProcedures();
-		}
+			string commaDelimitedString = string.Join(",", _DbAccess.ListCachedStoredProcedures().OrderBy(sp => sp));
 
-		internal void RemoveCachedStoredProcedures(IEnumerable<string> storedProcedures)
-		{
-			_DbAccess.RemoveCachedStoredProcedures(storedProcedures);
+			if (string.IsNullOrEmpty(commaDelimitedString))
+				return 0;
+
+			var parameters = new Dictionary<string, IConvertible>(StringComparer.OrdinalIgnoreCase);
+			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.CommaDelimitedSpListParameterName, commaDelimitedString);
+			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.ElapsedTimeParameterName, (int)elapsedTime.TotalMinutes);
+
+			StoredProcedureResponse results = _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(spDetectDdlChanges, parameters));
+			int invalidation;
+
+			if (results.ResultSets.Count == 0 || (invalidation = results.ResultSets[0].Count) == 0)
+				return 0;
+
+			_DbAccess.RemoveCachedStoredProcedures(results.ResultSets[0].Select(item => item.First().Value as string));
+
+			return invalidation;
 		}
 
 		#region IDisposable Members

@@ -96,6 +96,26 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
+		public static class DetectDdlChangesContract
+		{
+			const string _DefaultCommaDelimitedSpListParameterName = "inCommaDelimitedString";
+			const string _DefaultElapsedTimeParameterName = "inElapsedMinutes";
+
+			private static string _CommaDelimitedSpListParameterName = _DefaultCommaDelimitedSpListParameterName;
+			public static string CommaDelimitedSpListParameterName
+			{
+				get { return _CommaDelimitedSpListParameterName; }
+				set { _CommaDelimitedSpListParameterName = string.IsNullOrEmpty(value) ? _DefaultCommaDelimitedSpListParameterName : value; }
+			}
+
+			private static string _ElapsedTimeParameterName = _DefaultElapsedTimeParameterName;
+			public static string ElapsedTimeParameterName
+			{
+				get { return _ElapsedTimeParameterName; }
+				set { _ElapsedTimeParameterName = string.IsNullOrEmpty(value) ? _DefaultElapsedTimeParameterName : value; }
+			}
+		}
+
 		public static TimeSpan DerivedParametersCacheExpireInterval
 		{
 			get { return DerivedParametersCache.ExpireInterval; }

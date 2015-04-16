@@ -21,7 +21,7 @@ using DataBooster.DbWebApi.Razor;
 
 namespace DataBooster.DbWebApi
 {
-	public static class WebApiExtensions
+	public static partial class WebApiExtensions
 	{
 		private static Collection<IFormatPlug> _FormatPlugs;
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
@@ -46,7 +46,7 @@ namespace DataBooster.DbWebApi
 		#region Registration
 		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true)
 		{
-			DbWebApiOptions.DerivedParametersCacheExpireInterval = new TimeSpan(0, 15, 0);
+			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
 
 			if (supportCsv)
 				config.AddFormatPlug(new CsvFormatPlug());

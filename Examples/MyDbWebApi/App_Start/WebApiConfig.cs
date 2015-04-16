@@ -18,7 +18,7 @@ namespace MyDbWebApi
 
 			config.Routes.MapHttpRoute(
 				name: "MiscApi",
-				routeTemplate: "api/{controller}/{method}"
+				routeTemplate: "api/{controller}/{action}"
 			);
 
 			config.RegisterDbWebApi();

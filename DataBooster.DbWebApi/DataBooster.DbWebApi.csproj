@@ -88,6 +88,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DerivedParametersCache\WebApiExtensions.partial.cs" />
     <Compile Include="Csv\CsvDateTimeConverter.cs" />
     <Compile Include="Csv\CsvExporter.cs" />
     <Compile Include="Csv\CsvFormatPlug.cs" />
@@ -119,13 +120,13 @@
     </None>
     <None Include="DbWebApi.cd" />
     <None Include="packages.config" />
-    <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck">
+    <None Include="DerivedParametersCache\SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql">
+    <None Include="DerivedParametersCache\SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
