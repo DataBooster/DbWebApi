@@ -114,12 +114,41 @@ namespace DataBooster.DbWebApi
 				get { return _ElapsedTimeParameterName; }
 				set { _ElapsedTimeParameterName = string.IsNullOrEmpty(value) ? _DefaultElapsedTimeParameterName : value; }
 			}
+
+			private static TimeSpan _CacheExpireIntervalWithDetection = TimeSpan.FromDays(365);
+			public static TimeSpan CacheExpireIntervalWithDetection
+			{
+				get { return _CacheExpireIntervalWithDetection; }
+				set { if (value > _CacheExpireIntervalWithoutDetection) _CacheExpireIntervalWithDetection = value; }
+			}
+
+			private static TimeSpan _CacheExpireIntervalWithoutDetection;
+			internal static TimeSpan CacheExpireIntervalWithoutDetection
+			{
+				get { return _CacheExpireIntervalWithoutDetection; }
+				set { if (value < _CacheExpireIntervalWithDetection) _CacheExpireIntervalWithoutDetection = value; }
+			}
+
+			static DetectDdlChangesContract()
+			{
+				_CacheExpireIntervalWithoutDetection = DerivedParametersCache.ExpireInterval;
+			}
 		}
 
 		public static TimeSpan DerivedParametersCacheExpireInterval
 		{
-			get { return DerivedParametersCache.ExpireInterval; }
-			set { DerivedParametersCache.ExpireInterval = value; }
+			get
+			{
+				return DerivedParametersCache.ExpireInterval;
+			}
+			set
+			{
+				if (!WebApiExtensions.DerivedParametersCacheInPeriodicDetection)
+				{
+					DerivedParametersCache.ExpireInterval = value;
+					DetectDdlChangesContract.CacheExpireIntervalWithoutDetection = value;
+				}
+			}
 		}
 
 		private static PropertyNamingConvention _DefaultPropertyNamingConvention = PropertyNamingConvention.None;

@@ -4,6 +4,7 @@
 
 using System;
 using System.Web.Http;
+using DbParallel.DataAccess;
 using DataBooster.DbWebApi.DataAccess;
 
 namespace DataBooster.DbWebApi
@@ -20,11 +21,36 @@ namespace DataBooster.DbWebApi
 			string detectDdlChangesProc = ConfigHelper.DetectDdlChangesProc;
 
 			if (string.IsNullOrEmpty(detectDdlChangesProc) || elapsedMinutes < 1)
-				return -1;
-
-			using (DbContext dbContext = new DbContext())
 			{
-				return dbContext.InvalidateAlteredSpFromCache(detectDdlChangesProc, TimeSpan.FromMinutes(elapsedMinutes));
+				SwitchDerivedParametersCache(false);
+				return -1;
+			}
+			else
+			{
+				SwitchDerivedParametersCache(true);
+
+				using (DbContext dbContext = new DbContext())
+				{
+					return dbContext.InvalidateAlteredSpFromCache(detectDdlChangesProc, TimeSpan.FromMinutes(elapsedMinutes));
+				}
+			}
+		}
+
+		private static bool _DerivedParametersCacheInPeriodicDetection = false;
+		internal static bool DerivedParametersCacheInPeriodicDetection
+		{
+			get { return _DerivedParametersCacheInPeriodicDetection; }
+		}
+
+		private static void SwitchDerivedParametersCache(bool periodicDetection)
+		{
+			if (periodicDetection != _DerivedParametersCacheInPeriodicDetection)
+			{
+				_DerivedParametersCacheInPeriodicDetection = periodicDetection;
+
+				DerivedParametersCache.ExpireInterval = periodicDetection ?
+					DbWebApiOptions.DetectDdlChangesContract.CacheExpireIntervalWithDetection :
+					DbWebApiOptions.DetectDdlChangesContract.CacheExpireIntervalWithoutDetection;
 			}
 		}
 	}
