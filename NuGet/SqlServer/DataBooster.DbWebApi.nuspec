@@ -17,5 +17,6 @@
 	<files>
 		<file src="..\NuGet\SqlServer\web.config.transform" target="content" />
 		<file src="..\NuGet\SqlServer\web.config.transform" target="content\app.config.transform" />
+		<file src="DerivedParametersCache\SqlScripts\SqlServer\**\*.*" target="content\SqlScripts\SqlServer" />
 	</files>
 </package>

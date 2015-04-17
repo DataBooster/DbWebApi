@@ -17,5 +17,6 @@
 	<files>
 		<file src="..\NuGet\Oracle\DataDirect\web.config.transform" target="content" />
 		<file src="..\NuGet\Oracle\DataDirect\web.config.transform" target="content\app.config.transform" />
+		<file src="DerivedParametersCache\SqlScripts\**\*.*" target="content\SqlScripts" />
 	</files>
 </package>
