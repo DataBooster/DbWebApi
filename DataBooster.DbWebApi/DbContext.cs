@@ -73,14 +73,11 @@ namespace DataBooster.DbWebApi
 			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.ElapsedTimeParameterName, (int)elapsedTime.TotalMinutes);
 
 			StoredProcedureResponse results = _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(spDetectDdlChanges, parameters));
-			int invalidation;
 
-			if (results.ResultSets.Count == 0 || (invalidation = results.ResultSets[0].Count) == 0)
+			if (results.ResultSets.Count == 0 || results.ResultSets[0].Count == 0)
 				return 0;
-
-			_DbAccess.RemoveCachedStoredProcedures(results.ResultSets[0].Select(item => item.First().Value as string));
-
-			return invalidation;
+			else
+				return _DbAccess.RemoveCachedStoredProcedures(results.ResultSets[0].Select(item => item.First().Value as string));
 		}
 
 		#region IDisposable Members

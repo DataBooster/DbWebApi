@@ -11,11 +11,6 @@ namespace DataBooster.DbWebApi
 {
 	public static partial class WebApiExtensions
 	{
-		public static int DetectSpChanges(this ApiController apiController, int elapsedMinutes)
-		{
-			return DetectSpChanges(elapsedMinutes);
-		}
-
 		public static int DetectSpChanges(int elapsedMinutes)
 		{
 			string detectDdlChangesProc = ConfigHelper.DetectDdlChangesProc;

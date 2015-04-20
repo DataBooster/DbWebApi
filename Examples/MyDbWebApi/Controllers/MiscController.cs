@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using DataBooster.DbWebApi;
 
 namespace MyDbWebApi.Controllers
 {
@@ -17,6 +18,12 @@ namespace MyDbWebApi.Controllers
 				}
 
 			return "?";
+		}
+
+		[AcceptVerbs("GET", "POST")]
+		public int DetectSpChanges(int elapsedMinutes)
+		{
+			return WebApiExtensions.DetectSpChanges(elapsedMinutes);
 		}
 	}
 }
