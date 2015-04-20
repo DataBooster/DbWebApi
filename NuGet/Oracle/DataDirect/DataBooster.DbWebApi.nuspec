@@ -3,7 +3,7 @@
 	<metadata>
 		<id>DataBooster.DbWebApi.Oracle.DataDirect</id>
 		<version>$version$</version>
-		<title>$title$ for Oracle (use DataDirect Provider)</title>
+		<title>$title$ for Oracle (using DataDirect Provider)</title>
 		<authors>$author$</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
 		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
