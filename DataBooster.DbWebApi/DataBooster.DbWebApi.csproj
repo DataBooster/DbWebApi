@@ -49,8 +49,8 @@
       <HintPath>..\packages\CsvHelper.2.13.0.0\lib\net40-client\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.7.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DataBooster.SqlServer.1.7.7.3\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.7.7.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DataBooster.SqlServer.1.7.7.4\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
@@ -59,8 +59,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine, Version=3.6.5.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <HintPath>..\packages\RazorEngine.3.6.5\lib\net40\RazorEngine.dll</HintPath>
+    <Reference Include="RazorEngine, Version=3.6.6.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.6.6\lib\net40\RazorEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
