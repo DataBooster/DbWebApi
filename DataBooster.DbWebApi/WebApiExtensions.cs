@@ -197,6 +197,7 @@ namespace DataBooster.DbWebApi
 			{
 				_QueryStringCache.TryRemove(apiController.Request.RequestUri);
 				_QueryStringCache.RemoveExpiredKeys(_QueryStringCacheLifetime);
+				SelfRecoverDerivedParametersCache();
 			}
 		}
 
