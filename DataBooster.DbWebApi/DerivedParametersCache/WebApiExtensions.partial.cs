@@ -62,12 +62,17 @@ namespace DataBooster.DbWebApi
 		{
 			if (_DerivedParametersCacheInPeriodicDetection)
 			{
-				TimeSpan thresholdInterval = DbWebApiOptions.DetectDdlChangesContract.CacheExpireIntervalWithoutDetection;
+				long thresholdInterval = DbWebApiOptions.DetectDdlChangesContract.CacheExpireIntervalWithoutDetection.Ticks;
 
-				if (thresholdInterval > TimeSpan.Zero && DateTime.Now - LastDetectSpChangesTime > thresholdInterval)
+				if (thresholdInterval > 0L)
 				{
-					SwitchDerivedParametersCache(false);
-					return true;
+					long lastDetectSpChangesTicks = Interlocked.Read(ref _LastDetectSpChangesTicks);
+
+					if (DateTime.Now.Ticks - lastDetectSpChangesTicks > thresholdInterval)
+					{
+						SwitchDerivedParametersCache(false);
+						return true;
+					}
 				}
 			}
 
