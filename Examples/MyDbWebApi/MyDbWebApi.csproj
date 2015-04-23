@@ -140,7 +140,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
-    <Content Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
+    <None Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
