@@ -484,6 +484,22 @@ Currently, the example server project in this repository supports _(untested)_ C
 ``` javascript
 ```
 
+#### PowerShell Client  
+In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) cmdlet is readily available. See following sample:
+``` PowerShell
+$inpms = @{inDate = [DateTime]"2015-03-16"};
+$response = Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo" -Body (ConvertTo-Json $inpms) -ContentType "application/json"
+```
+$response contains all the result data. In Powershell ISE, IntelliSense can show you all its member properties. If you want to save the response body stream (such as CSV or Excel xlsx) into a specified output file, please just use -OutFile parameter,
+``` PowerShell
+Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo" -Body (ConvertTo-Json $inpms) -ContentType "application/json" -OutFile "\\somewhere\somepath\filename.ext"
+```
+
+PowerShell is true powerful to do more solid work with less coding. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you would even didn't want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
+
+``` PowerShell
+```
+
 
 ## NuGet
 #### Server side
