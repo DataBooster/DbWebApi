@@ -519,7 +519,7 @@ To switch above from one NuGet package to another NuGet Package, simply uninstal
 
 Please refer to example project - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Examples/MyDbWebApi
 
-If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://dbwebapi.codeplex.com/releases/view/612912 simplicity.
+If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://dbwebapi.codeplex.com/releases/view/614695 simplicity.
 
 The example project requires Visual Studio 2010 at lowest with ASP.NET MVC 4 installed.
 Hopefully, base on the example, it's easier to customize your own DbWebApi server.
