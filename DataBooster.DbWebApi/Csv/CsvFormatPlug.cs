@@ -38,7 +38,7 @@ namespace DataBooster.DbWebApi.Csv
 			get { return "csv"; }
 		}
 
-		private int GetQueryResultSetIndex(Dictionary<string, string> queryStrings, string queryName)
+		private int GetQueryResultSetIndex(IDictionary<string, string> queryStrings, string queryName)
 		{
 			string queryResultSet = queryStrings.GetQueryParameterValue(queryName);
 
@@ -58,7 +58,7 @@ namespace DataBooster.DbWebApi.Csv
 			MediaTypeHeaderValue negotiatedMediaType, Encoding negotiatedEncoding)
 		{
 			HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
-			Dictionary<string, string> queryStrings = apiController.Request.GetQueryStringDictionary();
+			IDictionary<string, string> queryStrings = apiController.Request.GetQueryStringDictionary();
 			int[] resultSetChoices = new int[] { GetQueryResultSetIndex(queryStrings, DbWebApiOptions.QueryStringContract.ResultSetParameterName) };
 
 			csvResponse.Content = new PushStreamContent((stream, httpContent, transportContext) =>

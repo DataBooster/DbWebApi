@@ -5,9 +5,9 @@ using DataBooster.DbWebApi;
 
 namespace MyDbWebApi.Controllers
 {
+	[DbWebApiAuthorize]
 	public class DbWebApiController : ApiController
 	{
-		[DbWebApiAuthorize]
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
 		{

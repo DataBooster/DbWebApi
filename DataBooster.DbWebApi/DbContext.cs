@@ -26,7 +26,7 @@ namespace DataBooster.DbWebApi
 		{
 		}
 
-		public void SetNamingConvention(Dictionary<string, string> queryStrings)
+		public void SetNamingConvention(IDictionary<string, string> queryStrings)
 		{
 			string queryNamingCase = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName);
 

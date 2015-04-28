@@ -114,6 +114,7 @@
     <Compile Include="Razor\SerializableResponseData.cs" />
     <Compile Include="Razor\RazorMediaTypeFormatter.cs" />
     <Compile Include="WebApiExtensions.cs" />
+    <Compile Include="WebApiExtensions.parameters.cs" />
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
   <ItemGroup>

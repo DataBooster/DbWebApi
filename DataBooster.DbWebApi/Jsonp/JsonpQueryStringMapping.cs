@@ -30,7 +30,7 @@ namespace DataBooster.DbWebApi.Jsonp
 
 		private string GetParameterValue(HttpRequestMessage request, string parameterName)
 		{
-			Dictionary<string, string> queryStrings = request.GetQueryStringDictionary();
+			IDictionary<string, string> queryStrings = request.GetQueryStringDictionary();
 
 			if (queryStrings == null || string.IsNullOrEmpty(parameterName))
 				return null;

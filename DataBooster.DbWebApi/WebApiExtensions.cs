@@ -12,7 +12,6 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Newtonsoft.Json;
 using DbParallel.DataAccess;
 using DataBooster.DbWebApi.Csv;
 using DataBooster.DbWebApi.Excel;
@@ -26,7 +25,7 @@ namespace DataBooster.DbWebApi
 		private static Collection<IFormatPlug> _FormatPlugs;
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 		private static PseudoContentNegotiator _PseudoContentNegotiator;
-		private static CacheDictionary<Uri, Dictionary<string, string>> _QueryStringCache;
+		private static CacheDictionary<Uri, IDictionary<string, string>> _QueryStringCache;
 		private static TimeSpan _QueryStringCacheLifetime;
 
 		public static TimeSpan QueryStringCacheLifetime
@@ -39,7 +38,7 @@ namespace DataBooster.DbWebApi
 		{
 			_FormatPlugs = new Collection<IFormatPlug>();
 			_PseudoContentNegotiator = new PseudoContentNegotiator();
-			_QueryStringCache = new CacheDictionary<Uri, Dictionary<string, string>>();
+			_QueryStringCache = new CacheDictionary<Uri, IDictionary<string, string>>();
 			_QueryStringCacheLifetime = TimeSpan.FromSeconds(180);
 		}
 
@@ -199,125 +198,6 @@ namespace DataBooster.DbWebApi
 				_QueryStringCache.RemoveExpiredKeys(_QueryStringCacheLifetime);
 				SelfRecoverDerivedParametersCache();
 			}
-		}
-
-		#region QueryString Utilities
-
-		public static Dictionary<string, string> GetQueryStringDictionary(this HttpRequestMessage request)
-		{
-			if (request == null)
-				return null;
-
-			Dictionary<string, string> queryStrings;
-
-			if (_QueryStringCache.TryGetValue(request.RequestUri, out queryStrings))
-				return queryStrings;
-
-			var queryNameValuePairs = request.GetQueryNameValuePairs();
-			if (queryNameValuePairs == null)
-				return null;
-
-			queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-			string strName, strValue;
-
-			foreach (var pair in queryNameValuePairs)
-				if (pair.Value != null)
-				{
-					strName = pair.Key.Trim();
-					strValue = pair.Value.Trim();
-
-					if (strName.Length > 0 && strValue.Length > 0)
-						queryStrings[strName] = strValue;
-				}
-
-			_QueryStringCache.TryAdd(request.RequestUri, queryStrings);
-
-			return queryStrings;
-		}
-
-		internal static string GetQueryFileName(this Dictionary<string, string> queryStrings, string queryName, string filenameExtension)
-		{
-			string queryFileName = queryStrings.GetQueryParameterValue(queryName);
-
-			if (!string.IsNullOrEmpty(queryFileName))
-			{
-				if (queryFileName[0] == '.' || queryFileName[0] == '"')
-					queryFileName = queryFileName.TrimStart('.', '"');
-
-				if (queryFileName.Length > 0 && queryFileName[queryFileName.Length - 1] == '"')
-					queryFileName = queryFileName.TrimEnd('"');
-
-				if (queryFileName.Length > 0)
-				{
-					int dotPos = queryFileName.LastIndexOf('.');
-
-					if (dotPos < 0)
-						return queryFileName + '.' + filenameExtension;
-
-					if (dotPos > 0)
-						if (dotPos == queryFileName.Length - 1)
-							return queryFileName + filenameExtension;
-						else
-							return queryFileName;
-				}
-			}
-
-			return "[save_as]." + filenameExtension;
-		}
-
-		internal static string GetQueryParameterValue(this Dictionary<string, string> queryStringDictionary, string parameterName)
-		{
-			if (queryStringDictionary == null || queryStringDictionary.Count == 0 || string.IsNullOrEmpty(parameterName))
-				return null;
-
-			string parameterValue;
-
-			if (queryStringDictionary.TryGetValue(parameterName, out parameterValue))
-				return parameterValue;
-			else
-				return null;
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Gather required parameters of database stored procedure/function either from body or from uri query string.
-		/// 1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;
-		/// 2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";
-		/// 3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.
-		/// See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs
-		/// </summary>
-		/// <param name="request">The HTTP request. This is an extension method to HttpRequestMessage, when you use instance method syntax to call this method, omit this parameter.</param>
-		/// <param name="parametersFromBody">The parameters read from body. If not null, this method won't further try to gather input parameters from uri query string.</param>
-		/// <returns>Final input parameters dictionary (name-value pairs) to pass to database call.</returns>
-		public static Dictionary<string, object> GatherInputParameters(this HttpRequestMessage request, Dictionary<string, object> parametersFromBody)
-		{
-			return GatherInputParameters(request, parametersFromBody, DbWebApiOptions.QueryStringContract.JsonInputParameterName);
-		}
-
-		/// <summary>
-		/// Gather required parameters of database stored procedure/function either from body or from uri query string.
-		/// 1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;
-		/// 2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";
-		/// 3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.
-		/// See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs
-		/// </summary>
-		/// <param name="request">The HTTP request. This is an extension method to HttpRequestMessage, when you use instance method syntax to call this method, omit this parameter.</param>
-		/// <param name="parametersFromBody">The parameters read from body. If not null, this method won't further try to gather input parameters from uri query string.</param>
-		/// <param name="jsonInput">The special pre-arranged name in query string. Default as JsonInput.</param>
-		/// <returns>Final input parameters dictionary (name-value pairs) to pass to database call.</returns>
-		public static Dictionary<string, object> GatherInputParameters(this HttpRequestMessage request, Dictionary<string, object> parametersFromBody, string jsonInput)
-		{
-			if (parametersFromBody != null)
-				return parametersFromBody;
-
-			Dictionary<string, string> queryStringDictionary = request.GetQueryStringDictionary();
-			string jsonInputString;
-
-			if (queryStringDictionary.TryGetValue(jsonInput, out jsonInputString))
-				return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonInputString);
-			else
-				return queryStringDictionary.ToDictionary(t => t.Key, t => t.Value as object, StringComparer.OrdinalIgnoreCase);
 		}
 	}
 }
