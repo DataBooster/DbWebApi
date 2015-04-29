@@ -132,23 +132,23 @@ namespace DataBooster.DbWebApi
 				return queryStringDictionary.ToDictionary(t => t.Key, t => t.Value as object, StringComparer.OrdinalIgnoreCase);
 		}
 
-		public static void BulkGatherInputParameters(this HttpRequestMessage request, ICollection<IDictionary<string, object>> arrayOfParametersFromBody, string jsonInput)
+		public static void BulkGatherInputParameters(this HttpRequestMessage request, IList<IDictionary<string, object>> listOfParametersFromBody, string jsonInput)
 		{
-			if (arrayOfParametersFromBody == null || arrayOfParametersFromBody.Count == 0)
+			if (listOfParametersFromBody == null || listOfParametersFromBody.Count == 0)
 				return;
 
 			IDictionary<string, object> fixedParametersFromUri = GatherInputParameters(request, null, jsonInput);
 
 			if (fixedParametersFromUri != null && fixedParametersFromUri.Count > 0)
-				foreach (IDictionary<string, object> batch in arrayOfParametersFromBody)
+				foreach (IDictionary<string, object> batch in listOfParametersFromBody)
 					foreach (KeyValuePair<string, object> fromUri in fixedParametersFromUri)
 						if (!batch.ContainsKey(fromUri.Key))
 							batch.Add(fromUri);
 		}
 
-		public static void BulkGatherInputParameters(this HttpRequestMessage request, ICollection<IDictionary<string, object>> arrayOfParametersFromBody)
+		public static void BulkGatherInputParameters(this HttpRequestMessage request, IList<IDictionary<string, object>> listOfParametersFromBody)
 		{
-			BulkGatherInputParameters(request, arrayOfParametersFromBody, DbWebApiOptions.QueryStringContract.JsonInputParameterName);
+			BulkGatherInputParameters(request, listOfParametersFromBody, DbWebApiOptions.QueryStringContract.JsonInputParameterName);
 		}
 	}
 }

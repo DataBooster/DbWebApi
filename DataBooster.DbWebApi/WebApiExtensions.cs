@@ -194,10 +194,60 @@ namespace DataBooster.DbWebApi
 			}
 			finally
 			{
-				_QueryStringCache.TryRemove(apiController.Request.RequestUri);
-				_QueryStringCache.RemoveExpiredKeys(_QueryStringCacheLifetime);
-				SelfRecoverDerivedParametersCache();
+				CleanupCache(apiController.Request.RequestUri);
 			}
+		}
+
+		public static HttpResponseMessage BulkExecuteDbApi(this ApiController apiController, string sp, IList<IDictionary<string, object>> listOfParameters)
+		{
+			if (listOfParameters == null || listOfParameters.Count == 0)
+				return apiController.Request.CreateResponse(HttpStatusCode.BadRequest);
+
+			try
+			{
+				var negotiationResult = apiController.Request.Negotiate();
+
+				if (negotiationResult != null && negotiationResult.Formatter is PseudoMediaTypeFormatter)
+					return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
+
+				using (DbContext dbContext = new DbContext())
+				{
+					dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
+
+					if (negotiationResult != null)
+					{
+						if (negotiationResult.Formatter is RazorMediaTypeFormatter)
+							return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
+						else if (negotiationResult.Formatter is XmlMediaTypeFormatter)
+						{
+							ResponseRoot[] xmlResponses = new ResponseRoot[listOfParameters.Count];
+
+							for (int i = 0; i < xmlResponses.Length; i++)
+								xmlResponses[i] = new ResponseRoot(dbContext.ExecuteDbApi(sp, listOfParameters[i]));
+
+							return apiController.Request.CreateResponse(HttpStatusCode.OK, xmlResponses.AsQueryable());
+						}
+					}
+
+					StoredProcedureResponse[] jsonResponses = new StoredProcedureResponse[listOfParameters.Count];
+
+					for (int i = 0; i < jsonResponses.Length; i++)
+						jsonResponses[i] = dbContext.ExecuteDbApi(sp, listOfParameters[i]);
+
+					return apiController.Request.CreateResponse(HttpStatusCode.OK, jsonResponses.AsQueryable());
+				}
+			}
+			finally
+			{
+				CleanupCache(apiController.Request.RequestUri);
+			}
+		}
+
+		private static void CleanupCache(Uri requestUri)
+		{
+			_QueryStringCache.TryRemove(requestUri);
+			_QueryStringCache.RemoveExpiredKeys(_QueryStringCacheLifetime);
+			SelfRecoverDerivedParametersCache();
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace DataBooster.DbWebApi.Csv
 			if (valueColumns != null)
 			{
 				foreach (object cell in valueColumns)
-					_CsvWriter.WriteField(cell.GetType(), cell);
+					_CsvWriter.WriteField(cell);
 
 				_CsvWriter.NextRecord();
 			}
