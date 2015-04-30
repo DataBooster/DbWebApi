@@ -93,11 +93,11 @@ namespace DataBooster.DbWebApi
 		#endregion
 
 		/// <summary>
-		/// Gather required parameters of database stored procedure/function either from body or from uri query string.
-		/// 1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;
-		/// 2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";
-		/// 3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.
-		/// See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs
+		/// <para>Gather required parameters of database stored procedure/function either from body or from uri query string.</para>
+		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
+		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
+		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
+		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs </para>
 		/// </summary>
 		/// <param name="request">The HTTP request. This is an extension method to HttpRequestMessage, when you use instance method syntax to call this method, omit this parameter.</param>
 		/// <param name="parametersFromBody">The parameters read from body. If not null, this method won't further try to gather input parameters from uri query string.</param>
@@ -108,11 +108,11 @@ namespace DataBooster.DbWebApi
 		}
 
 		/// <summary>
-		/// Gather required parameters of database stored procedure/function either from body or from uri query string.
-		/// 1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;
-		/// 2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";
-		/// 3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.
-		/// See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs
+		/// <para>Gather required parameters of database stored procedure/function either from body or from uri query string.</para>
+		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
+		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
+		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
+		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs </para>
 		/// </summary>
 		/// <param name="request">The HTTP request. This is an extension method to HttpRequestMessage, when you use instance method syntax to call this method, omit this parameter.</param>
 		/// <param name="parametersFromBody">The parameters read from body. If not null, this method won't further try to gather input parameters from uri query string.</param>

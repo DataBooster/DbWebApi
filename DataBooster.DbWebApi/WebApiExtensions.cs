@@ -155,8 +155,8 @@ namespace DataBooster.DbWebApi
 		#endregion
 
 		/// <summary>
-		/// ExecuteDbApi is the DbWebApi extension method to ApiController.
-		/// See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs
+		/// <para>ExecuteDbApi is the DbWebApi extension method to ApiController.</para>
+		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs </para>
 		/// </summary>
 		/// <param name="apiController">Your ApiController to invoke this extension method</param>
 		/// <param name="sp">Specifies the fully qualified name of database stored procedure or function</param>
