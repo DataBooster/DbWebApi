@@ -12,8 +12,15 @@ namespace MyDbWebApi
 			config.Routes.MapHttpRoute(
 				name: "DbWebApi",
 				routeTemplate: "{sp}/{ext}",
-				defaults: new { controller = "DbWebApi", ext = RouteParameter.Optional },
+				defaults: new { controller = "DbWebApi", action = "Execute", ext = RouteParameter.Optional },
 				constraints: new { ext = @"|json|xml|csv|xlsx|jsonp|razor" }
+			);
+
+			config.Routes.MapHttpRoute(
+				name: "BulkApi",
+				routeTemplate: "bulk/{sp}/{ext}",
+				defaults: new { controller = "DbWebApi", action = "BulkExecute", ext = RouteParameter.Optional },
+				constraints: new { ext = @"|json|jsonp|xml" }
 			);
 
 			config.Routes.MapHttpRoute(

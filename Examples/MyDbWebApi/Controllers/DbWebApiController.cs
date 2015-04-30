@@ -13,5 +13,12 @@ namespace MyDbWebApi.Controllers
 		{
 			return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
 		}
+
+		[AcceptVerbs("POST", "PUT")]
+		public HttpResponseMessage BulkExecute(string sp, List<IDictionary<string, object>> listOfParametersDict)
+		{
+			Request.BulkGatherInputParameters(listOfParametersDict);
+			return this.BulkExecuteDbApi(sp, listOfParametersDict);
+		}
 	}
 }
