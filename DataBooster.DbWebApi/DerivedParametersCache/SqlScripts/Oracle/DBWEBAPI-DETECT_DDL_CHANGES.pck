@@ -136,7 +136,7 @@ PROCEDURE DETECT_DDL_CHANGES
 	inElapsedMinutes		PLS_INTEGER,
 	RC1						OUT SYS_REFCURSOR
 )	AS
-	tExpiration	DATE	:= SYSDATE - inElapsedMinutes / 1440.0;
+	tExpiration	DATE	:= SYSDATE - (inElapsedMinutes + 0.1) / 1440.0;		-- Plus approximate connection time
 BEGIN
 	OPEN RC1 FOR
 	SELECT

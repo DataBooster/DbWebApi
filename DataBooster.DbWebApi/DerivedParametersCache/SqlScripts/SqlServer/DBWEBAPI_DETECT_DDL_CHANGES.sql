@@ -86,6 +86,7 @@ BEGIN
 
 	SET	@tParmDefinition	= N'@tSchemaName NVARCHAR(64), @tSpName NVARCHAR(128), @tLastAltered DATETIME OUTPUT';
 	SET	@tExpiration		= DATEADD(minute, -@inElapsedMinutes, GETDATE());
+	SET	@tExpiration		= DATEADD(second, -6, @tExpiration);			-- Plus approximate connection time
 
 	DECLARE	tCursor CURSOR FOR
 		SELECT SYS_VIEW, SP_SCHEMA, SP_NAME FROM @SP_DDL_STATE_TAB
