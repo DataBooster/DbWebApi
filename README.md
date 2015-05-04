@@ -336,7 +336,8 @@ You can also specify the output Property Naming Convention in Uri Query String o
 - NamingCase=P (or Pascal) -------- PascalCase
 - NamingCase=C (or Camel) -------- CamelCase
 
-If you don't specify the NamingCase in later request, the global set before will back into effect.
+If you don't specify the NamingCase in later request, the global set before will back into effect.  
+Notes: The automatic naming conversion only applies to result sets' column-names. Input and output parameters remain the same as they are in database.  
 
 
 ### Exceptions
@@ -490,15 +491,20 @@ In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microso
 $inpms = @{inDate = [DateTime]"2015-03-16"};
 $response = Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo" -Body (ConvertTo-Json $inpms) -ContentType "application/json"
 ```
-$response contains all the result data. In Powershell ISE, IntelliSense can show you all its member properties. If you want to save the response body stream (such as CSV or Excel xlsx) into a specified output file, please just use -OutFile parameter,
+$response contains all the result data. In Powershell ISE, IntelliSense can show you all its member properties. If you want to save the response body stream (such as CSV or Excel xlsx) into a specified output file, please use -OutFile parameter,
 ``` PowerShell
-Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo" -Body (ConvertTo-Json $inpms) -ContentType "application/json" -OutFile "\\somewhere\somepath\filename.ext"
+Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo/xlsx" -Body (ConvertTo-Json $inpms) -ContentType "application/json" -OutFile "\\somewhere\somepath\filename.xlsx"
 ```
 
 PowerShell is true powerful to do more solid work with less coding. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you would even didn't want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
 
 ``` PowerShell
 ```
+
+### Limitations  
+* Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the IConvertible interface.
+* Database User-Defined Types, Table-Valued Parameters (SQL Server 2008), Oracle composite data types (such as Collection Types, Associative Arrays, Varrays, Nested Tables) are currently not supported in result set columns nor in sp parameters.  
+
 
 
 ## NuGet
