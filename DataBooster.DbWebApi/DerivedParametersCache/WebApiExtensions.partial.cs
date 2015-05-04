@@ -40,7 +40,7 @@ namespace DataBooster.DbWebApi
 			set { Interlocked.Exchange(ref _LastDetectSpChangesTicks, value.Ticks); }
 		}
 
-		private static bool _DerivedParametersCacheInPeriodicDetection = false;
+		private static volatile bool _DerivedParametersCacheInPeriodicDetection = false;
 		internal static bool DerivedParametersCacheInPeriodicDetection
 		{
 			get { return _DerivedParametersCacheInPeriodicDetection; }
