@@ -501,9 +501,11 @@ PowerShell is true powerful to do more solid work with less coding. Especially f
 ``` PowerShell
 ```
 
-### Limitations  
+### Restrictions  
 * Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
 * Database User-Defined Types, [Table-Valued Parameters (SQL Server 2008)](https://msdn.microsoft.com/en-us/library/bb675163.aspx), Oracle composite data types (such as Collection Types, [Associative Arrays](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB), Varrays, Nested Tables, etc.) are currently not supported in result set columns nor in sp parameters.  
+* All database procedure-names, function-names, column-names and parameter-names are regarded as case-insensitive.
+* [Oracle stored procedure or function overloading](https://docs.oracle.com/database/121/LNPLS/subprograms.htm#i12352) is not supported.
 
 
 
