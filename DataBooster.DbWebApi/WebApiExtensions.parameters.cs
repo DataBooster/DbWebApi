@@ -132,7 +132,7 @@ namespace DataBooster.DbWebApi
 				return queryStringDictionary.ToDictionary(t => t.Key, t => t.Value as object, StringComparer.OrdinalIgnoreCase);
 		}
 
-		public static void BulkGatherInputParameters(this HttpRequestMessage request, IList<IDictionary<string, object>> listOfParametersFromBody, string jsonInput)
+		public static void BulkGatherInputParameters<T>(this HttpRequestMessage request, IList<T> listOfParametersFromBody, string jsonInput) where T : IDictionary<string, object>
 		{
 			if (listOfParametersFromBody == null || listOfParametersFromBody.Count == 0)
 				return;
@@ -146,7 +146,7 @@ namespace DataBooster.DbWebApi
 							batch.Add(fromUri);
 		}
 
-		public static void BulkGatherInputParameters(this HttpRequestMessage request, IList<IDictionary<string, object>> listOfParametersFromBody)
+		public static void BulkGatherInputParameters<T>(this HttpRequestMessage request, IList<T> listOfParametersFromBody) where T : IDictionary<string, object>
 		{
 			BulkGatherInputParameters(request, listOfParametersFromBody, DbWebApiOptions.QueryStringContract.JsonInputParameterName);
 		}

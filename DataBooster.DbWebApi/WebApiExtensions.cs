@@ -198,7 +198,7 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
-		public static HttpResponseMessage BulkExecuteDbApi(this ApiController apiController, string sp, IList<IDictionary<string, object>> listOfParameters)
+		public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController, string sp, IList<T> listOfParameters) where T : IDictionary<string, object>
 		{
 			if (listOfParameters == null || listOfParameters.Count == 0)
 				return apiController.Request.CreateResponse(HttpStatusCode.BadRequest);
