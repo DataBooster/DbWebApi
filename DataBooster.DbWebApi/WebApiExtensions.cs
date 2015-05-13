@@ -198,6 +198,14 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
+		/// <summary>
+		/// Bulk execute a DbApi with a IList&lt;IDictionary&lt;string, object&gt;&gt; (a collection of input parameters collection)
+		/// </summary>
+		/// <typeparam name="T">IDictionary&lt;string, object&gt;</typeparam>
+		/// <param name="apiController">Your ApiController to invoke this extension method</param>
+		/// <param name="sp">Specifies the fully qualified name of database stored procedure or function</param>
+		/// <param name="listOfParameters">Specifies a collection of required parameter dictionary for every call in the bulk execution</param>
+		/// <returns>A complete HttpResponseMessage contains an array of every result data returned by the database</returns>
 		public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController, string sp, IList<T> listOfParameters) where T : IDictionary<string, object>
 		{
 			if (listOfParameters == null || listOfParameters.Count == 0)

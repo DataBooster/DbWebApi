@@ -54,10 +54,10 @@ namespace DataBooster.DbWebApi
 				return rawValue;
 
 			JArray jArrayValue = rawValue as JArray;
+
 			if (jArrayValue != null)
 				return jArrayValue.AsParameterValue();
 
-			#region The parameter is IEnumerable<>
 			Type pt = rawValue.GetType();
 
 			if (pt.IsArray && pt.HasElementType && typeof(IConvertible).IsAssignableFrom(pt.GetElementType()))
@@ -67,6 +67,8 @@ namespace DataBooster.DbWebApi
 
 			if (elementType == null)
 				return rawValue;
+
+			#region The rawValue is IEnumerable<>
 
 			if (typeof(IConvertible).IsAssignableFrom(elementType))
 				return (rawValue as IEnumerable).IEnumerableOfType<IConvertible>().AsParameterValue();
@@ -78,6 +80,7 @@ namespace DataBooster.DbWebApi
 				return (rawValue as IEnumerable).IEnumerableOfType<IDictionary<string, object>>().AsParameterValue();
 
 			return (rawValue as IEnumerable).IEnumerableOfType<object>().AsParameterValue();
+
 			#endregion
 		}
 
@@ -90,8 +93,8 @@ namespace DataBooster.DbWebApi
 		{
 			if (rawParameters == null || rawParameters.Count == 0)
 				return rawParameters;
-
-			return rawParameters.ToDictionary(p => p.Key, p => AsParameterValue(p.Value), StringComparer.OrdinalIgnoreCase);
+			else
+				return rawParameters.ToDictionary(p => p.Key, p => AsParameterValue(p.Value), StringComparer.OrdinalIgnoreCase);
 		}
 	}
 }
