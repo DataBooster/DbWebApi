@@ -68,7 +68,7 @@ namespace DataBooster.DbWebApi
 			if (string.IsNullOrEmpty(commaDelimitedString))
 				return 0;
 
-			var parameters = new Dictionary<string, IConvertible>(StringComparer.OrdinalIgnoreCase);
+			var parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.CommaDelimitedSpListParameterName, commaDelimitedString);
 			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.ElapsedTimeParameterName, (int)elapsedTime.TotalMinutes);
 

@@ -3,37 +3,28 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.Linq;
 using System.ComponentModel;
 using System.Collections.Generic;
 
 namespace DataBooster.DbWebApi.Client
 {
-	public class InputParameterDictionary : Dictionary<string, IConvertible>
+	public class InputParameterDictionary : Dictionary<string, object>
 	{
 		public InputParameterDictionary()
 			: base(StringComparer.OrdinalIgnoreCase)
 		{
 		}
 
-		public InputParameterDictionary(Dictionary<string, IConvertible> dictionary)
+		public InputParameterDictionary(IDictionary<string, object> dictionary)
 			: base(dictionary, StringComparer.OrdinalIgnoreCase)
 		{
 		}
 
-		public InputParameterDictionary(Dictionary<string, object> dictionary)
-			: base(dictionary.Count, StringComparer.OrdinalIgnoreCase)
+		[Obsolete("This constructor is deprecated and will be removed in the next major release. Use InputParameterDictionary(IDictionary<string, object> dictionary) instead.", false)]
+		public InputParameterDictionary(IDictionary<string, IConvertible> dictionary)
+			: base(dictionary.ToDictionary(d => d.Key, d => d.Value as object, StringComparer.OrdinalIgnoreCase))
 		{
-			IConvertible val;
-
-			foreach (var pair in dictionary)
-			{
-				val = pair.Value as IConvertible;
-
-				if (val == null)
-					throw new ArgumentOutOfRangeException(pair.Key);
-				else
-					Add(pair.Key, val);
-			}
 		}
 
 		public InputParameterDictionary(object anonymousTypeInstance)
@@ -43,17 +34,9 @@ namespace DataBooster.DbWebApi.Client
 				return;
 
 			PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(anonymousTypeInstance);
-			IConvertible val;
 
 			foreach (PropertyDescriptor prop in properties)
-			{
-				val = prop.GetValue(anonymousTypeInstance) as IConvertible;
-
-				if (val == null)
-					throw new ArgumentOutOfRangeException(prop.Name);
-				else
-					Add(prop.Name, val);
-			}
+				Add(prop.Name, prop.GetValue(anonymousTypeInstance));
 		}
 	}
 }

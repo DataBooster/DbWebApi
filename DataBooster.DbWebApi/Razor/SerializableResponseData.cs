@@ -11,7 +11,7 @@ namespace DataBooster.DbWebApi.Razor
 	[Serializable]
 	public class SerializableResponseData
 	{
-		public List<List<BindableDynamicObject>> ResultSets { get; set; }
+		public IList<IList<BindableDynamicObject>> ResultSets { get; set; }
 		public BindableDynamicObject OutputParameters { get; set; }
 		public object ReturnValue { get; set; }
 
