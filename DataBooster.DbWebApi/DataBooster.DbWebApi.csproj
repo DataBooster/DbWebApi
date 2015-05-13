@@ -107,6 +107,7 @@
     <Compile Include="Excel\XlsxFormatPlug.cs" />
     <Compile Include="IDbWebApiAuthorization.cs" />
     <Compile Include="IFormatPlug.cs" />
+    <Compile Include="ParameterConvert.cs" />
     <Compile Include="Jsonp\JsonpMediaTypeFormatter.cs" />
     <Compile Include="Jsonp\JsonpQueryStringMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Razor\RazorContext.cs" />
     <Compile Include="Razor\SerializableResponseData.cs" />
     <Compile Include="Razor\RazorMediaTypeFormatter.cs" />
+    <Compile Include="TypeHelper.cs" />
     <Compile Include="WebApiExtensions.cs" />
     <Compile Include="WebApiExtensions.parameters.cs" />
     <Compile Include="Xml\ResponseRoot.cs" />

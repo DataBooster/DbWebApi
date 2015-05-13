@@ -52,12 +52,12 @@ namespace DataBooster.DbWebApi
 
 		public StoredProcedureResponse ExecuteDbApi(string sp, IDictionary<string, object> parameters)
 		{
-			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters));
+			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters.PretreatInputDictionary()));
 		}
 
 		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, Action<int> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, int[] resultSetChoices = null, bool bulkRead = false)
 		{
-			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
+			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters.PretreatInputDictionary()), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
 		}
 
 		// Invalidate Altered Stored Procedures from DerivedParametersCache
