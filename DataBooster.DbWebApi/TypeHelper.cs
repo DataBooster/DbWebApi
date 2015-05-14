@@ -38,11 +38,6 @@ namespace DataBooster.DbWebApi
 
 			return (ienumType == null) ? null : ienumType.GetGenericArguments()[0];
 		}
-
-		internal static IEnumerable<T> AsOfType<T>(this IEnumerable source)
-		{
-			return (source as IEnumerable<T>) ?? source.OfType<T>();
-		}
 	}
 }
 
