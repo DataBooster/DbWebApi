@@ -15,7 +15,7 @@ namespace MyDbWebApi.Controllers
 		}
 
 		[AcceptVerbs("POST", "PUT")]
-		public HttpResponseMessage BulkExecute(string sp, List<IDictionary<string, object>> listOfParametersDict)
+		public HttpResponseMessage BulkExecute(string sp, List<Dictionary<string, object>> listOfParametersDict)
 		{
 			Request.BulkGatherInputParameters(listOfParametersDict);
 			return this.BulkExecuteDbApi(sp, listOfParametersDict);
