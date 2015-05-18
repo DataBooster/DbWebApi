@@ -32,7 +32,7 @@ namespace DataBooster.DbWebApi
 			var first = jArrayValue.First;
 
 			if (first is JObject)
-				return jArrayValue.ToObject<DataTable>();
+				return jArrayValue.ToObject<List<Dictionary<string, object>>>().ToDataTable();
 
 			if (first is JValue)
 				return jArrayValue.ToObject<object[]>().NormalizeNumericArray();
