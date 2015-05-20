@@ -37,37 +37,57 @@ The conciseness of using DbWebApi is down-to-earth for hands-on developers, to a
 
 ## Usage
 
-#### ApiController:
+#### ApiController:  
+Please reference the sample [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs):
 ``` CSharp
 using System.Net.Http;
 using System.Web.Http;
 using System.Collections.Generic;
 using DataBooster.DbWebApi;
 
-namespace SampleDbWebApi.Controllers
+namespace MyDbWebApi.Controllers
 {
+    [DbWebApiAuthorize]
     public class DbWebApiController : ApiController
     {
-        [DbWebApiAuthorize]
         [AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
         public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
         {
             return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
         }
+
+        [AcceptVerbs("POST", "PUT")]
+        public HttpResponseMessage BulkExecute(string sp, List<Dictionary<string, object>> listOfParametersDict)
+        {
+            Request.BulkGatherInputParameters(listOfParametersDict);
+            return this.BulkExecuteDbApi(sp, listOfParametersDict);
+        }
     }
 }
 ```
-That's it!  
-ExecuteDbApi is the extension method to ApiController.
+That's all, ExecuteDbApi and BulkExecuteDbApi are extension methods to ApiController.
 ``` CSharp
+// Execute a DbApi with a input parameters' dictionary
+// ExecuteDbApi built-in supports JSON, JSONP, XML, Excel xlsx, CSV and Razor Templating responses.
 public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
                                                string sp, IDictionary<string, object> parameters)
 // sp:         Specifies the fully qualified name of database stored procedure or function
 // parameters: Specifies required input-parameters as name-value pairs
 ```
+``` CSharp
+// Bulk execute a DbApi with a IList<IDictionary<string, object>> (a collection of input parameters collection)
+// Notes: BulkExecuteDbApi only supports JSON, JSONP and XML MediaType responses.
+public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController,
+                                               string sp, IList<T> listOfParameters)
+                                               where T : IDictionary<string, object>
+// sp:         Specifies the fully qualified name of database stored procedure or function
+// listOfParameters:
+//             Specifies a collection of required parameter dictionary for every call in the bulk execution
+```
+The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) demonstrates the Web API routing for these two actions.
 
 #### Web.config  
-"DataBooster.DbWebApi.MainConnection" is the only one configuration item needs to be customized:
+"<u>DataBooster.DbWebApi.MainConnection</u>" is the only one configuration item needs to be customized:
 ``` Xml
 <connectionStrings>
   <add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" />
@@ -77,7 +97,8 @@ public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
 #### HTTP Request  
 ##### Url:  
 As registered in your WebApiConfig Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
-##### Input Parameters:  
+##### Input Parameters
+* Simple Parameters  
 Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
 For example, a SQL Server Stored Procedure:  
 ``` SQL
@@ -88,7 +109,7 @@ ALTER PROCEDURE dbo.prj_GetRule
     @outRuleDesc varchar(256) = NULL OUTPUT
 AS  ...
 ```
-The request JSON should like:  
+The request JSON should look like:  
 ``` JSON
 {
     "inRuleDate":"2015-02-03T00:00:00Z",
@@ -96,6 +117,119 @@ The request JSON should like:
 }
 ```
 Parameter names are case-insensitive.
+
+* [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
+In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake (avoid too many context switches between the PL/SQL and SQL engines). For example, in database side:
+``` SQL
+TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+
+PROCEDURE WRITE_BULK_DATA
+(
+    inGroupID       PLS_INTEGER,
+    inItemValues    NUMBER_ARRAY,
+    RC1             OUT SYS_REFCURSOR
+);
+
+```
+The request JSON should look like:  
+``` JSON
+{
+    "inGroupID": 108,
+    "inItemValues": [
+                        0,
+                        1,
+                        0.618,
+                        1001,
+                        -3.1415926585
+                    ]
+}
+```
+
+* [Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb675163.aspx) (SQL Server 2008+):  
+In SQL Server 2008 or later, [Table-Valued Parameter](https://msdn.microsoft.com/en-us/library/bb510489.aspx) provides an equifinality of Associative Array Bulk Binds, but the implementation styles have different looks. For example, in database side:
+``` SQL
+CREATE TYPE dbo.CategoryTableType AS TABLE
+    ( CategoryID int, Weight float(6), CategoryName nvarchar(50) )
+
+CREATE PROCEDURE dbo.usp_UpdateCategories 
+    (@inGroupID int, @inTvpCategories dbo.CategoryTableType READONLY)
+```
+The request JSON should look like:  
+``` JSON
+{
+    "inGroupID": 108,
+    "inTvpCategories": [
+                           {
+                               "CategoryID": 1,
+                               "Weight": 0.15,
+                               "CategoryName": "Peach Blossom"
+                           },
+                           {
+                               "CategoryID": 2,
+                               "Weight": 0.38,
+                               "CategoryName": "Peony"
+                           },
+                           {
+                               "CategoryID": 3,
+                               "Weight": 0.26,
+                               "CategoryName": "Tulip"
+                           },
+                           {
+                               "CategoryID": 4,
+                               "Weight": 0.06,
+                               "CategoryName": "Cymbidium Orchis"
+                           },
+                           {
+                               "CategoryID": 5,
+                               "Weight": 0.18,
+                               "CategoryName": "Water Lily"
+                           }
+                       ]
+}
+```
+*Tips:  
+Unlike outer parameters bind-by-name (as above exampled "inGroupID" and "inTvpCategories"), Inside of the Table-Valued Parameter SQL Server actually behaves bind-by-position. No matter what you name those internal columns (as above exampled "CategoryID", "Weight", "CategoryName"), it made no difference to SQL Server. Below JSON input would get the same results as above.*
+``` JSON
+{
+    "inGroupID": 108,
+    "inTvpCategories": [
+                           {
+                               "C01": 1,
+                               "C02": 0.15,
+                               "C03": "Peach Blossom"
+                           },
+                           {
+                               "C01": 2,
+                               "C02": 0.38,
+                               "C03": "Peony"
+                           },
+                           {
+                               "C01": 3,
+                               "C02": 0.26,
+                               "C03": "Tulip"
+                           },
+                           {
+                               "C01": 4,
+                               "C02": 0.06,
+                               "C03": "Cymbidium Orchis"
+                           },
+                           {
+                               "C01": 5,
+                               "C02": 0.18,
+                               "C03": "Water Lily"
+                           }
+                       ]
+}
+```
+*According to this, you can control the order of properties in JSON Serialization by this sort of lazy way.*   
+Notes:  
+If you don't have any item in the "inTvpCategories", but you still want to execute the stored procedure dbo.usp_UpdateCategories with an empty table-value, please remove the whole "inTvpCategories" parameter from the JSON request as below:
+``` JSON
+{
+    "inGroupID": 108
+}
+```
+.
 
 ##### Accept Response MediaType:  
 1. JSON (default)  
@@ -133,7 +267,7 @@ Parameter names are case-insensitive.
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xml)  
 
-4. xlsx (Excel 2007/2010)  
+4. xlsx (Excel 2007 and later)  
     Specify in request header:  
     Accept: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet  
     or  
@@ -146,7 +280,7 @@ Parameter names are case-insensitive.
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)  
     Notes: Since xlsx content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
 
-5. CSV
+5. CSV  
     Specify in request header:  
     Accept: text/csv  
     or specify in query string: ?format=csv  
@@ -185,7 +319,7 @@ Parameter names are case-insensitive.
 ``` CSharp
     public class StoredProcedureResponse
     {
-        public List<List<BindableDynamicObject>> ResultSets { get; set; }
+        public IList<IList<BindableDynamicObject>> ResultSets { get; set; }
         public BindableDynamicObject OutputParameters { get; set; }
         public object ReturnValue { get; set; }
     }
@@ -375,6 +509,9 @@ As a completely generic web service, DbWebApi makes the distributed deployment m
 As a Web API, the target clients are still front-end applications mainly, plus some data formats transform for systems integration convenience.  
 The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](http://databooster.codeplex.com/) directly for high-performance database access.  
   
+#### Bulk Manipulation  
+* The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server).
+* If there are thousands of data rows or more data sets need to be passed back to database, it's well worth considering using Table-Valued Parameters (specific for SQL Server 2008+) or PL/SQL Associative Array Parameters (specific for Oracle database) in a single ExecuteDbApi (Execute action) call as mentioned before, they are completely thorough bulk operations.
 
 ## Clients
 #### .Net Client  
@@ -503,7 +640,8 @@ PowerShell is true powerful to do more solid work with less coding. Especially f
 
 ### Restrictions  
 * Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
-* Database User-Defined Types, [Table-Valued Parameters (SQL Server 2008)](https://msdn.microsoft.com/en-us/library/bb675163.aspx), Oracle composite data types (such as Collection Types, [Associative Arrays](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB), Varrays, Nested Tables, etc.) are currently not supported in result set columns nor in sp parameters.  
+* Database User-Defined Types, Oracle composite data types (such as Collection Types, Varrays, Nested Tables, etc.) are currently not supported in result set columns nor in sp/func parameters.  
+[Table-Valued Parameters (SQL Server 2008)](https://msdn.microsoft.com/en-us/library/bb675163.aspx) and [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) are supported only in sp/func input parameters.    
 * All database procedure-names, function-names, column-names and parameter-names are regarded as case-insensitive.
 * [Oracle stored procedure or function overloading](https://docs.oracle.com/database/121/LNPLS/subprograms.htm#i12352) is not supported.
 
