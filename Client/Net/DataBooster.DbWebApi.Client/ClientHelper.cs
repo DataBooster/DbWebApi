@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Repository:	https://github.com/DataBooster/DbWebApi
 
+using System;
 using System.Net.Http;
-using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DataBooster.DbWebApi.Client
 {
@@ -20,7 +22,7 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<List<DbWebApiResponse>> readTask = content.ReadAsAsync<List<DbWebApiResponse>>();
+				Task<IEnumerable<DbWebApiResponse>> readTask = content.ReadAsAsync<IEnumerable<DbWebApiResponse>>();
 				IEnumerable<DbWebApiResponse> dbWebApiResponse = readTask.Result;
 
 				if (readTask.IsFaulted)
@@ -73,6 +75,41 @@ namespace DataBooster.DbWebApi.Client
 			if (content.Headers.ContentType == null)
 				return null;
 			return content.Headers.ContentType.MediaType;
+		}
+
+		public static IDictionary<string, Array> SeparateArrayByProperties<T>(this ICollection<T> sourceRows) where T : IDictionary<string, object>
+		{
+			if (sourceRows == null)
+				throw new ArgumentNullException("sourceRows");
+
+			int i = 0, size = sourceRows.Count;
+			IDictionary<string, Type> propTypeDict = PreparePropertyType(sourceRows);
+			Dictionary<string, Array> propValueDict = new Dictionary<string, Array>();
+
+			foreach (var prop in propTypeDict)
+				propValueDict.Add(prop.Key, Array.CreateInstance(prop.Value, size));
+
+			foreach (var row in sourceRows)
+			{
+				foreach (var prop in propTypeDict)
+					propValueDict[prop.Key].SetValue(Convert.ChangeType(row[prop.Key], prop.Value), i);
+
+				i++;
+			}
+
+			return propValueDict;
+		}
+
+		private static IDictionary<string, Type> PreparePropertyType<T>(ICollection<T> sourceRows) where T : IDictionary<string, object>
+		{
+			Dictionary<string, Type> propTypeDict = new Dictionary<string, Type>();
+			Dictionary<string, int> pendingProperties = new Dictionary<string, int>();
+
+			foreach (var row in sourceRows)
+			{
+			}
+
+			return propTypeDict;
 		}
 	}
 }
