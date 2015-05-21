@@ -4,11 +4,34 @@
 
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DataBooster.DbWebApi.Client
 {
 	public static class ClientHelper
 	{
+		public static IEnumerable<DbWebApiResponse> BulkReadDbJson(this HttpResponseMessage httpResponse)
+		{
+			var content = httpResponse.Content;
+			var contentType = content.GetContentType();
+
+			if (contentType != null && contentType.ToLower().EndsWith("/json") == false)
+				throw new HttpRequestException("Response Content-Type is not JSON");
+
+			if (httpResponse.IsSuccessStatusCode)
+			{
+				Task<List<DbWebApiResponse>> readTask = content.ReadAsAsync<List<DbWebApiResponse>>();
+				IEnumerable<DbWebApiResponse> dbWebApiResponse = readTask.Result;
+
+				if (readTask.IsFaulted)
+					throw readTask.Exception;
+
+				return dbWebApiResponse;
+			}
+			else
+				throw httpResponse.CreateUnsuccessException();
+		}
+
 		public static DbWebApiResponse ReadDbJson(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
@@ -28,14 +51,17 @@ namespace DataBooster.DbWebApi.Client
 				return dbWebApiResponse;
 			}
 			else
-			{
-				var errorDictionary = content.ReadAsAsync<HttpErrorClient>().Result;
+				throw httpResponse.CreateUnsuccessException();
+		}
 
-				if (errorDictionary.Count == 0)
-					throw new HttpRequestException(string.Format("{0} ({1})", (int)httpResponse.StatusCode, httpResponse.ReasonPhrase));
-				else
-					throw new HttpResponseClientException(errorDictionary);
-			}
+		private static HttpRequestException CreateUnsuccessException(this HttpResponseMessage httpResponse)
+		{
+			var errorDictionary = httpResponse.Content.ReadAsAsync<HttpErrorClient>().Result;
+
+			if (errorDictionary.Count == 0)
+				return new HttpRequestException(string.Format("{0} ({1})", (int)httpResponse.StatusCode, httpResponse.ReasonPhrase));
+			else
+				return new HttpResponseClientException(errorDictionary);
 		}
 
 		private static string GetContentType(this HttpContent content)
