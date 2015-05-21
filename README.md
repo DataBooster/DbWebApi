@@ -96,7 +96,7 @@ The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master
 
 #### HTTP Request  
 ##### Url:  
-As registered in your WebApiConfig Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
+As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
 ##### Input Parameters
 * Simple Parameters  
 Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
@@ -510,7 +510,12 @@ As a Web API, the target clients are still front-end applications mainly, plus s
 The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](http://databooster.codeplex.com/) directly for high-performance database access.  
   
 #### Bulk Manipulation  
-* The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server).
+* The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server). Usage,
+    - Url:  
+As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/**bulk**/Your.StoredProcedure.FullyQualifiedName).
+    - Input Parameters:  
+Simply wrap every input parameters dictionary in a JSON array.
+
 * If there are thousands of data rows or more data sets need to be passed back to database, it's well worth considering using Table-Valued Parameters (specific for SQL Server 2008+) or PL/SQL Associative Array Parameters (specific for Oracle database) in a single ExecuteDbApi (Execute action) call as mentioned before, they are completely thorough bulk operations.
 
 ## Clients
