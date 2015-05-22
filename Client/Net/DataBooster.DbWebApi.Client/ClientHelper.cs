@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace DataBooster.DbWebApi.Client
 {
@@ -83,33 +84,56 @@ namespace DataBooster.DbWebApi.Client
 				throw new ArgumentNullException("sourceRows");
 
 			int i = 0, size = sourceRows.Count;
-			IDictionary<string, Type> propTypeDict = PreparePropertyType(sourceRows);
-			Dictionary<string, Array> propValueDict = new Dictionary<string, Array>();
-
-			foreach (var prop in propTypeDict)
-				propValueDict.Add(prop.Key, Array.CreateInstance(prop.Value, size));
+			Dictionary<string, Array> propArrayDict = null;
+			Array separateArray;
 
 			foreach (var row in sourceRows)
 			{
-				foreach (var prop in propTypeDict)
-					propValueDict[prop.Key].SetValue(Convert.ChangeType(row[prop.Key], prop.Value), i);
+				if (propArrayDict == null)
+				{
+					propArrayDict = new Dictionary<string, Array>();
+
+					foreach (var prop in row)
+						propArrayDict.Add(prop.Key, new object[size]);
+				}
+
+				foreach (var prop in row)
+					if (propArrayDict.TryGetValue(prop.Key, out separateArray))
+						separateArray.SetValue(prop.Value, i);
 
 				i++;
 			}
 
-			return propValueDict;
+			return propArrayDict;
 		}
 
-		private static IDictionary<string, Type> PreparePropertyType<T>(ICollection<T> sourceRows) where T : IDictionary<string, object>
+		public static IDictionary<string, Array> SeparateArrayByProperties(this ICollection anonymousTypeSourceRows)
 		{
-			Dictionary<string, Type> propTypeDict = new Dictionary<string, Type>();
-			Dictionary<string, int> pendingProperties = new Dictionary<string, int>();
+			if (anonymousTypeSourceRows == null)
+				throw new ArgumentNullException("sourceRows");
 
-			foreach (var row in sourceRows)
+			int i = 0, size = anonymousTypeSourceRows.Count;
+			Dictionary<string, Array> propArrayDict = null;
+			PropertyDescriptorCollection properties = null;
+
+			foreach (var rowObj in anonymousTypeSourceRows)
 			{
+				if (propArrayDict == null)
+				{
+					propArrayDict = new Dictionary<string, Array>();
+					properties = TypeDescriptor.GetProperties(rowObj);
+
+					foreach (PropertyDescriptor prop in properties)
+						propArrayDict.Add(prop.Name, Array.CreateInstance(prop.PropertyType, size));
+				}
+
+				foreach (PropertyDescriptor prop in properties)
+					propArrayDict[prop.Name].SetValue(prop.GetValue(rowObj), i);
+
+				i++;
 			}
 
-			return propTypeDict;
+			return propArrayDict;
 		}
 	}
 }
