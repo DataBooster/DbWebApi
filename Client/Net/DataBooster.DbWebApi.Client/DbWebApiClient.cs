@@ -84,7 +84,7 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsJson overrides
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync<T>(string requestUri, IEnumerable<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
 				ContinueWith<IEnumerable<DbWebApiResponse>>(requestTask =>
@@ -98,12 +98,12 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync(string requestUri, IEnumerable<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync<T>(string requestUri, IEnumerable<T> listOfInputParameters) where T : IDictionary<string, object>
+		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters).
 				ContinueWith<IEnumerable<DbWebApiResponse>>(requestTask =>
@@ -117,12 +117,12 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync(string requestUri, IEnumerable<object> listOfAnonymousTypeParameters)
+		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		public IEnumerable<DbWebApiResponse> ExecAsJson<T>(string requestUri, IEnumerable<T> listOfInputParameters) where T : IDictionary<string, object>
+		public IEnumerable<DbWebApiResponse> ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			try
 			{
@@ -144,7 +144,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public IEnumerable<DbWebApiResponse> ExecAsJson(string requestUri, IEnumerable<object> listOfAnonymousTypeParameters)
+		public IEnumerable<DbWebApiResponse> ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJson(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
@@ -220,7 +220,7 @@ namespace DataBooster.DbWebApi.Client
 		#region Bulk Raw Methods
 		private const string _ErrBulkMethodGet = "Bulk Exec does not support HTTP GET";
 
-		public Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, IEnumerable<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				throw new NotSupportedException(_ErrBulkMethodGet);
@@ -228,12 +228,12 @@ namespace DataBooster.DbWebApi.Client
 				return PostRawAsync(requestUri, listOfInputParameters, cancellationToken);
 		}
 
-		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, IEnumerable<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, IEnumerable<T> listOfInputParameters) where T : IDictionary<string, object>
+		public Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				throw new NotSupportedException(_ErrBulkMethodGet);
@@ -241,31 +241,47 @@ namespace DataBooster.DbWebApi.Client
 				return PostRawAsync(requestUri, listOfInputParameters);
 		}
 
-		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, IEnumerable<object> listOfAnonymousTypeParameters)
+		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecRawAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		protected IEnumerable<IDictionary<string, object>> AsInputParameters(IEnumerable<object> listOfAnonymousTypeParameters)
+		protected ICollection<IDictionary<string, object>> AsInputParameters(ICollection<object> listOfAnonymousTypeParameters)
 		{
-			IEnumerable<IDictionary<string, object>> listOfInputParameterDictionary = listOfAnonymousTypeParameters as IEnumerable<IDictionary<string, object>>;
+			ICollection<IDictionary<string, object>> listOfInputParameterDictionary = listOfAnonymousTypeParameters as ICollection<IDictionary<string, object>>;
 
-			return listOfInputParameterDictionary ?? listOfAnonymousTypeParameters.Select(o => AsInputParameters(o));
+			return listOfInputParameterDictionary ?? listOfAnonymousTypeParameters.Select(o => AsInputParameters(o)).ToList();
 		}
 
-		protected Task<HttpResponseMessage> PostRawAsync<T>(string requestUri, IEnumerable<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		protected Task<HttpResponseMessage> PostRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			if (listOfInputParameters == null)
 				throw new ArgumentNullException("listOfInputParameters");
+			if (listOfInputParameters.Count == 0)
+				return CreateEmptyResponse();
 			return _HttpClient.PostAsJsonAsync(requestUri, listOfInputParameters, cancellationToken);
 		}
 
-		protected Task<HttpResponseMessage> PostRawAsync<T>(string requestUri, IEnumerable<T> listOfInputParameters) where T : IDictionary<string, object>
+		protected Task<HttpResponseMessage> PostRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			if (listOfInputParameters == null)
 				throw new ArgumentNullException("listOfInputParameters");
+			if (listOfInputParameters.Count == 0)
+				return CreateEmptyResponse();
 			return _HttpClient.PostAsJsonAsync(requestUri, listOfInputParameters);
 		}
+
+		private Task<HttpResponseMessage> CreateEmptyResponse()
+		{
+			TaskCompletionSource<HttpResponseMessage> tcs = new TaskCompletionSource<HttpResponseMessage>();
+			HttpResponseMessage emptyResponse = new HttpResponseMessage();
+
+
+
+			tcs.SetResult(emptyResponse);
+			return tcs.Task;
+		}
+
 		#endregion
 
 		#region Raw Methods
