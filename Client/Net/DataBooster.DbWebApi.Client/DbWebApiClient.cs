@@ -84,10 +84,10 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsJson overrides
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<IEnumerable<DbWebApiResponse>>(requestTask =>
+				ContinueWith<DbWebApiResponse[]>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
@@ -98,15 +98,15 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters).
-				ContinueWith<IEnumerable<DbWebApiResponse>>(requestTask =>
+				ContinueWith<DbWebApiResponse[]>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
@@ -117,12 +117,12 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 
-		public Task<IEnumerable<DbWebApiResponse>> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		public IEnumerable<DbWebApiResponse> ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public DbWebApiResponse[] ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			try
 			{
@@ -144,7 +144,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public IEnumerable<DbWebApiResponse> ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public DbWebApiResponse[] ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJson(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
@@ -257,8 +257,10 @@ namespace DataBooster.DbWebApi.Client
 		{
 			if (listOfInputParameters == null)
 				throw new ArgumentNullException("listOfInputParameters");
+
 			if (listOfInputParameters.Count == 0)
-				return CreateEmptyResponse();
+				return CreateEmptyJsonArrayResponse();
+
 			return _HttpClient.PostAsJsonAsync(requestUri, listOfInputParameters, cancellationToken);
 		}
 
@@ -266,19 +268,23 @@ namespace DataBooster.DbWebApi.Client
 		{
 			if (listOfInputParameters == null)
 				throw new ArgumentNullException("listOfInputParameters");
+
 			if (listOfInputParameters.Count == 0)
-				return CreateEmptyResponse();
+				return CreateEmptyJsonArrayResponse();
+
 			return _HttpClient.PostAsJsonAsync(requestUri, listOfInputParameters);
 		}
 
-		private Task<HttpResponseMessage> CreateEmptyResponse()
+		private Task<HttpResponseMessage> CreateEmptyJsonArrayResponse()
 		{
 			TaskCompletionSource<HttpResponseMessage> tcs = new TaskCompletionSource<HttpResponseMessage>();
-			HttpResponseMessage emptyResponse = new HttpResponseMessage();
+			HttpResponseMessage emptyResponseMessage = new HttpResponseMessage();
 
+			emptyResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(new DbWebApiResponse[0]),
+				new UTF8Encoding(false, true), "application/json");
 
+			tcs.SetResult(emptyResponseMessage);
 
-			tcs.SetResult(emptyResponse);
 			return tcs.Task;
 		}
 

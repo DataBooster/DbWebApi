@@ -13,7 +13,9 @@ namespace DataBooster.DbWebApi.Client
 {
 	public static class ClientHelper
 	{
-		public static IEnumerable<DbWebApiResponse> BulkReadDbJson(this HttpResponseMessage httpResponse)
+		#region Read response as JSON extentions
+
+		public static DbWebApiResponse[] BulkReadDbJson(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 			var contentType = content.GetContentType();
@@ -23,8 +25,8 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<IEnumerable<DbWebApiResponse>> readTask = content.ReadAsAsync<IEnumerable<DbWebApiResponse>>();
-				IEnumerable<DbWebApiResponse> dbWebApiResponse = readTask.Result;
+				Task<DbWebApiResponse[]> readTask = content.ReadAsAsync<DbWebApiResponse[]>();
+				DbWebApiResponse[] dbWebApiResponse = readTask.Result;
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
@@ -78,6 +80,16 @@ namespace DataBooster.DbWebApi.Client
 			return content.Headers.ContentType.MediaType;
 		}
 
+		#endregion
+
+		#region SeparateArrayByProperties overloads
+
+		/// <summary>
+		/// Separate dictionary (IDictionary&lt;string, object&gt;) array by each key, to be a single Dictionary&lt;string, Array&gt;, every key has an array or values.
+		/// </summary>
+		/// <typeparam name="T">IDictionary&lt;string, object&gt;</typeparam>
+		/// <param name="sourceRows">Source collection of dictionary, each dictionary must have the same keys.</param>
+		/// <returns>A new Dictionary&lt;string, Array&gt;</returns>
 		public static IDictionary<string, Array> SeparateArrayByProperties<T>(this ICollection<T> sourceRows) where T : IDictionary<string, object>
 		{
 			if (sourceRows == null)
@@ -107,6 +119,11 @@ namespace DataBooster.DbWebApi.Client
 			return propArrayDict;
 		}
 
+		/// <summary>
+		/// Separate an array of anonymous type (or named type) instances by each property, to be a single Dictionary&lt;string, Array&gt;, every key has an array or values.
+		/// </summary>
+		/// <param name="anonymousTypeSourceRows">Source collection of anonymous type (or named type) instances</param>
+		/// <returns>A new Dictionary&lt;string, Array&gt;</returns>
 		public static IDictionary<string, Array> SeparateArrayByProperties(this ICollection anonymousTypeSourceRows)
 		{
 			if (anonymousTypeSourceRows == null)
@@ -135,5 +152,7 @@ namespace DataBooster.DbWebApi.Client
 
 			return propArrayDict;
 		}
+
+		#endregion
 	}
 }
