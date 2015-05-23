@@ -96,18 +96,14 @@ namespace DataBooster.DbWebApi.Client
 				throw new ArgumentNullException("sourceRows");
 
 			int i = 0, size = sourceRows.Count;
-			Dictionary<string, Array> propArrayDict = null;
+			Dictionary<string, Array> propArrayDict = new Dictionary<string, Array>();
 			Array separateArray;
 
 			foreach (var row in sourceRows)
 			{
-				if (propArrayDict == null)
-				{
-					propArrayDict = new Dictionary<string, Array>();
-
+				if (i == 0)
 					foreach (var prop in row)
 						propArrayDict.Add(prop.Key, new object[size]);
-				}
 
 				foreach (var prop in row)
 					if (propArrayDict.TryGetValue(prop.Key, out separateArray))
@@ -130,14 +126,13 @@ namespace DataBooster.DbWebApi.Client
 				throw new ArgumentNullException("sourceRows");
 
 			int i = 0, size = anonymousTypeSourceRows.Count;
-			Dictionary<string, Array> propArrayDict = null;
+			Dictionary<string, Array> propArrayDict = new Dictionary<string, Array>();
 			PropertyDescriptorCollection properties = null;
 
 			foreach (var rowObj in anonymousTypeSourceRows)
 			{
-				if (propArrayDict == null)
+				if (properties == null)
 				{
-					propArrayDict = new Dictionary<string, Array>();
 					properties = TypeDescriptor.GetProperties(rowObj);
 
 					foreach (PropertyDescriptor prop in properties)
