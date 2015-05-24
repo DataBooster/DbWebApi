@@ -15,7 +15,7 @@ namespace DataBooster.DbWebApi.Client
 	{
 		#region Read response as JSON extentions
 
-		public static DbWebApiResponse[] BulkReadDbJson(this HttpResponseMessage httpResponse)
+		internal static DbWebApiResponse[] BulkReadDbJson(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 			var contentType = content.GetContentType();
