@@ -220,7 +220,7 @@ namespace DataBooster.DbWebApi.Client
 		#region Bulk Raw Methods
 		private const string _ErrBulkMethodGet = "Bulk Exec does not support HTTP GET";
 
-		internal Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		protected Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				throw new NotSupportedException(_ErrBulkMethodGet);
@@ -228,12 +228,12 @@ namespace DataBooster.DbWebApi.Client
 				return PostRawAsync(requestUri, listOfInputParameters, cancellationToken);
 		}
 
-		internal Task<HttpResponseMessage> ExecRawAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		protected Task<HttpResponseMessage> ExecRawAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		internal Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		protected Task<HttpResponseMessage> ExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				throw new NotSupportedException(_ErrBulkMethodGet);
@@ -241,7 +241,7 @@ namespace DataBooster.DbWebApi.Client
 				return PostRawAsync(requestUri, listOfInputParameters);
 		}
 
-		internal Task<HttpResponseMessage> ExecRawAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		protected Task<HttpResponseMessage> ExecRawAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecRawAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
