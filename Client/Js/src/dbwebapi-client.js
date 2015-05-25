@@ -1,7 +1,7 @@
 ﻿/*!
 * DbWebApi Client JavaScript Library v1.0.9-alpha
 * https://github.com/databooster/dbwebapi
-* Date: 2015-05-24
+* Date: 2015-05-25
 */
 (function (window, undefined) {
 	jQuery.support.cors = true;
@@ -10,10 +10,18 @@
 		if (jQuery.isPlainObject(inputJson))
 			return JSON.stringify(inputJson);
 		else if (jQuery.isArray(inputJson)) {
-			if (inputJson.length > 0)
-				return JSON.stringify(inputJson);
-			else
-				return "";
+			if (inputJson.length > 0) {
+				if (jQuery.isPlainObject(inputJson[0]))
+					return JSON.stringify(inputJson);
+				else {
+					jQuery.error("The elements of input array must be plain objects!");
+					return null;
+				}
+			}
+			else {
+				jQuery.error("Empty array of input can not be accepted by bulk invoking!");
+				return null;
+			}
 		}
 		else if (typeof inputJson === "string")
 			return inputJson;
