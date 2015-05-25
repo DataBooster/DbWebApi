@@ -1,7 +1,7 @@
 ﻿/*!
-* DbWebApi Client JavaScript Library v1.0.8-alpha
+* DbWebApi Client JavaScript Library v1.0.9-alpha
 * https://github.com/databooster/dbwebapi
-* Date: 2015-03-19
+* Date: 2015-05-24
 */
 (function (window, undefined) {
 	jQuery.support.cors = true;
@@ -9,6 +9,12 @@
 	function toJsonString(inputJson) {
 		if (jQuery.isPlainObject(inputJson))
 			return JSON.stringify(inputJson);
+		else if (jQuery.isArray(inputJson)) {
+			if (inputJson.length > 0)
+				return JSON.stringify(inputJson);
+			else
+				return "";
+		}
 		else if (typeof inputJson === "string")
 			return inputJson;
 		else
