@@ -69,7 +69,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Js", "Js", "{AE635240-4E33-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{85B148EC-10C1-4109-9072-BEA4F698E9EF}"
 	ProjectSection(SolutionItems) = preProject
-		Client\Js\src\dbwebapi_client.js = Client\Js\src\dbwebapi_client.js
+		Client\Js\src\dbwebapi-client.js = Client\Js\src\dbwebapi-client.js
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2D4600AA-6985-4B27-A317-6757BC0298F1}"
