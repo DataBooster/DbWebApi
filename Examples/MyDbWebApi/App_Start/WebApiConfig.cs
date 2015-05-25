@@ -9,7 +9,7 @@ namespace MyDbWebApi
 	{
 		public static void Register(HttpConfiguration config)
 		{
-			#region Solution 1: Auto-detect a post request body. Invoking BulkExecute if input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a usual dictionary.
+			#region Solution 1: Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
 
 			config.Routes.MapHttpRoute(
 				name: "DbWebApi",
