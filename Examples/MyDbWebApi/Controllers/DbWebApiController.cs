@@ -1,13 +1,49 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Collections.Generic;
 using DataBooster.DbWebApi;
+using Newtonsoft.Json.Linq;
 
 namespace MyDbWebApi.Controllers
 {
 	[DbWebApiAuthorize]
 	public class DbWebApiController : ApiController
 	{
+		#region Solution 1: Auto-detect a post request body. Invoking BulkExecute if input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a usual dictionary.
+
+		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
+		public HttpResponseMessage DynExecute(string sp, JContainer requestBody)
+		{
+			JArray bulkParameters = requestBody as JArray;
+
+			if (bulkParameters != null)
+			{
+				if (Request.Method == HttpMethod.Post || Request.Method == HttpMethod.Put)
+				{
+					List<Dictionary<string, object>> listOfDicts = bulkParameters.ToObject<List<Dictionary<string, object>>>();
+
+					if (listOfDicts != null && listOfDicts.Count > 0)
+						return BulkExecute(sp, listOfDicts);
+					else
+						return Request.CreateResponse(HttpStatusCode.NotAcceptable);
+				}
+				else
+					return Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
+			}
+
+			JObject parameters = requestBody as JObject;
+
+			if (parameters != null)
+				return Execute(sp, parameters.ToObject<Dictionary<string, object>>());
+
+			return Request.CreateResponse(HttpStatusCode.BadRequest);
+		}
+
+		#endregion	// Solution 1
+
+		#region Solution 2: Separate BulkExecute action from Execute action
+
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
 		{
@@ -20,5 +56,7 @@ namespace MyDbWebApi.Controllers
 			Request.BulkGatherInputParameters(listOfParametersDict);
 			return this.BulkExecuteDbApi(sp, listOfParametersDict);
 		}
+
+		#endregion	// Solution 2
 	}
 }
