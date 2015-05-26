@@ -34,7 +34,7 @@ namespace MyDbWebApi.Controllers
 					if (listOfDicts != null && listOfDicts.Count > 0)
 						return BulkExecute(sp, listOfDicts);
 					else
-						return Request.CreateResponse(HttpStatusCode.NotAcceptable);
+						return Request.CreateResponse(HttpStatusCode.NoContent);
 				}
 				else
 					return Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
