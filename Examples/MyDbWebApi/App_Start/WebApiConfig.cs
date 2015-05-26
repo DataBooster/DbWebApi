@@ -9,7 +9,7 @@ namespace MyDbWebApi
 	{
 		public static void Register(HttpConfiguration config)
 		{
-			#region Solution 1: Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
+			#region Approach 1: Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
 
 			config.Routes.MapHttpRoute(
 				name: "DbWebApi",
@@ -18,10 +18,10 @@ namespace MyDbWebApi
 				constraints: new { ext = @"|json|xml|csv|xlsx|jsonp|razor" }
 			);
 
-			#endregion	// Solution 1
+			#endregion	// Approach 1
 
 			/*
-			#region Solution 2: Separate BulkExecute action from Execute action
+			#region Approach 2: Separate BulkExecute action from Execute action
 
 			config.Routes.MapHttpRoute(
 				name: "DbWebApi",
@@ -37,7 +37,7 @@ namespace MyDbWebApi
 				constraints: new { ext = @"|json|jsonp|xml" }
 			);
 
-			#endregion	// Solution 2
+			#endregion	// Approach 2
 			*/
 
 			config.Routes.MapHttpRoute(

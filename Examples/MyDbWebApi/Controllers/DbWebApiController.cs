@@ -10,7 +10,7 @@ namespace MyDbWebApi.Controllers
 	[DbWebApiAuthorize]
 	public class DbWebApiController : ApiController
 	{
-		#region Solution 1: Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
+		#region Approach 1: Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
 
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage DynExecute(string sp, JContainer requestBody)
@@ -43,9 +43,9 @@ namespace MyDbWebApi.Controllers
 			return Request.CreateResponse(HttpStatusCode.BadRequest);
 		}
 
-		#endregion	// Solution 1
+		#endregion	// Approach 1
 
-		#region Solution 2: Separate BulkExecute action from Execute action
+		#region Approach 2: Separate BulkExecute action from Execute action
 
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
@@ -60,6 +60,6 @@ namespace MyDbWebApi.Controllers
 			return this.BulkExecuteDbApi(sp, listOfParametersDict);
 		}
 
-		#endregion	// Solution 2
+		#endregion	// Approach 2
 	}
 }
