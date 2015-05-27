@@ -27,17 +27,12 @@ namespace MyDbWebApi.Controllers
 
 			if (bulkParameters != null)
 			{
-				if (Request.Method == HttpMethod.Post || Request.Method == HttpMethod.Put)
-				{
-					List<Dictionary<string, object>> listOfDicts = bulkParameters.ToObject<List<Dictionary<string, object>>>();
+				List<Dictionary<string, object>> listOfDicts = bulkParameters.ToObject<List<Dictionary<string, object>>>();
 
-					if (listOfDicts != null && listOfDicts.Count > 0)
-						return BulkExecute(sp, listOfDicts);
-					else
-						return Request.CreateResponse(HttpStatusCode.NoContent);
-				}
+				if (listOfDicts != null && listOfDicts.Count > 0)
+					return BulkExecute(sp, listOfDicts);
 				else
-					return Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
+					return Request.CreateResponse(HttpStatusCode.NoContent);
 			}
 
 			return Request.CreateResponse(HttpStatusCode.BadRequest);
