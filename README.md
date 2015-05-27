@@ -65,7 +65,9 @@ namespace MyDbWebApi.Controllers
     }
 }
 ```
-That's all, ExecuteDbApi and BulkExecuteDbApi are extension methods to ApiController.
+That's all, ExecuteDbApi and BulkExecuteDbApi are extension methods to ApiController.  
+Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs), you can also see another using approach that combines the Execute and BulkExecute as a DynExecute which auto-detect a post request body, invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.  
+
 ``` CSharp
 // Execute a DbApi with a input parameters' dictionary
 // ExecuteDbApi built-in supports JSON, JSONP, XML, Excel xlsx, CSV and Razor Templating responses.
@@ -76,7 +78,7 @@ public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
 ```
 ``` CSharp
 // Bulk execute a DbApi with a IList<IDictionary<string, object>> (a collection of input parameters collection)
-// Notes: BulkExecuteDbApi only supports JSON, JSONP and XML MediaType responses.
+// Notes: BulkExecuteDbApi only supports JSON and XML MediaType responses.
 public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController,
                                                string sp, IList<T> listOfParameters)
                                                where T : IDictionary<string, object>
@@ -117,6 +119,32 @@ The request JSON should look like:
 }
 ```
 Parameter names are case-insensitive.
+
+* Array of Parameter Sets  
+To pass bulk of same structure data back to database, you can just wrap all sets of parameters into an array like:
+``` JSON
+[
+  {
+    "inRuleDate":"2015-02-03T00:00:00Z",
+    "inRuleId":108
+  },
+  {
+    "inRuleDate":"2015-02-04T00:00:00Z",
+    "inRuleId":109
+  },
+  {
+    "inRuleDate":"2015-02-05T00:00:00Z",
+    "inRuleId":110
+  },
+  {
+    "inRuleDate":"2015-02-06T00:00:00Z",
+    "inRuleId":111
+  }
+]
+```
+For above example, the Web API server side will iteratively invoking database stored procedure dbo.prj_GetRule 4 times and the response body will be an array that contains the corresponding results of 4 times executions.  
+*Notes:  
+BulkExecute reads bulk sets of parameters from the request message body only, it means only HTTP POST and PUT can be used to send BulkExecute request, and only JSON and XML are acceptable media types for bulk response. If this limitation does counteract its conveniences you gain, please consider using following alternatives.*
 
 * [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
 In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake (avoid too many context switches between the PL/SQL and SQL engines). For example, in database side:
@@ -357,6 +385,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
   "ReturnValue":0
 }
 ```
+For response to bulk execute request, each of such JSON object will be further encapsulated into an outer array.
 
 ##### application/xml, text/xml  
     Sample:
@@ -427,6 +456,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
   <ReturnValue i:nil="true" />
 </ResponseRoot>
 ```
+For response to bulk execute request, each of such XML object will be further encapsulated into an outer array.
 
 ##### text/csv  
     Sample:
@@ -510,12 +540,7 @@ As a Web API, the target clients are still front-end applications mainly, plus s
 The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](http://databooster.codeplex.com/) directly for high-performance database access.  
   
 #### Bulk Manipulation  
-* The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server). Usage,
-    - Url:  
-As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/**bulk**/Your.StoredProcedure.FullyQualifiedName).
-    - Input Parameters:  
-Simply wrap every input parameters dictionary in a JSON array.
-
+* The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server).
 * If there are thousands of data rows or more data sets need to be passed back to database, it's well worth considering using Table-Valued Parameters (specific for SQL Server 2008+) or PL/SQL Associative Array Parameters (specific for Oracle database) in a single ExecuteDbApi (Execute action) call as mentioned before, they are completely thorough bulk operations.
 
 ## Clients
@@ -539,6 +564,9 @@ DbWebApiResponse data = client.ExecAsJson("test_schema.prj_package.foo",
 // You can either consume JObject[] (LINQ to JSON) directly or cast to your strong-type business class as below:
 IEnumerable<MyStrongTypeCls> strongTypeObjs = data.ResultSets[0].Select(j => j.ToObject<MyStrongTypeCls>());
 ```
+The second argument of ExecAsJson can be a dictionary that contains every parameters, or an anonymous type object that each property indicate a parameter name-value.  
+If an array of input parameter sets is passed into the second argument of ExecAsJson, the return will be an array -- DbWebApiResponse[].  
+`  
 If you just need the response content stream (E.g. CSV, Excel xlsx or generated text) to be stored as a file or transfer forward to somewhere else on the network, see below example, replacing ExecAsJson() by ExecRawAsync(), then [write the HTTP content to a stream](https://msdn.microsoft.com/en-us/library/hh138076.aspx) dicectly.
 ``` CSharp
 ....
@@ -590,6 +618,7 @@ The second argument of $.postDb - inputJson can be either a JSON string or a pla
     ....
 ```
 If there is no input parameter to pass to the server, please put _**null**_ in the second argument.  
+If an array of input parameter sets is passed into the second argument, the return data will be an array that contains the corresponding results of every iterative executions.  
 By default, the $.postDb sets the withCredentials property of the internal xhrFields object to true so it will pass the user credentials with cross-domain requests.  
 As the name implies, $.postDb uses HTTP POST to send a request;  
 Alternatively, $.getDb can be used for HTTP GET if need be. All input parameters are encapsulated into a special query string, and appended to the url for GET-requests.
@@ -615,6 +644,7 @@ Below example is a JSONP approach of above example,
              });
     ....
 ```
+Notes: since JSONP sends request by HTTP GET method, BulkExecute can not be used by JSONP.  
 The server side:
 ``` CSharp
     config.RegisterDbWebApi();
