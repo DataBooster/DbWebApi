@@ -22,7 +22,64 @@ With DbWebApi you can access SQL Server or Oracle package stored procedure like
 * `http://dbwebapi.dev.com/sqldev/test_schema.prj_package.your_sp/razor?RazorTemplate=outTemplateSpParameter`
 
 ***
+### Contents:
+- [Overview](#Overview)
+- [What are the benefits of DbWebApi?](#what-are-the-benefits-of-dbwebapi)
+- [Usage - server side](#usage)
+    - [ApiController](#apicontroller)
+    - [Web.config](#webconfig)
+    - [HTTP Request](#http-request)
+        - [Url](#url)
+        - [Input Parameters](#input-parameters)
+            - [Simple Parameters](#simple-parameters)
+            - [Array of Parameter Sets](#array-of-parameter-sets)
+            - [PL/SQL Associative Array Parameters](#associative-array-parameters)
+            - [Table-Valued Parameters](#table-valued-parameters)
+        - [Accept Response MediaType](#accept-response-mediatype)
+            - [JSON](#accept-json)
+            - [JSONP](#accept-jsonp)
+            - [XML](#accept-xml)
+            - [Excel .xlsx](#accept-xlsx)
+            - [CSV](#accept-csv)
+            - [Razor Templating](#accept-razor-templating)
+            - [Other MediaTypes](#accept-other-mediatypes)
+                - [Control in low level](#other-mediatype-low-lev)
+                - [Control in high level](#other-mediatype-high-lev)
+    - [HTTP Response](#http-response)
+        - [Response data internal structure](#response-data-internal-structure)
+        - [Response body formats](#response-body-formats)
+            - [application/json, text/json](#applicationjson-textjson)
+            - [application/xml, text/xml](#applicationxml-textxml)
+            - [text/csv](#textcsv)
+        - [Property Naming Convention](#property-naming-convention)
+        - [Exceptions](#exceptions)
+        - [Permission Control](#permission-control)
+        - [UserName](#username)
+    - [Performance](#performance)
+    - [Bulk Manipulation](#bulk-manipulation)
+        - [Quasi Bulk (BulkExecute action)](#quasi-bulk)
+        - [Thorough Bulk - Table-Valued Parameters or PL/SQL Associative Array Parameters](#thorough-bulk)
+- [Clients](#clients)
+    - [.Net Client](#net-client)
+    - [JavaScript Client](#javascript-client)
+        - [Cross-domain](#cross-domain)
+            - [JSONP for now](#jsonp-for-now-added-server-lib-v124-client-js-v108-alpha)
+            - [CORS later](#cors-later)
+    - [PowerShell Client](#powershell-client)
+        - [Bulk Data Post Back](#bulk-data-post-back)
+            - [Hundreds or less](#hundreds-or-less)
+            - [Thousands or more](#thousands-or-more)
+                - [Table-Valued Parameters](#ps-table-valued-parameters)
+                - [PL/SQL Associative Array Parameters](#ps-associative-array-parameters)
+- [Restrictions](#restrictions)
+- [NuGet](#nugget)
+    - [Server packages](#server-side)
+    - [Clients](#clients-1)
+- [Examples](#examples)
 
+***
+
+### Overview  
 DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet). While being regarded as a proxy service, DbWebApi reflects in two directions: Data Access Proxy and Media Format Proxy.
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
@@ -66,7 +123,7 @@ namespace MyDbWebApi.Controllers
 }
 ```
 That's all, ExecuteDbApi and BulkExecuteDbApi are extension methods to ApiController.  
-Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs), you can also see another using approach that combines the Execute and BulkExecute as a DynExecute which auto-detect a post request body, invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.  
+Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs), you can also see another using approach that combines the Execute and BulkExecute as a DynExecute which auto-detect a post request body, invoking BulkExecute if sets of input parameters are encapsulated in an arrray; or invoking Execute if input parameters are encapsulated in a single dictionary.  
 
 ``` CSharp
 // Execute a DbApi with a input parameters' dictionary
@@ -100,7 +157,7 @@ The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master
 ##### Url:  
 As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
 ##### Input Parameters
-* Simple Parameters  
+* <a name="simple-parameters"></a>Simple Parameters  
 Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
 For example, a SQL Server Stored Procedure:  
 ``` SQL
@@ -120,8 +177,8 @@ The request JSON should look like:
 ```
 Parameter names are case-insensitive.
 
-* Array of Parameter Sets  
-To pass bulk of same structure data back to database, you can just wrap all sets of parameters into an array like:
+* <a name="array-of-parameter-sets"></a>Array of Parameter Sets  
+To pass bulk of same structure data back to database, you can just encapsulate all sets of parameters into an array like:
 ``` JSON
 [
   {
@@ -146,7 +203,7 @@ For above example, the Web API server side will iteratively invoking database st
 *Notes:  
 BulkExecute reads bulk sets of parameters from the request message body only, it means only HTTP POST and PUT can be used to send BulkExecute request, and only JSON and XML are acceptable media types for bulk response. If this limitation does counteract its conveniences you gain, please consider using following alternatives.*
 
-* [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
+* <a name="associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
 In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake (avoid too many context switches between the PL/SQL and SQL engines). For example, in database side:
 ``` SQL
 TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
@@ -173,7 +230,7 @@ The request JSON should look like:
 }
 ```
 
-* [Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb675163.aspx) (SQL Server 2008+):  
+* <a name="table-valued-parameters"></a>[Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb675163.aspx) (SQL Server 2008+):  
 In SQL Server 2008 or later, [Table-Valued Parameter](https://msdn.microsoft.com/en-us/library/bb510489.aspx) provides an equifinality of Associative Array Bulk Binds, but the implementation styles have different looks. For example, in database side:
 ``` SQL
 CREATE TYPE dbo.CategoryTableType AS TABLE
@@ -260,7 +317,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
 .
 
 ##### Accept Response MediaType:  
-1. JSON (default)  
+1. <a name="accept-json"></a>JSON (default)  
     Specify in request header:  
     Accept: application/json  
     or  
@@ -270,7 +327,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)  
 
-2. JSONP  
+2. <a name="accept-jsonp"></a>JSONP  
     QueryString must contain **callback** parameter _(the name can be configured)_  
     and (  
     Specify in request header:  
@@ -285,7 +342,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/jsonp)  
     )  
 
-3. XML  
+3. <a name="accept-xml"></a>XML  
     Specify in request header:  
     Accept: application/xml  
     or  
@@ -295,7 +352,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xml)  
 
-4. xlsx (Excel 2007 and later)  
+4. <a name="accept-xlsx"></a>xlsx (Excel 2007 and later)  
     Specify in request header:  
     Accept: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet  
     or  
@@ -308,7 +365,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)  
     Notes: Since xlsx content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
 
-5. CSV  
+5. <a name="accept-csv"></a>CSV  
     Specify in request header:  
     Accept: text/csv  
     or specify in query string: ?format=csv  
@@ -317,7 +374,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/csv)  
     Notes: CSV response will only return the first (or one specified zero indexed result set in query string: ResultSet=i) result set if your stored procedure has multiple result sets. Since CSV content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].csv).  
 
-6. Razor Templating    
+6. <a name="accept-razor-templating"></a>Razor Templating    
     Specify in request header:  
     Accept: text/razor  
     or  
@@ -329,10 +386,10 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     Notes: To send a Razor request, the template text must be provided in a conventionalized parameter {RazorTemplate=} in either json body of post request or query string of get request, if the template text is a output parameter name of the stored procedure, the string content of that output parameter will be used as the actual template text. Two optional parameters: {RazorEncoding=Raw|Html} _(default is Raw)_ and {RazorLanguage=CSharp|VisualBasic} _(default is CSharp)_.   
     Model's Data: Inside Razor template, the **@Model** directive represents your strored procedure's result data. _(E.g.  @Model.OutputParameters.outSomeThing - is the value of output parameter outSomeThing, @Model.ResultSets[0][0].SomeProperty - is the value of Some_Property column of the first row of the first resultset)_  
  
-7. Other MediaTypes  
+7. <a name="accept-other-mediatypes"></a>Other MediaTypes  
     To support new MediaType, you can:
 
-* Control in low level (DbDataReader and writeStream), you can create a new class that implements the interface **IFormatPlug**, and register it in your HttpConfiguration. Just like following CSV and xlsx did:
+* <a name="other-mediatype-low-lev"></a>Control in low level (DbDataReader and writeStream), you can create a new class that implements the interface **IFormatPlug**, and register it in your HttpConfiguration. Just like following CSV and xlsx did:
 ``` CSharp
     public static void RegisterDbWebApi(this HttpConfiguration config)
     {
@@ -340,9 +397,9 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
         config.AddFormatPlug(new XlsxFormatPlug());
     }
 ```
-* Control in high level (start point: StoredProcedureResponse), you can create a new XyzMediaTypeFormatter class as [classical tutorial](http://www.asp.net/web-api/overview/formats-and-model-binding/media-formatters) shows.
+* <a name="other-mediatype-high-lev"></a>Control in high level (start point: StoredProcedureResponse), you can create a new XyzMediaTypeFormatter class as [classical tutorial](http://www.asp.net/web-api/overview/formats-and-model-binding/media-formatters) shows.
   
-
+### HTTP Response
 #### Response data internal structure
 ``` CSharp
     public class StoredProcedureResponse
@@ -540,8 +597,8 @@ As a Web API, the target clients are still front-end applications mainly, plus s
 The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](http://databooster.codeplex.com/) directly for high-performance database access.  
   
 #### Bulk Manipulation  
-* The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server).
-* If there are thousands of data rows or more data sets need to be passed back to database, it's well worth considering using Table-Valued Parameters (specific for SQL Server 2008+) or PL/SQL Associative Array Parameters (specific for Oracle database) in a single ExecuteDbApi (Execute action) call as mentioned before, they are completely thorough bulk operations.
+* <a name="quasi-bulk"></a>The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server).
+* <a name="thorough-bulk"></a>If there are thousands of data rows or more data sets need to be passed back to database, it's well worth considering using Table-Valued Parameters (specific for SQL Server 2008+) or PL/SQL Associative Array Parameters (specific for Oracle database) in a single ExecuteDbApi (Execute action) call as mentioned before, they are completely thorough bulk operations.
 
 ## Clients
 #### .Net Client  
@@ -663,15 +720,50 @@ In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microso
 $inpms = @{inDate = [DateTime]"2015-03-16"};
 $response = Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo" -Body (ConvertTo-Json $inpms) -ContentType "application/json"
 ```
-$response contains all the result data. In Powershell ISE, IntelliSense can show you all its member properties. If you want to save the response body stream (such as CSV or Excel xlsx) into a specified output file, please use -OutFile parameter,
+$response contains all the result data. In Powershell ISE, the IntelliSense can show you all its member properties.  
+If an array of input parameter sets is passed into the body content, the return $response will be an array that contains the corresponding results of every iterative executions.  
+
+If you want to save the response body stream (such as CSV or Excel xlsx) into a specified output file, please use -OutFile parameter,
 ``` PowerShell
 Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo/xlsx" -Body (ConvertTo-Json $inpms) -ContentType "application/json" -OutFile "\\somewhere\somepath\filename.xlsx"
 ```
 
-PowerShell is true powerful to do more solid work with less coding. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you would even didn't want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
-
+##### Bulk Data Post Back
+- <a name="hundreds-or-less"></a>If you only have hundreds of records or less to post back to database, you can just encapsulate all records into an array, let the Web API server side implicitly perform the BulkExecute action. Following example shows how to load data from a local CSV file and post back into database:
 ``` PowerShell
+$impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
+Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test.net/oradev/test_schema.prj_package.write_row" -Body (ConvertTo-Json $impData) -ContentType "application/json";
 ```
+Straightforwardly, any CSV columns that match the names in input parameters will be passed into the stored procedure.  
+By using PowerShell pipeline, if need, you can easily apply some data transformations, to do such as: column-parameter mapping or simple calculating by [select cmdlet](https://technet.microsoft.com/en-us/library/hh849895.aspx), data filtering by [where cmdlet](https://technet.microsoft.com/en-us/library/hh849715.aspx), some simple aggregation by [group cmdlet](https://technet.microsoft.com/en-us/library/hh849907.aspx), and data sorting by [sort cmdlet](https://technet.microsoft.com/en-us/library/hh849912.aspx), ... etc.
+- <a name="thousands-or-more"></a>If you have thousands of records or more to post back to database, taking advantage of [Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb510489.aspx) (SQL Server 2008+) or [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/A91202_01/901_doc/appdev.901/a89856/05_colls.htm#23723) (Oracle) will give you significantly better performance.
+    - <a name="ps-table-valued-parameters"></a>[Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb510489.aspx) (SQL Server 2008+)  
+Basically just further wrap the array of records into a single parameter, like the second line in following example *(note that dbo.pck_bulk_write stored procedure is different from single row operation)*:
+``` PowerShell
+$impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
+$inpms = @{ tvpParam = $impData };
+Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test.net/sqldev/dbo.pck_bulk_write" -Body (ConvertTo-Json $inpms) -ContentType "application/json";
+```
+- 
+    - <a name="ps-associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#ODPNT250) (Oracle)  
+Oracle uses another style,  each parameter must be separated as an array of simple data type. See following example,
+``` PowerShell
+$impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
+$inpms = @{inItemIds=[int[]]@(0) * $impData.Length; inItemNames=[string[]]@("") * $import.Length; inItemValues=[decimal[]]@(0) * $import.Length; inBatchComment="This is a test load."};
+[int]$i = 0;
+foreach ($item in $impData) {
+    $inpms.inItemIds[$i] = $item.ItemId;
+    $inpms.inItemNames[$i] = $item.ItemName;
+    $inpms.inItemValues[$i] = $item.ItemValue;
+    $i++;
+}
+Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test.net/oradev/test_schema.tst_package.bulk_write" -Body (ConvertTo-Json $inpms) -ContentType "application/json";
+```
+*Tips:*  
+*Using PowerShell array for large dataset, better to initialize an array with explicit size (instead of dynamic array with subsequent appending elements), otherwise most of performance will be lost in highly frequent memory reallocation, data copying over and over again.*  
+
+PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you won't want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
+
 
 ### Restrictions  
 * Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
