@@ -702,11 +702,12 @@ Below example is a JSONP approach of above example,
     ....
 ```
 Notes: since JSONP sends request by HTTP GET method, BulkExecute can not be used by JSONP.  
+
 The server side:
 ``` CSharp
     config.RegisterDbWebApi();
 ```
-will include JSONP support by default. If you don't want to support JSONP, you can remove the JsonpMediaTypeFormatter from the config.Formatters collection after that.  
+will include JSONP support by default. If you don't want to support JSONP, you can remove the JsonpMediaTypeFormatter from the *config.Formatters* collection after that.  
 
 
 ###### CORS later  
