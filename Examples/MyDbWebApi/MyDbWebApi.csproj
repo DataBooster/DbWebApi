@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\MiscController.cs" />
+    <Compile Include="DataAccess\ConfigHelper.partial.cs" />
     <Compile Include="Filters\MyDbWebApiAuthorization.cs" />
     <Compile Include="Controllers\DbWebApiController.cs" />
     <Compile Include="Filters\DbWebApiAuthorizeAttribute.cs" />

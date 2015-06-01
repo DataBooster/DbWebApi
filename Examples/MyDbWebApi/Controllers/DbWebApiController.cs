@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Collections.Generic;
 using DataBooster.DbWebApi;
 using Newtonsoft.Json.Linq;
+using MyDbWebApi.DataAccess;
 
 namespace MyDbWebApi.Controllers
 {
@@ -45,13 +46,33 @@ namespace MyDbWebApi.Controllers
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
 		{
-			return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
+			IDictionary<string, object> inputDict = Request.GatherInputParameters(parameters);
+
+			if (!string.IsNullOrEmpty(ConfigHelper.UserNameReservedParameter) && User != null && User.Identity != null)
+			{
+				string userName = User.Identity.Name;
+
+				if (!string.IsNullOrEmpty(userName))
+					inputDict[ConfigHelper.UserNameReservedParameter] = userName;
+			}
+
+			return this.ExecuteDbApi(sp, inputDict);
 		}
 
 		[AcceptVerbs("POST", "PUT")]
 		public HttpResponseMessage BulkExecute(string sp, List<Dictionary<string, object>> listOfParametersDict)
 		{
 			Request.BulkGatherInputParameters(listOfParametersDict);
+
+			if (!string.IsNullOrEmpty(ConfigHelper.UserNameReservedParameter) && User != null && User.Identity != null)
+			{
+				string userName = User.Identity.Name;
+
+				if (!string.IsNullOrEmpty(userName))
+					foreach (var inputDict in listOfParametersDict)
+						inputDict[ConfigHelper.UserNameReservedParameter] = userName;
+			}
+
 			return this.BulkExecuteDbApi(sp, listOfParametersDict);
 		}
 
