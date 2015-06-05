@@ -87,6 +87,7 @@ In other words, DbWebApi provides an alternative way to implement your Web APIs 
 In essence, DbWebApi is still a ASP.NET Web API instead of a naked tunnel for database. It just be generic, and provides a few extension methods to your ASP.NET Web API services.
 - Security:  
 What security you did for your existing Web API services, can still apply in the DbWebApi.
+
 - Data Contract:  
 Since there is no setup at all, the domain entities returned from DbWebApi simply reflect the result sets returned from your stored procedure. So the data contract is driven by your stored procedure.  
 To isolate the downstream consumers from the source raw schemas, you can slimly achieve the isolation in your stored procedure only once, or do some data transportation once after DbWebApi.  
@@ -98,6 +99,8 @@ Actually, the contract transformation can be done in any one node of the interme
 Less coding, less configuration, less deployment, less maintenance.  
 The conciseness of using DbWebApi is down-to-earth for hands-on developers, to access database stored procedures or functions is completely coding-free and configuration-free. Don't need to explicitly specify any metadata about database objects (such as parameters type, size, direction... or columns attributes) by coding or configuration, don't need to write any controller for handling new data models from database, don't need to write any method for calling new stored procedures or functions ... No more dazzling _The Emperor's New Services(Clothes)_ to test(fitting), deploy or maintain.
 - In data-driven applications area, there are a large number of scenarios without substantial logic in data access web services, however they wasted a lot of our efforts on very boring data moving coding or configurations, we've had enough of it. Since now on, most of thus repetitive works can be dumped onto DbWebApi.
+- Unlike WCF Data Services or other similar web services, DbWebApi has no design time within the service itself. In terms of the overall system, stored procedures design has already undertaken the corresponding part of contract design when stored procedure based development was adopted as part of the whole development.  
+_It's unnecessary to repeat design for the same part of contract again. Repeated designs inevitably lead to redundant configuration, recompilation ... redeployment for every intermediate links._
 - DbWebApi can coexist within your existing ASP.NET Web API, as a supplementary service to reduce new boring manual works for most common of application scenarios.
 
 ## Usage
