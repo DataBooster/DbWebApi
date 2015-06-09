@@ -853,4 +853,4 @@ namespace MyDbWebApi
 
 According to your own circumstances, above should be modified as needed, just like the most basic settings should be applied on an Empty ASP.NET Web API project.
 
-Welcome all feedback through the [Discussions](https://dbwebapi.codeplex.com/discussions) or [Issue](https://github.com/DataBooster/DbWebApi/issues).
+Welcome all feedback through the [Discussions](https://dbwebapi.codeplex.com/discussions) or [Issues](https://github.com/DataBooster/DbWebApi/issues).
