@@ -179,7 +179,7 @@ ALTER PROCEDURE dbo.prj_GetRule
     @outRuleDesc varchar(256) = NULL OUTPUT
 AS  ...
 ```
-The request JSON should look like:  
+The payload JSON should look like:  
 ``` JSON
 {
     "inRuleDate":"2015-02-03T00:00:00Z",
@@ -227,7 +227,7 @@ PROCEDURE WRITE_BULK_DATA
 );
 
 ```
-The request JSON should look like:  
+The payload JSON should look like:  
 ``` JSON
 {
     "inGroupID": 108,
@@ -250,7 +250,7 @@ CREATE TYPE dbo.CategoryTableType AS TABLE
 CREATE PROCEDURE dbo.usp_UpdateCategories 
     (@inGroupID int, @inTvpCategories dbo.CategoryTableType READONLY)
 ```
-The request JSON should look like:  
+The payload JSON should look like:  
 ``` JSON
 {
     "inGroupID": 108,
@@ -319,7 +319,7 @@ Unlike outer parameters bind-by-name (as above exampled "inGroupID" and "inTvpCa
 ```
 *According to this, you can control the order of properties in JSON Serialization by this sort of lazy way.*   
 Notes:  
-If you don't have any item in the "inTvpCategories", but you still want to execute the stored procedure dbo.usp_UpdateCategories with an empty table-value, please remove the whole "inTvpCategories" parameter from the JSON request as below:
+If you don't have any item in the "inTvpCategories", but you still want to execute the stored procedure dbo.usp_UpdateCategories with an empty table-value, please remove the whole "inTvpCategories" parameter from the JSON payload as below:
 ``` JSON
 {
     "inGroupID": 108
@@ -808,3 +808,49 @@ If you are only interested in having your trial server setup quickly, you can do
 
 The example project requires Visual Studio 2010 at lowest with ASP.NET MVC 4 installed.
 Hopefully, base on the example, it's easier to customize your own DbWebApi server.
+
+By default, the example server is configured for intranet environment:
+
+[Web.config](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Web.config)
+``` XML
+<configuration>
+  <system.web>
+    <authentication mode="Windows" />
+  </system.web>
+  <connectionStrings>
+    <add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI;Min Pool Size=8" />
+  </connectionStrings>
+</configuration>
+```
+
+[DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs)
+``` CSharp
+namespace MyDbWebApi.Controllers
+{
+    [DbWebApiAuthorize]
+    public class DbWebApiController : ApiController
+    {
+        ....
+    }
+}
+```
+
+[MyDbWebApiAuthorization.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Filters/MyDbWebApiAuthorization.cs)
+``` CSharp
+namespace MyDbWebApi
+{
+    public class MyDbWebApiAuthorization : IDbWebApiAuthorization
+    {
+        public bool IsAuthorized(string userName, string storedProcedure, object state = null)
+        {
+            // TO DO, to implementate your own authorization logic
+            return true;	// If allow permission
+            return false;	// If deny permission
+        }
+    }
+}
+```
+
+According to your own circumstances, above should be modified as needed, just like the most basic settings should be applied on an Empty ASP.NET Web API project.
+
+Welcome all feedback through the [Discussions](https://dbwebapi.codeplex.com/discussions) or [Issue](https://github.com/DataBooster/DbWebApi/issues).
