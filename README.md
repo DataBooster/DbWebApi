@@ -774,6 +774,7 @@ Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test
 ```
 *Tips:*  
 *Using PowerShell array for large dataset, better to initialize an array with explicit size (instead of dynamic array with subsequent appending elements), otherwise most of performance will be lost in highly frequent memory reallocation, data copying over and over again.*  
+*You may notice that Invoke-RestMethod takes many fixed arguments all the time, to be lazier to type them, you can import a convenient function Invoke-DbWebApi from [dbwebapi-client.ps1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
 
 PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you won't even want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
 
