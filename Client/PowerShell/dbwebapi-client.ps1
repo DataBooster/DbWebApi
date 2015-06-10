@@ -29,7 +29,7 @@ Function Invoke-DbWebApi {
 		$psBoundParameters.Remove("Password");
 	}
 	else {
-		$psBoundParameters.Add("UseDefaultCredentials", $true);
+		$psBoundParameters.UseDefaultCredentials = $true;
 	}
 
 	if (!$psBoundParameters.ContainsKey("Method")) {
