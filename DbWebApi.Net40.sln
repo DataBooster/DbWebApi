@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi", "DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.csproj", "{37F01AC2-C486-4E32-838C-E0F23BE16B5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.csproj", "{37F01AC2-C486-4E32-838C-E0F23BE16B5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A6985-BA61-4CE6-8085-322035D9014F}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,52 +12,50 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A69
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Pack-Oracle-DataDirect.bat = NuGet\Pack-Oracle-DataDirect.bat
-		NuGet\Pack-Oracle-ODP.NET.bat = NuGet\Pack-Oracle-ODP.NET.bat
-		NuGet\Pack-Oracle-ODP.NET.Managed.bat = NuGet\Pack-Oracle-ODP.NET.Managed.bat
-		NuGet\Pack-SqlServer.bat = NuGet\Pack-SqlServer.bat
+		Server\NuGet\Pack-Oracle-DataDirect.bat = Server\NuGet\Pack-Oracle-DataDirect.bat
+		Server\NuGet\Pack-Oracle-ODP.NET.bat = Server\NuGet\Pack-Oracle-ODP.NET.bat
+		Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat = Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat
+		Server\NuGet\Pack-SqlServer.bat = Server\NuGet\Pack-SqlServer.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\nupkg\NuGet Command-Line.htm = NuGet\nupkg\NuGet Command-Line.htm
+		Server\NuGet\nupkg\NuGet Command-Line.htm = Server\NuGet\nupkg\NuGet Command-Line.htm
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\SqlServer\DataBooster.DbWebApi.nuspec = NuGet\SqlServer\DataBooster.DbWebApi.nuspec
-		NuGet\SqlServer\web.config.transform = NuGet\SqlServer\web.config.transform
+		Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec = Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec
+		Server\NuGet\SqlServer\web.config.transform = Server\NuGet\SqlServer\web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{798E5725-AA6A-4AFB-A752-EEF6044C36C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET", "ODP.NET", "{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec = NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec
-		NuGet\Oracle\ODP.NET\web.config.transform = NuGet\Oracle\ODP.NET\web.config.transform
+		Server\NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec
+		Server\NuGet\Oracle\ODP.NET\web.config.transform = Server\NuGet\Oracle\ODP.NET\web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDirect", "DataDirect", "{A172D239-9E04-46AF-9243-1D8FE49F19B1}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec = NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec
-		NuGet\Oracle\DataDirect\web.config.transform = NuGet\Oracle\DataDirect\web.config.transform
+		Server\NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec
+		Server\NuGet\Oracle\DataDirect\web.config.transform = Server\NuGet\Oracle\DataDirect\web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET.Managed", "ODP.NET.Managed", "{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec = NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec
-		NuGet\Oracle\ODP.NET.Managed\web.config.transform = NuGet\Oracle\ODP.NET.Managed\web.config.transform
+		Server\NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec
+		Server\NuGet\Oracle\ODP.NET.Managed\web.config.transform = Server\NuGet\Oracle\ODP.NET.Managed\web.config.transform
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D3B28B2F-4E2B-4299-B2A7-FC9FBE0273A3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi", "Samples\Server\Net40\MyDbWebApi.csproj", "{1C81D605-AADC-4EDE-B99C-60E544105118}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi.Net40", "Server\Sample\MyDbWebApi.Net40\MyDbWebApi.Net40.csproj", "{1C81D605-AADC-4EDE-B99C-60E544105118}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net", "Net", "{9C621537-BFDD-4F0C-9308-925AE75320EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Client", "Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.Net40.csproj", "{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Client.Net40", "Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.Net40.csproj", "{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2524A6C9-0B54-4334-9817-86CE3FFB5271}"
 	ProjectSection(SolutionItems) = preProject
@@ -83,6 +81,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		Client\PowerShell\dbwebapi-client.ps1 = Client\PowerShell\dbwebapi-client.ps1
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{8140A7E2-B0C7-4FB1-9960-C3C42EF8609A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,13 +108,16 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{8E71CF07-E755-4A97-A0A2-21DF211FB979} = {5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}
+		{8140A7E2-B0C7-4FB1-9960-C3C42EF8609A} = {5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A} = {5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}
 		{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
 		{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
 		{798E5725-AA6A-4AFB-A752-EEF6044C36C7} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
 		{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
 		{A172D239-9E04-46AF-9243-1D8FE49F19B1} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
 		{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
-		{1C81D605-AADC-4EDE-B99C-60E544105118} = {D3B28B2F-4E2B-4299-B2A7-FC9FBE0273A3}
+		{1C81D605-AADC-4EDE-B99C-60E544105118} = {8140A7E2-B0C7-4FB1-9960-C3C42EF8609A}
 		{9C621537-BFDD-4F0C-9308-925AE75320EC} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
 		{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
 		{C218CFD1-D316-4F03-B0BD-202773280E72} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
