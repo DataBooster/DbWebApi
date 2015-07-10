@@ -50,7 +50,7 @@
       <HintPath>$(SolutionDir)\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\CsvHelper.2.13.0.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <HintPath>..\..\packages\CsvHelper.2.13.2.0\lib\net40-client\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DbParallel.DataAccess, Version=1.7.8.2, Culture=neutral, processorArchitecture=MSIL">
@@ -126,9 +126,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="DbWebApi.cd" />
-    <None Include="packages.config" />
     <None Include="DerivedParametersCache\SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
-    <None Include="packages.net40.config" />
+    <None Include="packages.DataBooster.DbWebApi.Net40.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

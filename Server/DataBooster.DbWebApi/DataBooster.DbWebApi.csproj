@@ -129,8 +129,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="DbWebApi.cd" />
-    <None Include="packages.net45.config" />
-    <None Include="packages.config" />
+    <None Include="packages.DataBooster.DbWebApi.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DerivedParametersCache\SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
   </ItemGroup>
   <ItemGroup />
