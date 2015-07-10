@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DbWebApi Client .Net Library")]
-[assembly: AssemblyDescription("DbWebApi .Net(≥ 4.0) Client Library. https://github.com/DataBooster/DbWebApi")]
+[assembly: AssemblyDescription("DbWebApi .Net Client Library. https://github.com/DataBooster/DbWebApi")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Abel Cheng")]
 [assembly: AssemblyProduct("DataBooster.DbWebApi.Client")]
