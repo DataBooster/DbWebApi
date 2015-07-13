@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+	<connectionStrings>
+		<add name="$rootnamespace$.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" xdt:Transform="Remove" xdt:Locator="Match(name,providerName,connectionString)"/>
+		<add name="DataBooster.DbWebApi.MainConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI;Min Pool Size=8" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name,providerName)"/>
+	</connectionStrings>
+
+	<appSettings>
+		<add key="$rootnamespace$.MainPackage" value="SCHEMA.PACKAGE_" xdt:Transform="Remove" xdt:Locator="Match(key,value)"/>
+	</appSettings>
+
+	<appSettings xdt:Transform="RemoveAll" xdt:Locator="Condition(count(*)=0)" />
+
+</configuration>

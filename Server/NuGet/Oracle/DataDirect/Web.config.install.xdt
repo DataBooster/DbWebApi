@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+	<connectionStrings>
+		<add name="$rootnamespace$.MainConnection" providerName="DDTek.Oracle" connectionString="Data Source=SAMPLEDB;Procedure Description Cache=false;Authentication Method=Client" xdt:Transform="Remove" xdt:Locator="Match(name,providerName,connectionString)"/>
+		<add name="$rootnamespace$.AuxConnection" providerName="System.Data.SqlClient" connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=SAMPLEDB;Integrated Security=SSPI" xdt:Transform="Remove" xdt:Locator="Match(name,providerName,connectionString)"/>
+		<add name="DataBooster.DbWebApi.MainConnection" providerName="DDTek.Oracle" connectionString="Data Source=SAMPLEDB;Procedure Description Cache=false;Authentication Method=Client;Min Pool Size=8" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name,providerName)"/>
+	</connectionStrings>
+
+	<appSettings>
+		<add key="$rootnamespace$.MainPackage" value="SCHEMA.PACKAGE." xdt:Transform="Remove" xdt:Locator="Match(key,value)"/>
+	</appSettings>
+
+	<!-- remove if section is empty -->
+	<appSettings xdt:Transform="RemoveAll" xdt:Locator="Condition(count(*)=0)" />
+
+</configuration>

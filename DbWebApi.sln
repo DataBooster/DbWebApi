@@ -28,7 +28,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8}"
 	ProjectSection(SolutionItems) = preProject
 		Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec = Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec
-		Server\NuGet\SqlServer\web.config.transform = Server\NuGet\SqlServer\web.config.transform
+		Server\NuGet\SqlServer\Web.config.install.xdt = Server\NuGet\SqlServer\Web.config.install.xdt
+		Server\NuGet\SqlServer\Web.config.uninstall.xdt = Server\NuGet\SqlServer\Web.config.uninstall.xdt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{798E5725-AA6A-4AFB-A752-EEF6044C36C7}"
@@ -36,19 +37,22 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET", "ODP.NET", "{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D}"
 	ProjectSection(SolutionItems) = preProject
 		Server\NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec
-		Server\NuGet\Oracle\ODP.NET\web.config.transform = Server\NuGet\Oracle\ODP.NET\web.config.transform
+		Server\NuGet\Oracle\ODP.NET\Web.config.install.xdt = Server\NuGet\Oracle\ODP.NET\Web.config.install.xdt
+		Server\NuGet\Oracle\ODP.NET\Web.config.uninstall.xdt = Server\NuGet\Oracle\ODP.NET\Web.config.uninstall.xdt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDirect", "DataDirect", "{A172D239-9E04-46AF-9243-1D8FE49F19B1}"
 	ProjectSection(SolutionItems) = preProject
 		Server\NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec
-		Server\NuGet\Oracle\DataDirect\web.config.transform = Server\NuGet\Oracle\DataDirect\web.config.transform
+		Server\NuGet\Oracle\DataDirect\Web.config.install.xdt = Server\NuGet\Oracle\DataDirect\Web.config.install.xdt
+		Server\NuGet\Oracle\DataDirect\Web.config.uninstall.xdt = Server\NuGet\Oracle\DataDirect\Web.config.uninstall.xdt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET.Managed", "ODP.NET.Managed", "{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B}"
 	ProjectSection(SolutionItems) = preProject
 		Server\NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec
-		Server\NuGet\Oracle\ODP.NET.Managed\web.config.transform = Server\NuGet\Oracle\ODP.NET.Managed\web.config.transform
+		Server\NuGet\Oracle\ODP.NET.Managed\Web.config.install.xdt = Server\NuGet\Oracle\ODP.NET.Managed\Web.config.install.xdt
+		Server\NuGet\Oracle\ODP.NET.Managed\Web.config.uninstall.xdt = Server\NuGet\Oracle\ODP.NET.Managed\Web.config.uninstall.xdt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi.Net40", "Server\Sample\MyDbWebApi.Net40\MyDbWebApi.Net40.csproj", "{1C81D605-AADC-4EDE-B99C-60E544105118}"
