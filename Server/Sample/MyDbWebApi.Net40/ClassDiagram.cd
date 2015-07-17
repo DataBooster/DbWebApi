@@ -3,7 +3,7 @@
   <Class Name="MyDbWebApi.Controllers.DbWebApiController">
     <Position X="0.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAIQAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Controllers\DbWebApiController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -11,14 +11,14 @@
     <Position X="2.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAACAAAA=</HashCode>
-      <FileName>Authorization\DbWebApiAuthorizeAttribute.cs</FileName>
+      <FileName>Filters\DbWebApiAuthorizeAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MyDbWebApi.MyDbWebApiAuthorization">
     <Position X="5.75" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Authorization\MyDbWebApiAuthorization.cs</FileName>
+      <FileName>Filters\MyDbWebApiAuthorization.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

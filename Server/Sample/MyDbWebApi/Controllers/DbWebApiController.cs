@@ -1,13 +1,15 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Collections.Generic;
 using DataBooster.DbWebApi;
 using Newtonsoft.Json.Linq;
 
 namespace MyDbWebApi.Controllers
 {
-	[DbWebApiAuthorize]
+	//	[DbWebApiAuthorize]
+	[EnableCors(origins: "http://www.example.com", headers: "*", methods: "*", SupportsCredentials = true)]
 	public class DbWebApiController : ApiController
 	{
 		#region Approach 1: Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.

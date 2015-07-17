@@ -107,7 +107,7 @@ _It's unnecessary to repeat design for the same part of contract again. Repeated
 ## Usage
 
 #### ApiController:  
-Please reference the sample [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs):
+Please reference the sample [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/Controllers/DbWebApiController.cs):
 ``` CSharp
 using System.Net.Http;
 using System.Web.Http;
@@ -135,7 +135,7 @@ namespace MyDbWebApi.Controllers
 }
 ```
 That's all, ExecuteDbApi and BulkExecuteDbApi are extension methods to ApiController.  
-Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs), you can also see another using approach that combines the Execute and BulkExecute as a DynExecute which auto-detect a post request body, invoking BulkExecute if sets of input parameters are encapsulated in an arrray; or invoking Execute if input parameters are encapsulated in a single dictionary.  
+Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/Controllers/DbWebApiController.cs), you can also see another using approach that combines the Execute and BulkExecute as a DynExecute which auto-detect a post request body, invoking BulkExecute if sets of input parameters are encapsulated in an arrray; or invoking Execute if input parameters are encapsulated in a single dictionary.  
 
 ``` CSharp
 // Execute a DbApi with a input parameters' dictionary
@@ -155,7 +155,7 @@ public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiCont
 // listOfParameters:
 //             Specifies a collection of required parameter dictionary for every call in the bulk execution
 ```
-The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) demonstrates the Web API routing for these two actions.
+The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/App_Start/WebApiConfig.cs) demonstrates the Web API routing for these two actions.
 
 #### Web.config  
 "<u>DataBooster.DbWebApi.MainConnection</u>" is the only one configuration item needs to be customized:
@@ -167,7 +167,7 @@ The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master
 
 #### HTTP Request  
 ##### Url:  
-As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
+As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
 ##### Input Parameters
 * <a name="simple-parameters"></a>Simple Parameters  
 Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
@@ -774,7 +774,7 @@ Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test
 ```
 *Tips:*  
 *Using PowerShell array for large dataset, better to initialize an array with explicit size (instead of dynamic array with subsequent appending elements), otherwise most of performance will be lost in highly frequent memory reallocation, data copying over and over again.*  
-*You may notice that Invoke-RestMethod takes many fixed arguments all the time, to be lazier to type them, you can import a convenient function Invoke-DbWebApi from [dbwebapi-client.ps1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
+*You may notice that [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) takes many fixed arguments, to be lazier to type them all the time, you can import a convenient function [Invoke-DbWebApi](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) from [dbwebapi-client.ps1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
 
 PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you won't even want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
 
@@ -813,7 +813,7 @@ Hopefully, base on the example, it's easier to customize your own DbWebApi serve
 
 By default, the example server is configured for intranet environment:
 
-[Web.config](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Web.config)
+[Web.config](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/Web.config)
 ``` XML
 <configuration>
   <system.web>
@@ -825,7 +825,7 @@ By default, the example server is configured for intranet environment:
 </configuration>
 ```
 
-[DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs)
+[DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/Controllers/DbWebApiController.cs)
 ``` CSharp
 namespace MyDbWebApi.Controllers
 {
@@ -837,7 +837,7 @@ namespace MyDbWebApi.Controllers
 }
 ```
 
-[MyDbWebApiAuthorization.cs](https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Filters/MyDbWebApiAuthorization.cs)
+[MyDbWebApiAuthorization.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi.Net40/Filters/MyDbWebApiAuthorization.cs)
 ``` CSharp
 namespace MyDbWebApi
 {

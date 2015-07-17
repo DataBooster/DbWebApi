@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace MyDbWebApi.DataAccess
+namespace MyDbWebApi
 {
-	public static partial class ConfigHelper
+	public static class ConfigHelper
 	{
 		private const string _UserNameReservedParameterSettingKey = "UserNameReservedParameter";
 
