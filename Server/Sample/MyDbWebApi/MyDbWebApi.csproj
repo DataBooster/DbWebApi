@@ -121,6 +121,8 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Controllers\DbWebApiController.cs" />
     <Compile Include="Controllers\MiscController.cs" />
+    <Compile Include="Filters\DbWebApiAuthorizeAttribute.cs" />
+    <Compile Include="Filters\MyDbWebApiAuthorization.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -135,9 +137,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

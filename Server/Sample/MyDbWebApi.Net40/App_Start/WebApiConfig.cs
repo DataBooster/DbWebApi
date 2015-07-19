@@ -34,7 +34,7 @@ namespace MyDbWebApi
 				name: "BulkApi",
 				routeTemplate: "bulk/{sp}/{ext}",
 				defaults: new { controller = "DbWebApi", action = "BulkExecute", ext = RouteParameter.Optional },
-				constraints: new { ext = @"|json|jsonp|xml" }
+				constraints: new { ext = @"|json|xml" }
 			);
 
 			#endregion	// Approach 2

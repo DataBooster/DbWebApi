@@ -162,12 +162,18 @@
     <Compile Include="..\MyDbWebApi\ConfigHelper.cs">
       <Link>ConfigHelper.cs</Link>
     </Compile>
+    <Compile Include="..\MyDbWebApi\Controllers\DbWebApiController.cs">
+      <Link>Controllers\DbWebApiController.cs</Link>
+    </Compile>
     <Compile Include="..\MyDbWebApi\Controllers\MiscController.cs">
       <Link>Controllers\MiscController.cs</Link>
     </Compile>
-    <Compile Include="Filters\MyDbWebApiAuthorization.cs" />
-    <Compile Include="Controllers\DbWebApiController.cs" />
-    <Compile Include="Filters\DbWebApiAuthorizeAttribute.cs" />
+    <Compile Include="..\MyDbWebApi\Filters\DbWebApiAuthorizeAttribute.cs">
+      <Link>Filters\DbWebApiAuthorizeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\MyDbWebApi\Filters\MyDbWebApiAuthorization.cs">
+      <Link>Filters\MyDbWebApiAuthorization.cs</Link>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
