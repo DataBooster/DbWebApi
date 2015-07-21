@@ -24,6 +24,9 @@ namespace DataBooster.DbWebApi
 		private static CacheDictionary<Uri, IDictionary<string, string>> _QueryStringCache;
 		private static TimeSpan _QueryStringCacheLifetime;
 
+		/// <summary>
+		/// Get/Set the duration time that query string dictionary remains in the cache, defaults to 3 minutes.
+		/// </summary>
 		public static TimeSpan QueryStringCacheLifetime
 		{
 			get { return _QueryStringCacheLifetime; }
@@ -37,7 +40,6 @@ namespace DataBooster.DbWebApi
 			_QueryStringCache = new CacheDictionary<Uri, IDictionary<string, string>>();
 			_QueryStringCacheLifetime = TimeSpan.FromSeconds(180);
 		}
-
 
 		#region Negotiation
 		internal static ContentNegotiationResult Negotiate(this HttpRequestMessage request)
