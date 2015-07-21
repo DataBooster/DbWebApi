@@ -95,9 +95,7 @@ namespace DataBooster.DbWebApi
 				queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
 
 			config.Formatters.JsonFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
-#if WEB_API2
 			config.Formatters.JsonFormatter.AddMediaTypeMapping("bson", new MediaTypeHeaderValue("application/bson"), queryStringParameterName);
-#endif
 			config.Formatters.XmlFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
 		}
 
