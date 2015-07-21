@@ -13,9 +13,6 @@ using System.Web.Http;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DbParallel.DataAccess;
-using DataBooster.DbWebApi.Csv;
-using DataBooster.DbWebApi.Excel;
-using DataBooster.DbWebApi.Jsonp;
 using DataBooster.DbWebApi.Razor;
 
 namespace DataBooster.DbWebApi
@@ -23,7 +20,6 @@ namespace DataBooster.DbWebApi
 	public static partial class WebApiExtensions
 	{
 		private static Collection<IFormatPlug> _FormatPlugs;
-		private static PseudoMediaTypeFormatter _PseudoFormatter;
 		private static PseudoContentNegotiator _PseudoContentNegotiator;
 		private static CacheDictionary<Uri, IDictionary<string, string>> _QueryStringCache;
 		private static TimeSpan _QueryStringCacheLifetime;
@@ -42,90 +38,6 @@ namespace DataBooster.DbWebApi
 			_QueryStringCacheLifetime = TimeSpan.FromSeconds(180);
 		}
 
-		#region Registration
-		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true)
-		{
-			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
-
-#if WEB_API2
-			if (supportBson)
-				config.Formatters.Add(new BsonMediaTypeFormatter());
-#endif
-			if (supportCsv)
-				config.AddFormatPlug(new CsvFormatPlug());
-			if (supportXlsx)
-				config.AddFormatPlug(new XlsxFormatPlug());
-			if (supportJsonp)
-				config.Formatters.Add(new JsonpMediaTypeFormatter());
-			if (supportRazor)
-				config.Formatters.Add(new RazorMediaTypeFormatter());
-		}
-
-		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = null)
-		{
-			if (formatPlug == null)
-				throw new ArgumentNullException("formatPlug");
-
-			if (_FormatPlugs.Count == 0)
-			{
-				config.SupportMediaTypeShortMapping(queryStringParameterName);
-
-				_PseudoFormatter = new PseudoMediaTypeFormatter(config.Formatters.JsonFormatter);
-				config.Formatters.Add(_PseudoFormatter);
-			}
-			else
-				if (_FormatPlugs.Contains(formatPlug))
-					return;
-
-			_FormatPlugs.Add(formatPlug);
-
-			if (!_PseudoFormatter.SupportedMediaTypes.Contains(formatPlug.DefaultMediaType))
-				_PseudoFormatter.SupportedMediaTypes.Add(formatPlug.DefaultMediaType);
-
-			foreach (var mediaType in formatPlug.SupportedMediaTypes)
-				if (!_PseudoFormatter.SupportedMediaTypes.Contains(mediaType))
-					_PseudoFormatter.SupportedMediaTypes.Add(mediaType);
-
-			_PseudoFormatter.AddMediaTypeMapping(formatPlug.FormatShortName, formatPlug.DefaultMediaType, queryStringParameterName);
-		}
-
-		public static void SupportMediaTypeShortMapping(this HttpConfiguration config, string queryStringParameterName = null)
-		{
-			if (string.IsNullOrEmpty(queryStringParameterName))
-				queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
-
-			config.Formatters.JsonFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
-			config.Formatters.JsonFormatter.AddMediaTypeMapping("bson", new MediaTypeHeaderValue("application/bson"), queryStringParameterName);
-			config.Formatters.XmlFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
-		}
-
-		private static void AddMediaTypeMapping(this MediaTypeFormatter mediaTypeFormatter, string type, MediaTypeHeaderValue mediaType, string queryStringParameterName)
-		{
-			if (mediaTypeFormatter != null && !mediaTypeFormatter.MediaTypeMappings.Any(m => m.ExistMediaTypeMapping(type)))
-			{
-				if (string.IsNullOrEmpty(queryStringParameterName))
-					queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
-
-				mediaTypeFormatter.AddQueryStringMapping(queryStringParameterName, type, mediaType);
-				mediaTypeFormatter.AddUriPathExtensionMapping(type, mediaType);
-			}
-		}
-
-		private static bool ExistMediaTypeMapping(this MediaTypeMapping mediaTypeMapping, string mediaFormat)
-		{
-			QueryStringMapping qsMapping = mediaTypeMapping as QueryStringMapping;
-
-			if (qsMapping != null && qsMapping.QueryStringParameterValue == mediaFormat)
-				return true;
-
-			UriPathExtensionMapping ueMapping = mediaTypeMapping as UriPathExtensionMapping;
-
-			if (ueMapping != null && ueMapping.UriPathExtension == mediaFormat)
-				return true;
-
-			return false;
-		}
-		#endregion
 
 		#region Negotiation
 		internal static ContentNegotiationResult Negotiate(this HttpRequestMessage request)

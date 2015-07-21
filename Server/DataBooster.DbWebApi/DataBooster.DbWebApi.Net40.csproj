@@ -121,6 +121,7 @@
     <Compile Include="TypeHelper.cs" />
     <Compile Include="WebApiExtensions.cs" />
     <Compile Include="WebApiExtensions.parameters.cs" />
+    <Compile Include="WebApiExtensions.register.cs" />
     <Compile Include="Xml\ResponseRoot.cs" />
   </ItemGroup>
   <ItemGroup>
