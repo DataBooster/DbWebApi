@@ -43,10 +43,14 @@ namespace DataBooster.DbWebApi
 		}
 
 		#region Registration
-		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true)
+		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true)
 		{
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
 
+#if WEB_API2
+			if (supportBson)
+				config.Formatters.Add(new BsonMediaTypeFormatter());
+#endif
 			if (supportCsv)
 				config.AddFormatPlug(new CsvFormatPlug());
 			if (supportXlsx)
@@ -91,6 +95,9 @@ namespace DataBooster.DbWebApi
 				queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
 
 			config.Formatters.JsonFormatter.AddMediaTypeMapping("json", new MediaTypeHeaderValue("application/json"), queryStringParameterName);
+#if WEB_API2
+			config.Formatters.JsonFormatter.AddMediaTypeMapping("bson", new MediaTypeHeaderValue("application/bson"), queryStringParameterName);
+#endif
 			config.Formatters.XmlFormatter.AddMediaTypeMapping("xml", new MediaTypeHeaderValue("application/xml"), queryStringParameterName);
 		}
 

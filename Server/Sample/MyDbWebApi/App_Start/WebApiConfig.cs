@@ -27,7 +27,7 @@ namespace MyDbWebApi
 				name: "DbWebApi",
 				routeTemplate: "{sp}/{ext}",
 				defaults: new { controller = "DbWebApi", action = "DynExecute", ext = RouteParameter.Optional },
-				constraints: new { ext = @"|json|xml|csv|xlsx|jsonp|razor" }
+				constraints: new { ext = @"|json|bson|xml|csv|xlsx|jsonp|razor" }
 			);
 
 			#endregion	// Approach 1
@@ -39,14 +39,14 @@ namespace MyDbWebApi
 				name: "DbWebApi",
 				routeTemplate: "{sp}/{ext}",
 				defaults: new { controller = "DbWebApi", action = "Execute", ext = RouteParameter.Optional },
-				constraints: new { ext = @"|json|xml|csv|xlsx|jsonp|razor" }
+				constraints: new { ext = @"|json|bson|xml|csv|xlsx|jsonp|razor" }
 			);
 
 			config.Routes.MapHttpRoute(
 				name: "BulkApi",
 				routeTemplate: "bulk/{sp}/{ext}",
 				defaults: new { controller = "DbWebApi", action = "BulkExecute", ext = RouteParameter.Optional },
-				constraints: new { ext = @"|json|xml" }
+				constraints: new { ext = @"|json|bson|xml" }
 			);
 
 			#endregion	// Approach 2
