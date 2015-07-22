@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{
 	ProjectSection(SolutionItems) = preProject
 		Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec = Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec
 		Server\NuGet\SqlServer\Web.config.install.xdt = Server\NuGet\SqlServer\Web.config.install.xdt
+		Server\NuGet\SqlServer\Web.config.transform = Server\NuGet\SqlServer\Web.config.transform
 		Server\NuGet\SqlServer\Web.config.uninstall.xdt = Server\NuGet\SqlServer\Web.config.uninstall.xdt
 	EndProjectSection
 EndProject

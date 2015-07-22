@@ -1,22 +1,26 @@
-<?xml version="1.0"?>
-<package >
-	<metadata>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata minClientVersion="2.6">
 		<id>DataBooster.DbWebApi.SqlServer</id>
 		<version>$version$</version>
 		<title>$title$ for SQL Server</title>
 		<authors>$author$</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
-		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
+		<licenseUrl>https://dbwebapi.codeplex.com/license</licenseUrl>
 		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
 		<copyright>Copyright 2015 Abel Cheng</copyright>
-		<tags>Gneric ASP.NET Web API data driven ADO.NET Booster SQL Server Database Stored Procedure DataAccess Bulk JSON XML CSV Excel xlsx JSONP Razor CsvHelper ClosedXML RazorEngine</tags>
+		<tags>Gneric ASP.NET Web API data driven ADO.NET Booster SQL Server Database Stored Procedure DataAccess Bulk JSON BSON XML CSV Excel xlsx JSONP Razor CsvHelper ClosedXML RazorEngine</tags>
 	</metadata>
 	<files>
-		<file src="..\NuGet\SqlServer\web.config.transform" target="content" />
-		<file src="..\NuGet\SqlServer\web.config.transform" target="content\app.config.transform" />
+		<file src="..\NuGet\SqlServer\Web.config.transform" target="content" />
+		<file src="..\NuGet\SqlServer\Web.config.transform" target="content\App.config.transform" />
+		<file src="..\NuGet\SqlServer\Web.config.install.xdt" target="content" />
+		<file src="..\NuGet\SqlServer\Web.config.install.xdt" target="content\App.config.install.xdt" />
+		<file src="..\NuGet\SqlServer\Web.config.uninstall.xdt" target="content" />
+		<file src="..\NuGet\SqlServer\Web.config.uninstall.xdt" target="content\App.config.uninstall.xdt" />
 		<file src="DerivedParametersCache\SqlScripts\SqlServer\**\*.*" target="content\SqlScripts\SqlServer" />
 	</files>
 </package>

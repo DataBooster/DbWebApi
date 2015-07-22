@@ -15,6 +15,8 @@
 		<tags>Generic ASP.NET Web API data driven ADO.NET Booster Oracle ODP.NET Managed Database Stored Procedure DataAccess Bulk JSON BSON XML CSV Excel xlsx JSONP Razor CsvHelper ClosedXML RazorEngine</tags>
 	</metadata>
 	<files>
+		<file src="..\NuGet\SqlServer\Web.config.transform" target="content" />
+		<file src="..\NuGet\SqlServer\Web.config.transform" target="content\App.config.transform" />
 		<file src="..\NuGet\Oracle\ODP.NET.Managed\Web.config.install.xdt" target="content" />
 		<file src="..\NuGet\Oracle\ODP.NET.Managed\Web.config.install.xdt" target="content\App.config.install.xdt" />
 		<file src="..\NuGet\Oracle\ODP.NET.Managed\Web.config.uninstall.xdt" target="content" />
