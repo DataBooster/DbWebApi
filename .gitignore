@@ -28,5 +28,7 @@ _ReSharper*/
 *.vssscc
 $tf*/
 packages/*/
-Server/Sample/packages/*/
 *.nupkg
+Server/Sample/packages/*/
+Server/NuGet/nupkg/Net*/
+Server/DataBooster.DbWebApi/*.nuspec
