@@ -4,6 +4,7 @@
 
 using System;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,19 +14,36 @@ namespace DataBooster.DbWebApi.Client
 {
 	public static class ClientHelper
 	{
+		private static MediaTypeFormatterCollection _ReadAsMediaTypeFormatterCollection = null;
+
+		public static MediaTypeFormatterCollection ReadAsMediaTypeFormatterCollection
+		{
+			get
+			{
+				if (_ReadAsMediaTypeFormatterCollection == null)
+				{
+					_ReadAsMediaTypeFormatterCollection = new MediaTypeFormatterCollection();
+#if WEB_API2
+					_ReadAsMediaTypeFormatterCollection.Insert(0, new BsonMediaTypeFormatter());
+#endif
+				}
+
+				return _ReadAsMediaTypeFormatterCollection;
+			}
+		}
+
 		#region Read response as JSON extentions
 
 		internal static DbWebApiResponse[] BulkReadDbJson(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
-			var contentType = content.GetContentType();
 
-			if (contentType != null && contentType.ToLower().EndsWith("/json") == false)
-				throw new HttpRequestException("Response Content-Type is not JSON");
+			if (content == null)
+				throw new ArgumentNullException("httpResponse.Content");
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<DbWebApiResponse[]> readTask = content.ReadAsAsync<DbWebApiResponse[]>();
+				Task<DbWebApiResponse[]> readTask = content.ReadAsAsync<DbWebApiResponse[]>(ReadAsMediaTypeFormatterCollection);
 				DbWebApiResponse[] dbWebApiResponse = readTask.Result;
 
 				if (readTask.IsFaulted)
@@ -40,14 +58,13 @@ namespace DataBooster.DbWebApi.Client
 		public static DbWebApiResponse ReadDbJson(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
-			var contentType = content.GetContentType();
 
-			if (contentType != null && contentType.ToLower().EndsWith("/json") == false)
-				throw new HttpRequestException("Response Content-Type is not JSON");
+			if (content == null)
+				throw new ArgumentNullException("httpResponse.Content");
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<DbWebApiResponse> readTask = content.ReadAsAsync<DbWebApiResponse>();
+				Task<DbWebApiResponse> readTask = content.ReadAsAsync<DbWebApiResponse>(ReadAsMediaTypeFormatterCollection);
 				DbWebApiResponse dbWebApiResponse = readTask.Result;
 
 				if (readTask.IsFaulted)
@@ -61,7 +78,7 @@ namespace DataBooster.DbWebApi.Client
 
 		private static HttpRequestException CreateUnsuccessException(this HttpResponseMessage httpResponse)
 		{
-			var errorDictionary = httpResponse.Content.ReadAsAsync<HttpErrorClient>().Result;
+			var errorDictionary = httpResponse.Content.ReadAsAsync<HttpErrorClient>(ReadAsMediaTypeFormatterCollection).Result;
 
 			if (errorDictionary.Count == 0)
 				return new HttpRequestException(string.Format("{0} ({1})", (int)httpResponse.StatusCode, httpResponse.ReasonPhrase));

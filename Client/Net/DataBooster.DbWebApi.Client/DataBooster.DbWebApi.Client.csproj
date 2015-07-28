@@ -23,7 +23,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\Net45\</OutputPath>
     <IntermediateOutputPath>obj\Debug\Net45\</IntermediateOutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WEB_API2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Net45\DataBooster.DbWebApi.Client.xml</DocumentationFile>
@@ -34,7 +34,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\Net45\</OutputPath>
     <IntermediateOutputPath>obj\Release\Net45\</IntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;WEB_API2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Net45\DataBooster.DbWebApi.Client.xml</DocumentationFile>
