@@ -6,6 +6,7 @@ using System;
 using System.Text;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -64,6 +65,22 @@ namespace DataBooster.DbWebApi.Client
 
 		public DbWebApiClient(string baseAddress, bool useDefaultCredentials = true)
 			: this(useDefaultCredentials)
+		{
+			if (!string.IsNullOrWhiteSpace(baseAddress))
+				_HttpClient.BaseAddress = new Uri(baseAddress);
+		}
+
+		public DbWebApiClient(string username, string password)
+		{
+			_HttpClient = new HttpClient();
+
+			_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", username, password))));
+
+			_CreatedInternalClient = true;
+		}
+
+		public DbWebApiClient(string baseAddress, string username, string password)
+			: this(username, password)
 		{
 			if (!string.IsNullOrWhiteSpace(baseAddress))
 				_HttpClient.BaseAddress = new Uri(baseAddress);
