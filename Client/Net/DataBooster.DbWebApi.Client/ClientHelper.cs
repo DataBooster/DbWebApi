@@ -3,6 +3,8 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.IO;
+using System.Xml;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Collections;
@@ -32,7 +34,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		#region Read response as JSON extentions
+		#region Read response as JSON|BSON extentions
 
 		internal static DbWebApiResponse[] BulkReadDbJson(this HttpResponseMessage httpResponse)
 		{
@@ -95,6 +97,39 @@ namespace DataBooster.DbWebApi.Client
 			if (content.Headers.ContentType == null)
 				return null;
 			return content.Headers.ContentType.MediaType;
+		}
+
+		#endregion
+
+		#region Read response as XML extentions
+
+		public static XmlDocument ReadDbXml(this HttpResponseMessage httpResponse)
+		{
+			var content = httpResponse.Content;
+
+			if (content == null)
+				throw new ArgumentNullException("httpResponse.Content");
+
+			var contentType = content.GetContentType();
+
+			if (contentType != null && contentType.ToLower().EndsWith("/xml") == false)
+				throw new HttpRequestException("Response Content-Type is not XML");
+
+			if (httpResponse.IsSuccessStatusCode)
+			{
+				Task<Stream> readTask = content.ReadAsStreamAsync();
+
+				if (readTask.IsFaulted)
+					throw readTask.Exception;
+
+				XmlDocument xmlResponse = new XmlDocument();
+
+				xmlResponse.Load(readTask.Result);
+
+				return xmlResponse;
+			}
+			else
+				throw httpResponse.CreateUnsuccessException();
 		}
 
 		#endregion

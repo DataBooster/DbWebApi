@@ -3,6 +3,7 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.Xml;
 using System.Text;
 using System.Linq;
 using System.Net.Http;
@@ -101,6 +102,13 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsJson overrides
+#if WEB_API2
+		public async Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
+			return httpResponse.BulkReadDbJson();
+		}
+#else	// ASP.NET Web API 1
 		public Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
@@ -114,7 +122,7 @@ namespace DataBooster.DbWebApi.Client
 					return requestTask.Result.BulkReadDbJson();
 				});
 		}
-
+#endif
 		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
@@ -122,16 +130,7 @@ namespace DataBooster.DbWebApi.Client
 
 		public Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			return ExecRawAsync(requestUri, listOfInputParameters).
-				ContinueWith<DbWebApiResponse[]>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.BulkReadDbJson();
-				});
+			return ExecAsJsonAsync(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
 		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
@@ -168,6 +167,13 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region ExecAsJson overrides
+#if WEB_API2
+		public async Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
+			return httpResponse.ReadDbJson();
+		}
+#else	// ASP.NET Web API 1
 		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
@@ -181,7 +187,7 @@ namespace DataBooster.DbWebApi.Client
 					return requestTask.Result.ReadDbJson();
 				});
 		}
-
+#endif
 		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
@@ -189,16 +195,7 @@ namespace DataBooster.DbWebApi.Client
 
 		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
-			return ExecRawAsync(requestUri, inputParameters).
-				ContinueWith<DbWebApiResponse>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.ReadDbJson();
-				});
+			return ExecAsJsonAsync(requestUri, inputParameters, CancellationToken.None);
 		}
 
 		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
@@ -232,6 +229,139 @@ namespace DataBooster.DbWebApi.Client
 		{
 			return ExecAsJson(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
+		#endregion
+
+		#region Bulk ExecAsXml overrides
+#if WEB_API2
+		public async Task<XmlDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
+			return httpResponse.ReadDbXml();
+		}
+#else	// ASP.NET Web API 1
+		public Task<XmlDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		{
+			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
+				ContinueWith<XmlDocument>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadDbXml();
+				});
+		}
+#endif
+		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsXmlAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
+		}
+
+		public Task<XmlDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		{
+			return ExecAsXmlAsync(requestUri, listOfInputParameters, CancellationToken.None);
+		}
+
+		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		{
+			return ExecAsXmlAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+		}
+
+		public XmlDocument ExecAsXml<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		{
+			try
+			{
+				return ExecAsXmlAsync(requestUri, listOfInputParameters).Result;
+			}
+			catch (AggregateException ae)
+			{
+				if (ae.InnerExceptions.Count == 1)
+				{
+					Exception eInner = ae.InnerException;
+
+					if (eInner.InnerException != null)
+						eInner = eInner.InnerException;
+
+					throw eInner;
+				}
+				else
+					throw;
+			}
+		}
+
+		public XmlDocument ExecAsXml(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		{
+			return ExecAsXml(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+		}
+	
+		#endregion
+
+		#region ExecAsXml overrides
+#if WEB_API2
+		public async Task<XmlDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
+			return httpResponse.ReadDbXml();
+		}
+#else	// ASP.NET Web API 1
+		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
+				ContinueWith<XmlDocument>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadDbXml();
+				});
+		}
+#endif
+
+		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsXmlAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+		}
+
+		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAsXmlAsync(requestUri, inputParameters, CancellationToken.None);
+		}
+
+		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsXmlAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+		}
+
+		public XmlDocument ExecAsXml(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			try
+			{
+				return ExecAsXmlAsync(requestUri, inputParameters).Result;
+			}
+			catch (AggregateException ae)
+			{
+				if (ae.InnerExceptions.Count == 1)
+				{
+					Exception eInner = ae.InnerException;
+
+					if (eInner.InnerException != null)
+						eInner = eInner.InnerException;
+
+					throw eInner;
+				}
+				else
+					throw;
+			}
+		}
+
+		public XmlDocument ExecAsXml(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsXml(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+		}
+
 		#endregion
 
 		#region Bulk Raw Methods
