@@ -103,17 +103,20 @@ namespace DataBooster.DbWebApi.Client
 
 		#region Read response as XML extentions
 
-		public static XDocument ReadDbXml(this HttpResponseMessage httpResponse)
+		public static XDocument ReadDbXml(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "/xml")
 		{
 			var content = httpResponse.Content;
 
 			if (content == null)
 				throw new ArgumentNullException("httpResponse.Content");
 
-			var contentType = content.GetContentType();
+			if (!string.IsNullOrEmpty(checkContentTypeEndsWith))
+			{
+				var contentType = content.GetContentType();
 
-			if (contentType != null && contentType.ToLower().EndsWith("/xml") == false)
-				throw new HttpRequestException("Response Content-Type is not XML");
+				if (contentType != null && contentType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
+					throw new HttpRequestException("Response Content-Type is not XML");
+			}
 
 			if (httpResponse.IsSuccessStatusCode)
 			{

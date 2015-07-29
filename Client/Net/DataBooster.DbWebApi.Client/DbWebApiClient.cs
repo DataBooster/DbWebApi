@@ -238,7 +238,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadDbXml();
+			return httpResponse.ReadDbXml(null);
 		}
 #else	// ASP.NET Web API 1
 		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
@@ -251,7 +251,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadDbXml();
+					return requestTask.Result.ReadDbXml(null);
 				});
 		}
 #endif
@@ -303,7 +303,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadDbXml();
+			return httpResponse.ReadDbXml(null);
 		}
 #else	// ASP.NET Web API 1
 		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
@@ -316,7 +316,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadDbXml();
+					return requestTask.Result.ReadDbXml(null);
 				});
 		}
 #endif
