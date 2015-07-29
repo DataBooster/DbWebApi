@@ -4,7 +4,7 @@
 
 using System;
 using System.IO;
-using System.Xml;
+using System.Xml.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Collections;
@@ -103,7 +103,7 @@ namespace DataBooster.DbWebApi.Client
 
 		#region Read response as XML extentions
 
-		public static XmlDocument ReadDbXml(this HttpResponseMessage httpResponse)
+		public static XDocument ReadDbXml(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 
@@ -122,11 +122,7 @@ namespace DataBooster.DbWebApi.Client
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
 
-				XmlDocument xmlResponse = new XmlDocument();
-
-				xmlResponse.Load(readTask.Result);
-
-				return xmlResponse;
+				return XDocument.Load(readTask.Result);
 			}
 			else
 				throw httpResponse.CreateUnsuccessException();

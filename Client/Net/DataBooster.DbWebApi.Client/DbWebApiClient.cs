@@ -3,9 +3,9 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
-using System.Xml;
 using System.Text;
 using System.Linq;
+using System.Xml.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -235,16 +235,16 @@ namespace DataBooster.DbWebApi.Client
 
 		#region Bulk ExecAsXml overrides
 #if WEB_API2
-		public async Task<XmlDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public async Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
 			return httpResponse.ReadDbXml();
 		}
 #else	// ASP.NET Web API 1
-		public Task<XmlDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<XmlDocument>(requestTask =>
+				ContinueWith<XDocument>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
@@ -255,22 +255,22 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 #endif
-		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsXmlAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<XmlDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			return ExecAsXmlAsync(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
-		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsXmlAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		public XmlDocument ExecAsXml<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public XDocument ExecAsXml<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			try
 			{
@@ -292,7 +292,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public XmlDocument ExecAsXml(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public XDocument ExecAsXml(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsXml(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
@@ -300,16 +300,16 @@ namespace DataBooster.DbWebApi.Client
 
 		#region ExecAsXml overrides
 #if WEB_API2
-		public async Task<XmlDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		public async Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
 			return httpResponse.ReadDbXml();
 		}
 #else	// ASP.NET Web API 1
-		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
-				ContinueWith<XmlDocument>(requestTask =>
+				ContinueWith<XDocument>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
@@ -321,22 +321,22 @@ namespace DataBooster.DbWebApi.Client
 		}
 #endif
 
-		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsXmlAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
 		}
 
-		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
 			return ExecAsXmlAsync(requestUri, inputParameters, CancellationToken.None);
 		}
 
-		public Task<XmlDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAsXmlAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
 
-		public XmlDocument ExecAsXml(string requestUri, IDictionary<string, object> inputParameters = null)
+		public XDocument ExecAsXml(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
 			try
 			{
@@ -358,7 +358,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public XmlDocument ExecAsXml(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public XDocument ExecAsXml(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAsXml(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
