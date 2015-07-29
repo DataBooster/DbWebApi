@@ -123,6 +123,7 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 #endif
+
 		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
@@ -188,6 +189,7 @@ namespace DataBooster.DbWebApi.Client
 				});
 		}
 #endif
+
 		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
@@ -294,7 +296,6 @@ namespace DataBooster.DbWebApi.Client
 		{
 			return ExecAsXml(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
-	
 		#endregion
 
 		#region ExecAsXml overrides
@@ -361,7 +362,6 @@ namespace DataBooster.DbWebApi.Client
 		{
 			return ExecAsXml(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
-
 		#endregion
 
 		#region Bulk Raw Methods
@@ -434,7 +434,6 @@ namespace DataBooster.DbWebApi.Client
 
 			return tcs.Task;
 		}
-
 		#endregion
 
 		#region Raw Methods

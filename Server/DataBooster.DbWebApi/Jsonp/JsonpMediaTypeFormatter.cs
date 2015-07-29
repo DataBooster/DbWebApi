@@ -87,6 +87,38 @@ namespace DataBooster.DbWebApi.Jsonp
 		/// <param name="content">The <see cref="T:System.Net.Http.HttpContent"/> where the content is being written.</param>
 		/// <param name="transportContext">The <see cref="T:System.Net.TransportContext"/>.</param>
 		/// <returns>A <see cref="T:System.Threading.Tasks.Task"/> that will write the value to the stream.</returns>
+#if WEB_API2
+		public override async Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+			if (writeStream == null)
+				throw new ArgumentNullException("writeStream");
+
+			if (string.IsNullOrEmpty(_Callback))
+			{
+				await base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
+				return;
+			}
+
+			var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
+			var writer = new StreamWriter(writeStream, encoding);
+
+			writer.Write(_Callback + "(");
+			writer.Flush();
+
+			await base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
+
+			if (!string.IsNullOrEmpty(_JsonpState))
+			{
+				writer.Write(", ");
+				writer.Write(_JsonpState);
+			}
+
+			writer.Write(");");
+			writer.Flush();
+		}
+#else	// ASP.NET Web API 1
 		public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
 		{
 			if (type == null)
@@ -120,5 +152,6 @@ namespace DataBooster.DbWebApi.Jsonp
 					writer.Flush();
 				});
 		}
+#endif
 	}
 }
