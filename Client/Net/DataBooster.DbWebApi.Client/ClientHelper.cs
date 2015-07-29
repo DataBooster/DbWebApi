@@ -80,9 +80,18 @@ namespace DataBooster.DbWebApi.Client
 
 		private static HttpRequestException CreateUnsuccessException(this HttpResponseMessage httpResponse)
 		{
-			var errorDictionary = httpResponse.Content.ReadAsAsync<HttpErrorClient>(ReadAsMediaTypeFormatterCollection).Result;
+			HttpErrorClient errorDictionary;
 
-			if (errorDictionary.Count == 0)
+			try
+			{
+				errorDictionary = httpResponse.Content.ReadAsAsync<HttpErrorClient>(ReadAsMediaTypeFormatterCollection).Result;
+			}
+			catch
+			{
+				errorDictionary = null;
+			}
+
+			if (errorDictionary == null || errorDictionary.Count == 0)
 				return new HttpRequestException(string.Format("{0} ({1})", (int)httpResponse.StatusCode, httpResponse.ReasonPhrase));
 			else
 				return new HttpResponseClientException(errorDictionary);
@@ -110,16 +119,16 @@ namespace DataBooster.DbWebApi.Client
 			if (content == null)
 				throw new ArgumentNullException("httpResponse.Content");
 
-			if (!string.IsNullOrEmpty(checkContentTypeEndsWith))
-			{
-				var contentType = content.GetContentType();
-
-				if (contentType != null && contentType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
-					throw new HttpRequestException("Response Content-Type is not XML");
-			}
-
 			if (httpResponse.IsSuccessStatusCode)
 			{
+				if (!string.IsNullOrEmpty(checkContentTypeEndsWith))
+				{
+					var contentType = content.GetContentType();
+
+					if (contentType != null && contentType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
+						throw new HttpRequestException("Response Content-Type is not XML");
+				}
+
 				Task<Stream> readTask = content.ReadAsStreamAsync();
 
 				if (readTask.IsFaulted)
