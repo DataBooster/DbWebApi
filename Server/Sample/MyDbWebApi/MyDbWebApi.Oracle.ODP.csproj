@@ -27,8 +27,8 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Oracle\ODP.NET\</OutputPath>
-		<IntermediateOutputPath>obj\Oracle\ODP.NET\</IntermediateOutputPath>
-		<DefineConstants>TRACE;DEBUG;NO_SAMPLE</DefineConstants>
+    <IntermediateOutputPath>obj\Oracle\ODP.NET\</IntermediateOutputPath>
+    <DefineConstants>TRACE;DEBUG;NO_SAMPLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -36,8 +36,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Oracle\ODP.NET\</OutputPath>
-		<IntermediateOutputPath>obj\Oracle\ODP.NET\</IntermediateOutputPath>
-		<DefineConstants>TRACE;NO_SAMPLE</DefineConstants>
+    <IntermediateOutputPath>obj\Oracle\ODP.NET\</IntermediateOutputPath>
+    <DefineConstants>TRACE;NO_SAMPLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -137,7 +137,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.MyDbWebApi.Oracle.ODP.config" />
+    <None Include="packages.MyDbWebApi.Oracle.ODP.config" />
     <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
