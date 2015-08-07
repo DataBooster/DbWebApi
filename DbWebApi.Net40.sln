@@ -1,0 +1,173 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.csproj", "{37F01AC2-C486-4E32-838C-E0F23BE16B5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A6985-BA61-4CE6-8085-322035D9014F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
+	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Pack-Oracle-DataDirect.bat = Server\NuGet\Pack-Oracle-DataDirect.bat
+		Server\NuGet\Pack-Oracle-ODP.NET.bat = Server\NuGet\Pack-Oracle-ODP.NET.bat
+		Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat = Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat
+		Server\NuGet\Pack-SqlServer.bat = Server\NuGet\Pack-SqlServer.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056}"
+	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\nupkg\NuGet Command-Line.htm = Server\NuGet\nupkg\NuGet Command-Line.htm
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8}"
+	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec = Server\NuGet\SqlServer\DataBooster.DbWebApi.nuspec
+		Server\NuGet\SqlServer\Web.config.install.xdt = Server\NuGet\SqlServer\Web.config.install.xdt
+		Server\NuGet\SqlServer\Web.config.transform = Server\NuGet\SqlServer\Web.config.transform
+		Server\NuGet\SqlServer\Web.config.uninstall.xdt = Server\NuGet\SqlServer\Web.config.uninstall.xdt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{798E5725-AA6A-4AFB-A752-EEF6044C36C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET", "ODP.NET", "{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D}"
+	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\ODP.NET\DataBooster.DbWebApi.nuspec
+		Server\NuGet\Oracle\ODP.NET\Web.config.install.xdt = Server\NuGet\Oracle\ODP.NET\Web.config.install.xdt
+		Server\NuGet\Oracle\ODP.NET\Web.config.uninstall.xdt = Server\NuGet\Oracle\ODP.NET\Web.config.uninstall.xdt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDirect", "DataDirect", "{A172D239-9E04-46AF-9243-1D8FE49F19B1}"
+	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\DataDirect\DataBooster.DbWebApi.nuspec
+		Server\NuGet\Oracle\DataDirect\Web.config.install.xdt = Server\NuGet\Oracle\DataDirect\Web.config.install.xdt
+		Server\NuGet\Oracle\DataDirect\Web.config.uninstall.xdt = Server\NuGet\Oracle\DataDirect\Web.config.uninstall.xdt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET.Managed", "ODP.NET.Managed", "{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B}"
+	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec = Server\NuGet\Oracle\ODP.NET.Managed\DataBooster.DbWebApi.nuspec
+		Server\NuGet\Oracle\ODP.NET.Managed\Web.config.install.xdt = Server\NuGet\Oracle\ODP.NET.Managed\Web.config.install.xdt
+		Server\NuGet\Oracle\ODP.NET.Managed\Web.config.uninstall.xdt = Server\NuGet\Oracle\ODP.NET.Managed\Web.config.uninstall.xdt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi.Net40", "Server\Sample\MyDbWebApi.Net40\MyDbWebApi.Net40.csproj", "{1C81D605-AADC-4EDE-B99C-60E544105118}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net", "Net", "{9C621537-BFDD-4F0C-9308-925AE75320EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Client.Net40", "Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.Net40.csproj", "{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2524A6C9-0B54-4334-9817-86CE3FFB5271}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec = Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec
+		Client\Net\nupkg\Pack-Client.Net.bat = Client\Net\nupkg\Pack-Client.Net.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Js", "Js", "{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{85B148EC-10C1-4109-9072-BEA4F698E9EF}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Js\src\dbwebapi-client.js = Client\Js\src\dbwebapi-client.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2D4600AA-6985-4B27-A317-6757BC0298F1}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Js\nupkg\DataBooster.DbWebApi.Client.JS.nuspec = Client\Js\nupkg\DataBooster.DbWebApi.Client.JS.nuspec
+		Client\Js\nupkg\Pack-Client.JS.bat = Client\Js\nupkg\Pack-Client.JS.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{C218CFD1-D316-4F03-B0BD-202773280E72}"
+	ProjectSection(SolutionItems) = preProject
+		Client\PowerShell\dbwebapi-client.ps1 = Client\PowerShell\dbwebapi-client.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{8140A7E2-B0C7-4FB1-9960-C3C42EF8609A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net40", "Net40", "{727E5007-8D52-483C-BB86-3B3BDC98BC2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{0488E9A0-A4C0-4CF6-AC7E-CB827D357067}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{2C30A334-0BF7-42F4-84F7-85A6C2DCACB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET.Managed", "ODP.NET.Managed", "{BE7093B7-F106-4DF7-885F-6DE425D11470}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ODP.NET", "ODP.NET", "{29CBA70B-4DC7-4536-8E9E-1C7A31D88813}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDirect", "DataDirect", "{6BDAAD98-560F-48FB-A7C8-43CF9E390D41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi.Net40.Oracle.Managed", "Server\Sample\MyDbWebApi.Net40\MyDbWebApi.Net40.Oracle.Managed.csproj", "{FC56B202-B21F-4F0D-9AA9-E87CC7A69841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi.Net40.Oracle.ODP", "Server\Sample\MyDbWebApi.Net40\MyDbWebApi.Net40.Oracle.ODP.csproj", "{CC9B3B90-EA46-4460-A3B4-D4275F84E98B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi.Net40.Oracle.DataDirect", "Server\Sample\MyDbWebApi.Net40\MyDbWebApi.Net40.Oracle.DataDirect.csproj", "{60EF0A6C-06BE-4C20-BDCF-E166652AE5FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C81D605-AADC-4EDE-B99C-60E544105118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C81D605-AADC-4EDE-B99C-60E544105118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C81D605-AADC-4EDE-B99C-60E544105118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C81D605-AADC-4EDE-B99C-60E544105118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC56B202-B21F-4F0D-9AA9-E87CC7A69841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC56B202-B21F-4F0D-9AA9-E87CC7A69841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC56B202-B21F-4F0D-9AA9-E87CC7A69841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC56B202-B21F-4F0D-9AA9-E87CC7A69841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC9B3B90-EA46-4460-A3B4-D4275F84E98B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC9B3B90-EA46-4460-A3B4-D4275F84E98B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC9B3B90-EA46-4460-A3B4-D4275F84E98B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC9B3B90-EA46-4460-A3B4-D4275F84E98B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60EF0A6C-06BE-4C20-BDCF-E166652AE5FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EF0A6C-06BE-4C20-BDCF-E166652AE5FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EF0A6C-06BE-4C20-BDCF-E166652AE5FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EF0A6C-06BE-4C20-BDCF-E166652AE5FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E71CF07-E755-4A97-A0A2-21DF211FB979} = {5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}
+		{8140A7E2-B0C7-4FB1-9960-C3C42EF8609A} = {5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A} = {5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}
+		{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
+		{0D7D6AD8-7B24-4314-AAD5-F4D6E80538F8} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
+		{798E5725-AA6A-4AFB-A752-EEF6044C36C7} = {8E71CF07-E755-4A97-A0A2-21DF211FB979}
+		{9FBDE107-F2BF-4527-BA3E-1D9468B5F54D} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
+		{A172D239-9E04-46AF-9243-1D8FE49F19B1} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
+		{BF0DF6B6-CBEC-4FB0-88F5-B7BC4327968B} = {798E5725-AA6A-4AFB-A752-EEF6044C36C7}
+		{727E5007-8D52-483C-BB86-3B3BDC98BC2B} = {8140A7E2-B0C7-4FB1-9960-C3C42EF8609A}
+		{9C621537-BFDD-4F0C-9308-925AE75320EC} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{C218CFD1-D316-4F03-B0BD-202773280E72} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219} = {9C621537-BFDD-4F0C-9308-925AE75320EC}
+		{2524A6C9-0B54-4334-9817-86CE3FFB5271} = {9C621537-BFDD-4F0C-9308-925AE75320EC}
+		{85B148EC-10C1-4109-9072-BEA4F698E9EF} = {AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}
+		{2D4600AA-6985-4B27-A317-6757BC0298F1} = {AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}
+		{0488E9A0-A4C0-4CF6-AC7E-CB827D357067} = {727E5007-8D52-483C-BB86-3B3BDC98BC2B}
+		{2C30A334-0BF7-42F4-84F7-85A6C2DCACB9} = {727E5007-8D52-483C-BB86-3B3BDC98BC2B}
+		{1C81D605-AADC-4EDE-B99C-60E544105118} = {0488E9A0-A4C0-4CF6-AC7E-CB827D357067}
+		{BE7093B7-F106-4DF7-885F-6DE425D11470} = {2C30A334-0BF7-42F4-84F7-85A6C2DCACB9}
+		{29CBA70B-4DC7-4536-8E9E-1C7A31D88813} = {2C30A334-0BF7-42F4-84F7-85A6C2DCACB9}
+		{6BDAAD98-560F-48FB-A7C8-43CF9E390D41} = {2C30A334-0BF7-42F4-84F7-85A6C2DCACB9}
+		{FC56B202-B21F-4F0D-9AA9-E87CC7A69841} = {BE7093B7-F106-4DF7-885F-6DE425D11470}
+		{CC9B3B90-EA46-4460-A3B4-D4275F84E98B} = {29CBA70B-4DC7-4536-8E9E-1C7A31D88813}
+		{60EF0A6C-06BE-4C20-BDCF-E166652AE5FE} = {6BDAAD98-560F-48FB-A7C8-43CF9E390D41}
+	EndGlobalSection
+EndGlobal
