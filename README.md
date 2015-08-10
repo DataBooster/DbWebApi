@@ -79,6 +79,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
 - [NuGet](#nugget)
     - [Server packages](#server-side)
     - [Clients](#clients-1)
+- [SymbolSource](#symbolsource)
 - [Examples](#examples)
 
 ***
@@ -812,6 +813,10 @@ To switch above from one NuGet package to another NuGet Package, simply uninstal
 #### Clients
 - [DbWebApi Client .Net Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net)
 - [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS)
+
+### SymbolSource
+Associated Symbols Packages with above NuGet Packages are also available in http://srv.symbolsource.org/pdb/Public.  
+To source step during debugging into the code of libraries, please see [SymbolSource.org](http://www.symbolsource.org/Public/Home/VisualStudio) for detailed instructions.
 
 ## Examples
 
