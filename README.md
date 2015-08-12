@@ -40,7 +40,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
             - [Table-Valued Parameters](#table-valued-parameters)
         - [Accept Response MediaType](#accept-response-mediatype)
             - [JSON](#accept-json)
-            - [BSON](#accept-bson) _(only available to targetFramework="4.5" or above - ASP.NET Web API 2)_
+            - [BSON](#accept-bson) _(only available to targetFramework="4.5" or higher - ASP.NET Web API 2)_
             - [JSONP](#accept-jsonp)
             - [XML](#accept-xml)
             - [Excel .xlsx](#accept-xlsx)
@@ -343,7 +343,7 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or specify in UriPathExtension which depends on your url routing  
        (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)  
 
-2. <a name="accept-bson"></a>BSON _(only available to targetFramework="4.5" or above - ASP.NET Web API 2)_  
+2. <a name="accept-bson"></a>BSON _(only available to targetFramework="4.5" or higher - ASP.NET Web API 2)_  
     Specify in request header:  
     Accept: application/bson  
     or specify in query string: ?format=bson  
@@ -820,16 +820,17 @@ To source step during debugging into the code of libraries, please see [SymbolSo
 
 ## Examples
 
-Please refer to example project - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Examples/MyDbWebApi
+Please refer to example projects - MyDbWebApi in https://github.com/DataBooster/DbWebApi/tree/master/Server/Sample  
+- DbWebApi.SampleServers.sln for Visual Studio 2012 or later
+- DbWebApi.SampleServers.Net40.sln for Visual Studio 2010 with ASP.NET MVC 4 installed
 
-If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://dbwebapi.codeplex.com/releases/view/615474 simplicity.
+Inside the solutions, both .Net45 branch and .Net40 branch are further divided into 4 projects for - SQL Server, Oracle (ODP.NET Managed, ODP.NET Unmanaged and DataDirect provider). You can keep one of them as needed and removed all the rest. Hopefully, base on the examples, it's easier to customize it as your own DbWebApi server.
 
-The example project requires Visual Studio 2010 at lowest with ASP.NET MVC 4 installed.
-Hopefully, base on the example, it's easier to customize your own DbWebApi server.
+If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://github.com/DataBooster/DbWebApi/releases or http://dbwebapi.codeplex.com/releases simplicity.
 
 By default, the example server is configured for intranet environment:
 
-[Web.config](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Web.config)
+[Web.config](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Web.MyDbWebApi.config)
 ``` XML
 <configuration>
   <system.web>
@@ -870,5 +871,7 @@ namespace MyDbWebApi
 ```
 
 According to your own circumstances, above should be modified as needed, just like the most basic settings should be applied on an Empty ASP.NET Web API project.
+
+_Notes: the example web sites are just for hosting the DbWebApi, there is no default page in them, so you would see HTTP Error 403.14 when you open the nonexistent home page, that's normal._
 
 Welcome all feedback through the [Discussions](https://dbwebapi.codeplex.com/discussions) or [Issues](https://github.com/DataBooster/DbWebApi/issues).
