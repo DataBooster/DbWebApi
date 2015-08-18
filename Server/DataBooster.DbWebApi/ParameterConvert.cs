@@ -35,7 +35,7 @@ namespace DataBooster.DbWebApi
 				return jArrayValue.ToObject<List<Dictionary<string, object>>>().ToDataTable();
 
 			if (first is JValue)
-				return jArrayValue.ToObject<object[]>().NormalizeNumericArray();
+				return jArrayValue.ToObject<object[]>()/*.NormalizeNumericArray()*/;
 
 			return jArrayValue;
 		}
