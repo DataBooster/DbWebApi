@@ -7,18 +7,10 @@
       <FileName>Csv\CsvDateTimeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DataBooster.DbWebApi.DbContext">
-    <Position X="1" Y="10.25" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABACAAAAAAAAAAAAAAAAAAEAAAACAABAAAAAA=</HashCode>
-      <FileName>DbContext.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="DataBooster.DbWebApi.WebApiExtensions">
     <Position X="0.5" Y="0.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>ggIAUAICIAAACAAECAAACgQAAAAgAAAhCCAAAAAQAAg=</HashCode>
+      <HashCode>ggIAUAIGIAAACAEECgABSgQAAAAgQAAhCCAAAAAQAAg=</HashCode>
       <FileName>DerivedParametersCache\WebApiExtensions.partial.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,7 +44,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DataBooster.DbWebApi.Csv.CsvFormatPlug">
-    <Position X="7.75" Y="5.25" Width="2" />
+    <Position X="8" Y="5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEABACAAAQAAAAAAAAAAAIgAABAAAA=</HashCode>
       <FileName>Csv\CsvFormatPlug.cs</FileName>
@@ -68,7 +60,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DataBooster.DbWebApi.PseudoMediaTypeFormatter">
-    <Position X="1" Y="7" Width="2.25" />
+    <Position X="1" Y="9" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAEEAAAA=</HashCode>
       <FileName>PseudoMediaTypeFormatter.cs</FileName>
@@ -102,8 +94,15 @@
       <FileName>Razor\RazorMediaTypeFormatter.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="DataBooster.DbWebApi.DataAccess.DalCenter">
+    <Position X="7.75" Y="10" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAgAAAAAEAAAACAABAAAAAA=</HashCode>
+      <FileName>DataAccess\DalCenter.partial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="DataBooster.DbWebApi.IDbWebApiAuthorization">
-    <Position X="7.75" Y="9" Width="2" />
+    <Position X="8" Y="8.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>IDbWebApiAuthorization.cs</FileName>
