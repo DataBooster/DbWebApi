@@ -7,25 +7,11 @@ using System.Linq;
 using System.Data.Common;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
-using DataBooster.DbWebApi.DataAccess;
 
-namespace DataBooster.DbWebApi
+namespace DataBooster.DbWebApi.DataAccess
 {
-	public class DbContext : IDisposable
+	public partial class DalCenter
 	{
-		private DbAccess _DbAccess;
-
-		public DbContext(DbProviderFactory dbProviderFactory, string connectionString)
-		{
-			_DbAccess = new DbAccess(dbProviderFactory, connectionString);
-			_DbAccess.DynamicPropertyNamingConvention = DbWebApiOptions.DefaultPropertyNamingConvention;
-		}
-
-		public DbContext()
-			: this(ConfigHelper.DbProviderFactory, ConfigHelper.ConnectionString)
-		{
-		}
-
 		public void SetNamingConvention(IDictionary<string, string> queryStrings)
 		{
 			string queryNamingCase = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName);
@@ -52,7 +38,7 @@ namespace DataBooster.DbWebApi
 
 		public StoredProcedureResponse ExecuteDbApi(string sp, IDictionary<string, object> parameters)
 		{
-			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters.PretreatInputDictionary()));
+			return base.ExecuteProcedure(sp, parameters.PretreatInputDictionary());
 		}
 
 		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, Action<int> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, int[] resultSetChoices = null, bool bulkRead = false)
@@ -79,22 +65,5 @@ namespace DataBooster.DbWebApi
 			else
 				return _DbAccess.RemoveCachedStoredProcedures(results.ResultSets[0].Select(item => item.First().Value as string));
 		}
-
-		#region IDisposable Members
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing && _DbAccess != null)
-			{
-				_DbAccess.Dispose();
-				_DbAccess = null;
-			}
-		}
-		#endregion
 	}
 }

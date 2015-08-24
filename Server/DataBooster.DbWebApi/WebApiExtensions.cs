@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DbParallel.DataAccess;
 using DataBooster.DbWebApi.Razor;
+using DataBooster.DbWebApi.DataAccess;
 
 namespace DataBooster.DbWebApi
 {
@@ -96,7 +97,7 @@ namespace DataBooster.DbWebApi
 						return formatPlug.Respond(apiController, sp, parameters, negotiationResult.MediaType, negotiatedEncoding);
 				}
 
-				using (DbContext dbContext = new DbContext())
+				using (DalCenter dbContext = new DalCenter())
 				{
 					dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
 
@@ -137,7 +138,7 @@ namespace DataBooster.DbWebApi
 				if (negotiationResult != null && negotiationResult.Formatter is PseudoMediaTypeFormatter)
 					return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
 
-				using (DbContext dbContext = new DbContext())
+				using (DalCenter dbContext = new DalCenter())
 				{
 					dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
 

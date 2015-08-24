@@ -22,7 +22,7 @@ namespace DataBooster.DbWebApi
 			{
 				SwitchDerivedParametersCache(true);
 
-				using (DbContext dbContext = new DbContext())
+				using (DalCenter dbContext = new DalCenter())
 				{
 					cntExpired = dbContext.InvalidateAlteredSpFromCache(detectDdlChangesProc, TimeSpan.FromMinutes(elapsedMinutes));
 				}

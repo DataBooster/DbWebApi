@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
 using DbParallel.DataAccess;
+using DataBooster.DbWebApi.DataAccess;
 
 namespace DataBooster.DbWebApi.Csv
 {
@@ -65,7 +66,7 @@ namespace DataBooster.DbWebApi.Csv
 			{
 				StreamWriter textWriter = (negotiatedEncoding == null) ? new StreamWriter(stream) : new StreamWriter(stream, negotiatedEncoding);
 
-				using (DbContext dbContext = new DbContext())
+				using (DalCenter dbContext = new DalCenter())
 				{
 					dbContext.SetNamingConvention(queryStrings);
 

@@ -56,8 +56,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\CsvHelper.2.13.2.0\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.7.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.9.0\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.7.9.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.SqlServer.1.7.9.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
@@ -67,8 +67,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine, Version=3.7.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RazorEngine.3.7.0\lib\net45\RazorEngine.dll</HintPath>
+    <Reference Include="RazorEngine, Version=3.7.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RazorEngine.3.7.2\lib\net45\RazorEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -95,16 +95,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\ConfigHelper.sample.cs" />
-    <Compile Include="DataAccess\DbPackage.partial.sample.cs" />
-    <Compile Include="DataAccess\DbPackage.sample.cs" />
-    <Compile Include="DataAccess\MyBizMain.sample.cs" />
+    <Compile Include="DataAccess\SqlServer\ConfigHelper.sample.cs" />
+    <Compile Include="DataAccess\SqlServer\DalCenter.partial.sample.cs" />
+    <Compile Include="DataAccess\SqlServer\DalCenter.sample.cs" />
+    <Compile Include="DataAccess\SqlServer\DbPackage.sample.cs" />
+    <Compile Include="DataAccess\SqlServer\MyBizMain.sample.cs" />
     <Compile Include="DerivedParametersCache\WebApiExtensions.partial.cs" />
     <Compile Include="Csv\CsvDateTimeConverter.cs" />
     <Compile Include="Csv\CsvExporter.cs" />
     <Compile Include="Csv\CsvFormatPlug.cs" />
     <Compile Include="DataAccess\ConfigHelper.partial.cs" />
-    <Compile Include="DbContext.cs" />
+    <Compile Include="DataAccess\DalCenter.partial.cs" />
     <Compile Include="DbWebApiOptions.cs" />
     <Compile Include="DeunderscorePropertyNamesContractResolver.cs" />
     <Compile Include="Excel\XlsxFormatPlug.cs" />

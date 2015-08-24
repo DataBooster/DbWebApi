@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
 using ClosedXML.Excel;
+using DataBooster.DbWebApi.DataAccess;
 
 namespace DataBooster.DbWebApi.Excel
 {
@@ -47,7 +48,7 @@ namespace DataBooster.DbWebApi.Excel
 			MemoryStream memoryStream = new MemoryStream();	// TBD: To find a more efficient way later
 
 			using (XLWorkbook workbook = new XLWorkbook())
-			using (DbContext dbContext = new DbContext())
+			using (DalCenter dbContext = new DalCenter())
 			{
 				dbContext.SetNamingConvention(queryStrings);
 
