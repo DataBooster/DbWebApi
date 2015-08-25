@@ -14,10 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A69
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
 	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Pack-All.bat = Server\NuGet\Pack-All.bat
 		Server\NuGet\Pack-Oracle-DataDirect.bat = Server\NuGet\Pack-Oracle-DataDirect.bat
 		Server\NuGet\Pack-Oracle-ODP.NET.bat = Server\NuGet\Pack-Oracle-ODP.NET.bat
 		Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat = Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat
 		Server\NuGet\Pack-SqlServer.bat = Server\NuGet\Pack-SqlServer.bat
+		Server\NuGet\Push-All.bat = Server\NuGet\Push-All.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{CF8B7765-4D48-4A92-84A8-CEBBB0ED3056}"
