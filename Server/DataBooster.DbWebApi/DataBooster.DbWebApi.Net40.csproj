@@ -28,22 +28,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\Net40\</OutputPath>
-    <IntermediateOutputPath>obj\Debug\Net40\</IntermediateOutputPath>
+    <OutputPath>bin\Debug\Net40\SqlServer\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\Net40\SqlServer\</IntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG;NO_SAMPLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Net40\DataBooster.DbWebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Net40\SqlServer\DataBooster.DbWebApi.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\Net40\</OutputPath>
-    <IntermediateOutputPath>obj\Release\Net40\</IntermediateOutputPath>
+    <OutputPath>bin\Release\Net40\SqlServer\</OutputPath>
+    <IntermediateOutputPath>obj\Release\Net40\SqlServer\</IntermediateOutputPath>
     <DefineConstants>TRACE;NO_SAMPLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Net40\DataBooster.DbWebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Net40\SqlServer\DataBooster.DbWebApi.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML">

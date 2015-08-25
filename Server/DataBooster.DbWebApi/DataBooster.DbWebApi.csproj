@@ -29,23 +29,23 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\Net45\</OutputPath>
-    <IntermediateOutputPath>obj\Debug\Net45\</IntermediateOutputPath>
+    <OutputPath>bin\Debug\Net45\SqlServer\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\Net45\SqlServer\</IntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG;NO_SAMPLE;WEB_API2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Net45\DataBooster.DbWebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Net45\SqlServer\DataBooster.DbWebApi.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\Net45\</OutputPath>
-    <IntermediateOutputPath>obj\Release\Net45\</IntermediateOutputPath>
+    <OutputPath>bin\Release\Net45\SqlServer\</OutputPath>
+    <IntermediateOutputPath>obj\Release\Net45\SqlServer\</IntermediateOutputPath>
     <DefineConstants>TRACE;NO_SAMPLE;WEB_API2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Net45\DataBooster.DbWebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Net45\SqlServer\DataBooster.DbWebApi.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
