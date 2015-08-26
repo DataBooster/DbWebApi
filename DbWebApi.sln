@@ -95,8 +95,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{8140A7E2-B0C7-4FB1-9960-C3C42EF8609A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.csproj", "{D31D5DAC-53D8-4F02-8F99-4624F7F80DBB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37F01AC2-C486-4E32-838C-E0F23BE16B5A} = {37F01AC2-C486-4E32-838C-E0F23BE16B5A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Client", "Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.csproj", "{B56E3B90-AEAB-4719-A12A-71AB3FB991CA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219} = {C1678E26-1AD3-4AAC-B1C2-BF0D02CBA219}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDbWebApi", "Server\Sample\MyDbWebApi\MyDbWebApi.csproj", "{065C5D3C-7DF3-43C8-BDBA-1896953171FE}"
 EndProject
@@ -163,10 +169,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDirect", "DataDirect", "{DD85CDC2-CCCE-4562-A224-D3CD0F7EAE03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Oracle.ODP", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Oracle.ODP.csproj", "{3F51077C-F66F-49A6-BB8E-F08231F811AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92A26689-0E7E-491B-AFB5-A5822EA3D222} = {92A26689-0E7E-491B-AFB5-A5822EA3D222}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Oracle.Managed", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Oracle.Managed.csproj", "{E6A9029F-E2C1-4AC4-BE5D-ACE462916BEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ACCCC9C3-E51B-4D8F-9D00-874B03571307} = {ACCCC9C3-E51B-4D8F-9D00-874B03571307}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Oracle.DataDirect", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Oracle.DataDirect.csproj", "{C7A1E383-1E87-4931-85F3-C038F7B5A130}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98988797-44E4-4F7E-B717-12D215006AA8} = {98988797-44E4-4F7E-B717-12D215006AA8}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40.Oracle.Managed", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.Oracle.Managed.csproj", "{ACCCC9C3-E51B-4D8F-9D00-874B03571307}"
 EndProject
