@@ -131,16 +131,13 @@ namespace DataBooster.DbWebApi
 			{
 				var negotiationResult = apiController.Request.Negotiate();
 
-				if (negotiationResult != null && negotiationResult.Formatter is PseudoMediaTypeFormatter)
-					return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
+				if (negotiationResult != null)
+					if (negotiationResult.Formatter is PseudoMediaTypeFormatter || negotiationResult.Formatter is RazorMediaTypeFormatter)
+						return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
 
 				using (DalCenter dbContext = new DalCenter())
 				{
 					dbContext.SetDynamicDataStyle(apiController.Request.GetQueryStringDictionary());
-
-					if (negotiationResult != null)
-						if (negotiationResult.Formatter is RazorMediaTypeFormatter)
-							return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
 
 					StoredProcedureResponse[] spResponses = new StoredProcedureResponse[listOfParameters.Count];
 

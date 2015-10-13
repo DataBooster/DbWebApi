@@ -11,6 +11,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using Newtonsoft.Json.Linq;
+using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi.Client
 {
@@ -34,9 +36,9 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		#region Read response as JSON|BSON extentions
+		#region Read response as StoredProcedureResponse extentions
 
-		internal static DbWebApiResponse[] BulkReadDbJson(this HttpResponseMessage httpResponse)
+		internal static StoredProcedureResponse[] BulkReadResponse(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 
@@ -45,8 +47,8 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<DbWebApiResponse[]> readTask = content.ReadAsAsync<DbWebApiResponse[]>(ReadAsMediaTypeFormatterCollection);
-				DbWebApiResponse[] dbWebApiResponse = readTask.Result;
+				Task<StoredProcedureResponse[]> readTask = content.ReadAsAsync<StoredProcedureResponse[]>(ReadAsMediaTypeFormatterCollection);
+				StoredProcedureResponse[] dbWebApiResponse = readTask.Result;
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
@@ -57,7 +59,7 @@ namespace DataBooster.DbWebApi.Client
 				throw httpResponse.CreateUnsuccessException();
 		}
 
-		public static DbWebApiResponse ReadDbJson(this HttpResponseMessage httpResponse)
+		public static StoredProcedureResponse ReadResponse(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 
@@ -66,13 +68,12 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<DbWebApiResponse> readTask = content.ReadAsAsync<DbWebApiResponse>(ReadAsMediaTypeFormatterCollection);
-				DbWebApiResponse dbWebApiResponse = readTask.Result;
+				Task<StoredProcedureResponse> readTask = content.ReadAsAsync<StoredProcedureResponse>(ReadAsMediaTypeFormatterCollection);
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
-
-				return dbWebApiResponse;
+				else
+					return readTask.Result;
 			}
 			else
 				throw httpResponse.CreateUnsuccessException();
@@ -110,9 +111,41 @@ namespace DataBooster.DbWebApi.Client
 
 		#endregion
 
+		#region Read response as LINQ to JSON (JObject or JArray) extentions
+
+		public static JToken ReadAsJson(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "son")
+		{
+			var content = httpResponse.Content;
+
+			if (content == null)
+				throw new ArgumentNullException("httpResponse.Content");
+
+			if (httpResponse.IsSuccessStatusCode)
+			{
+				if (!string.IsNullOrEmpty(checkContentTypeEndsWith))
+				{
+					var contentType = content.GetContentType();
+
+					if (contentType != null && contentType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
+						throw new HttpRequestException("Response Content-Type is not JSON/BSON");
+				}
+
+				Task<JToken> readTask = content.ReadAsAsync<JToken>(ReadAsMediaTypeFormatterCollection);
+
+				if (readTask.IsFaulted)
+					throw readTask.Exception;
+				else
+					return readTask.Result;
+			}
+			else
+				throw httpResponse.CreateUnsuccessException();
+		}
+
+		#endregion
+
 		#region Read response as XML extentions
 
-		public static XDocument ReadDbXml(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "/xml")
+		public static XDocument ReadAsXml(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "/xml")
 		{
 			var content = httpResponse.Content;
 

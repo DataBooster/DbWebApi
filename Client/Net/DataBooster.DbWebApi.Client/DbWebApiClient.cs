@@ -12,6 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi.Client
 {
@@ -101,45 +103,176 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Bulk ExecAsJson overrides
+		#region Bulk Exec as StoredProcedureResponse overrides
 #if WEB_API2
-		public async Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public async Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.BulkReadDbJson();
+			return httpResponse.BulkReadResponse();
 		}
 #else	// ASP.NET Web API 1
-		public Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<DbWebApiResponse[]>(requestTask =>
+				ContinueWith<StoredProcedureResponse[]>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.BulkReadDbJson();
+					return requestTask.Result.BulkReadResponse();
 				});
 		}
 #endif
 
-		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		public Task<StoredProcedureResponse[]> ExecAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
+		}
+
+		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		{
+			return ExecAsync(requestUri, listOfInputParameters, CancellationToken.None);
+		}
+
+		public Task<StoredProcedureResponse[]> ExecAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		{
+			return ExecAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+		}
+
+		public StoredProcedureResponse[] Exec<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		{
+			try
+			{
+				return ExecAsync(requestUri, listOfInputParameters).Result;
+			}
+			catch (AggregateException ae)
+			{
+				if (ae.InnerExceptions.Count == 1)
+				{
+					Exception eInner = ae.InnerException;
+
+					if (eInner.InnerException != null)
+						eInner = eInner.InnerException;
+
+					throw eInner;
+				}
+				else
+					throw;
+			}
+		}
+
+		public StoredProcedureResponse[] Exec(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		{
+			return Exec(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+		}
+		#endregion
+
+		#region Exec as StoredProcedureResponse overrides
+#if WEB_API2
+		public async Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
+			return httpResponse.ReadResponse();
+		}
+#else	// ASP.NET Web API 1
+		public Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
+				ContinueWith<StoredProcedureResponse>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadResponse();
+				});
+		}
+#endif
+
+		public Task<StoredProcedureResponse> ExecAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+		}
+
+		public Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAsync(requestUri, inputParameters, CancellationToken.None);
+		}
+
+		public Task<StoredProcedureResponse> ExecAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+		}
+
+		public StoredProcedureResponse Exec(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			try
+			{
+				return ExecAsync(requestUri, inputParameters).Result;
+			}
+			catch (AggregateException ae)
+			{
+				if (ae.InnerExceptions.Count == 1)
+				{
+					Exception eInner = ae.InnerException;
+
+					if (eInner.InnerException != null)
+						eInner = eInner.InnerException;
+
+					throw eInner;
+				}
+				else
+					throw;
+			}
+		}
+
+		public StoredProcedureResponse Exec(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return Exec(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+		}
+		#endregion
+
+		#region Bulk ExecAsJson overrides
+#if WEB_API2
+		public async Task<JToken> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
+			return httpResponse.ReadAsJson();
+		}
+#else	// ASP.NET Web API 1
+		public Task<JToken> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		{
+			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
+				ContinueWith<JToken>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadAsJson();
+				});
+		}
+#endif
+		public Task<JToken> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<DbWebApiResponse[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public Task<JToken> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			return ExecAsJsonAsync(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
-		public Task<DbWebApiResponse[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public Task<JToken> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		public DbWebApiResponse[] ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public JToken ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			try
 			{
@@ -161,7 +294,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public DbWebApiResponse[] ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public JToken ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJson(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
@@ -169,43 +302,43 @@ namespace DataBooster.DbWebApi.Client
 
 		#region ExecAsJson overrides
 #if WEB_API2
-		public async Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		public async Task<JToken> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadDbJson();
+			return httpResponse.ReadAsJson();
 		}
 #else	// ASP.NET Web API 1
-		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		public Task<JToken> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
-				ContinueWith<DbWebApiResponse>(requestTask =>
+				ContinueWith<JToken>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadDbJson();
+					return requestTask.Result.ReadAsJson();
 				});
 		}
 #endif
 
-		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		public Task<JToken> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
 		}
 
-		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		public Task<JToken> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
 			return ExecAsJsonAsync(requestUri, inputParameters, CancellationToken.None);
 		}
 
-		public Task<DbWebApiResponse> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public Task<JToken> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
 
-		public DbWebApiResponse ExecAsJson(string requestUri, IDictionary<string, object> inputParameters = null)
+		public JToken ExecAsJson(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
 			try
 			{
@@ -227,7 +360,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public DbWebApiResponse ExecAsJson(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public JToken ExecAsJson(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAsJson(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
@@ -238,7 +371,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadDbXml();
+			return httpResponse.ReadAsXml();
 		}
 #else	// ASP.NET Web API 1
 		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
@@ -251,7 +384,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadDbXml();
+					return requestTask.Result.ReadAsXml();
 				});
 		}
 #endif
@@ -303,7 +436,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadDbXml();
+			return httpResponse.ReadAsXml();
 		}
 #else	// ASP.NET Web API 1
 		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
@@ -316,7 +449,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadDbXml();
+					return requestTask.Result.ReadAsXml();
 				});
 		}
 #endif
@@ -427,7 +560,7 @@ namespace DataBooster.DbWebApi.Client
 			TaskCompletionSource<HttpResponseMessage> tcs = new TaskCompletionSource<HttpResponseMessage>();
 			HttpResponseMessage emptyResponseMessage = new HttpResponseMessage();
 
-			emptyResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(new DbWebApiResponse[0]),
+			emptyResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(new StoredProcedureResponse[0]),
 				new UTF8Encoding(false, true), "application/json");
 
 			tcs.SetResult(emptyResponseMessage);
