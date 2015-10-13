@@ -12,7 +12,7 @@ namespace DataBooster.DbWebApi.DataAccess
 {
 	public partial class DalCenter
 	{
-		public void SetNamingConvention(IDictionary<string, string> queryStrings)
+		public void SetDynamicDataStyle(IDictionary<string, string> queryStrings)
 		{
 			string queryNamingCase = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName);
 
@@ -29,6 +29,33 @@ namespace DataBooster.DbWebApi.DataAccess
 						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.CamelCase;
 						break;
 				}
+
+			string xmlAsAttribute = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.XmlAsAttributeParameterName);
+			if (!string.IsNullOrEmpty(xmlAsAttribute))
+			{
+				bool serializePropertyAsAttribute;
+
+				if (bool.TryParse(xmlAsAttribute, out serializePropertyAsAttribute))
+					_DbAccess.DynamicObjectXmlSettings.SerializePropertyAsAttribute = serializePropertyAsAttribute;
+			}
+
+			string xmlNullValue = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.XmlNullValueParameterName);
+			if (!string.IsNullOrEmpty(xmlNullValue))
+			{
+				bool emitNullValue;
+
+				if (bool.TryParse(xmlNullValue, out emitNullValue))
+					_DbAccess.DynamicObjectXmlSettings.EmitNullValue = emitNullValue;
+			}
+
+			string xmlTypeSchema = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.XmlTypeSchemaParameterName);
+			if (!string.IsNullOrEmpty(xmlTypeSchema))
+			{
+				BindableDynamicObject.XmlSettings.DataTypeSchema dataTypeSchema;
+
+				if (Enum.TryParse(xmlTypeSchema, true, out dataTypeSchema))
+					_DbAccess.DynamicObjectXmlSettings.TypeSchema = dataTypeSchema;
+			}
 		}
 
 		public string ResolvePropertyName(string columnName)

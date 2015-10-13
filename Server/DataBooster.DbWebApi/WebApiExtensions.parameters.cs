@@ -82,7 +82,11 @@ namespace DataBooster.DbWebApi
 			if (queryStringDictionary == null || queryStringDictionary.Count == 0 || string.IsNullOrEmpty(parameterName))
 				return null;
 
-			string parameterValue;
+			string parameterValue, prefix = DbWebApiOptions.QueryStringContract.ReservedParameterPrefix;
+
+			if (prefix.Length > 0)
+				if (queryStringDictionary.TryGetValue(prefix + parameterName, out parameterValue))
+					return parameterValue;
 
 			if (queryStringDictionary.TryGetValue(parameterName, out parameterValue))
 				return parameterValue;

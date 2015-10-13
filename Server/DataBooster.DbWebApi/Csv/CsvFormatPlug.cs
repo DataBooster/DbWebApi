@@ -68,7 +68,7 @@ namespace DataBooster.DbWebApi.Csv
 
 				using (DalCenter dbContext = new DalCenter())
 				{
-					dbContext.SetNamingConvention(queryStrings);
+					dbContext.SetDynamicDataStyle(queryStrings);
 
 					CsvExporter csvExporter = new CsvExporter(textWriter);
 

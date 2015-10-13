@@ -1,153 +1,152 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProductVersion>8.0.30703</ProductVersion>
-		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>{92A26689-0E7E-491B-AFB5-A5822EA3D222}</ProjectGuid>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>DataBooster.DbWebApi</RootNamespace>
-		<AssemblyName>DataBooster.DbWebApi</AssemblyName>
-		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<FileAlignment>512</FileAlignment>
-		<SccProjectName>
-		</SccProjectName>
-		<SccLocalPath>
-		</SccLocalPath>
-		<SccAuxPath>
-		</SccAuxPath>
-		<SccProvider>
-		</SccProvider>
-		<TargetFrameworkProfile>Client</TargetFrameworkProfile>
-		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-		<RestorePackages>true</RestorePackages>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Optimize>false</Optimize>
-		<OutputPath>bin\Debug\Net40\Oracle\ODP.NET.Unmanaged\</OutputPath>
-		<IntermediateOutputPath>obj\Debug\Net40\Oracle\ODP.NET.Unmanaged\</IntermediateOutputPath>
-		<DefineConstants>TRACE;DEBUG;NO_SAMPLE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-		<DocumentationFile>bin\Debug\Net40\Oracle\ODP.NET.Unmanaged\DataBooster.DbWebApi.xml</DocumentationFile>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>pdbonly</DebugType>
-		<Optimize>true</Optimize>
-		<OutputPath>bin\Release\Net40\Oracle\ODP.NET.Unmanaged\</OutputPath>
-		<IntermediateOutputPath>obj\Release\Net40\Oracle\ODP.NET.Unmanaged\</IntermediateOutputPath>
-		<DefineConstants>TRACE;NO_SAMPLE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-		<DocumentationFile>bin\Release\Net40\Oracle\ODP.NET.Unmanaged\DataBooster.DbWebApi.xml</DocumentationFile>
-	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="ClosedXML">
-			<HintPath>$(SolutionDir)\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
-		</Reference>
-		<Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-			<HintPath>..\..\packages\CsvHelper.2.13.2.0\lib\net40-client\CsvHelper.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="DbParallel.DataAccess, Version=1.7.9.1, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\..\packages\DataBooster.Oracle.ODP.1.7.9.1\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="DocumentFormat.OpenXml">
-			<HintPath>$(SolutionDir)\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
-		</Reference>
-		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(SolutionDir)\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
-		</Reference>
-		<Reference Include="Oracle.DataAccess, Culture=neutral, PublicKeyToken=89b483f429c47342">
-			<HintPath>Oracle.DataAccess.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="RazorEngine, Version=3.7.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-			<HintPath>..\..\packages\RazorEngine.3.7.2\lib\net40\RazorEngine.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="System" />
-		<Reference Include="System.Configuration" />
-		<Reference Include="System.Core" />
-		<Reference Include="System.Net.Http">
-			<HintPath>$(SolutionDir)\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
-		</Reference>
-		<Reference Include="System.Net.Http.Formatting">
-			<HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
-		</Reference>
-		<Reference Include="System.Net.Http.WebRequest">
-			<HintPath>$(SolutionDir)\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
-		</Reference>
-		<Reference Include="System.Runtime.Serialization" />
-		<Reference Include="System.Web.Http">
-			<HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
-		</Reference>
-		<Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-			<HintPath>..\..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="System.Xml.Linq" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Xml" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Include="DataAccess\DalCenter.partial.cs" />
-		<Compile Include="DataAccess\Oracle.ODP\ConfigHelper.sample.cs" />
-		<Compile Include="DataAccess\Oracle.ODP\DalCenter.partial.sample.cs" />
-		<Compile Include="DataAccess\Oracle.ODP\DalCenter.sample.cs" />
-		<Compile Include="DataAccess\Oracle.ODP\DbPackage.sample.cs" />
-		<Compile Include="DataAccess\Oracle.ODP\MyBizMain.sample.cs" />
-		<Compile Include="DerivedParametersCache\WebApiExtensions.partial.cs" />
-		<Compile Include="Csv\CsvDateTimeConverter.cs" />
-		<Compile Include="Csv\CsvExporter.cs" />
-		<Compile Include="Csv\CsvFormatPlug.cs" />
-		<Compile Include="DataAccess\ConfigHelper.partial.cs" />
-		<Compile Include="DbWebApiOptions.cs" />
-		<Compile Include="DeunderscorePropertyNamesContractResolver.cs" />
-		<Compile Include="Excel\XlsxFormatPlug.cs" />
-		<Compile Include="IDbWebApiAuthorization.cs" />
-		<Compile Include="IFormatPlug.cs" />
-		<Compile Include="ParameterConvert.cs" />
-		<Compile Include="Jsonp\JsonpMediaTypeFormatter.cs" />
-		<Compile Include="Jsonp\JsonpQueryStringMapping.cs" />
-		<Compile Include="Properties\AssemblyInfo.cs" />
-		<Compile Include="PseudoContentNegotiator.cs" />
-		<Compile Include="PseudoMediaTypeFormatter.cs" />
-		<Compile Include="Razor\RazorContext.cs" />
-		<Compile Include="Razor\SerializableResponseData.cs" />
-		<Compile Include="Razor\RazorMediaTypeFormatter.cs" />
-		<Compile Include="TypeHelper.cs" />
-		<Compile Include="WebApiExtensions.cs" />
-		<Compile Include="WebApiExtensions.parameters.cs" />
-		<Compile Include="WebApiExtensions.register.cs" />
-		<Compile Include="Xml\ResponseRoot.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="app.config" />
-		<None Include="DbWebApi.cd" />
-		<None Include="DerivedParametersCache\SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
-		<None Include="packages.DataBooster.DbWebApi.Net40.Oracle.ODP.config" />
-	</ItemGroup>
-	<ItemGroup />
-	<ItemGroup>
-		<None Include="DerivedParametersCache\SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
-	</ItemGroup>
-	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-	<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-		<PropertyGroup>
-			<ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-		</PropertyGroup>
-		<Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-	</Target>
-	<Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{92A26689-0E7E-491B-AFB5-A5822EA3D222}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataBooster.DbWebApi</RootNamespace>
+    <AssemblyName>DataBooster.DbWebApi</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\Net40\Oracle\ODP.NET.Unmanaged\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\Net40\Oracle\ODP.NET.Unmanaged\</IntermediateOutputPath>
+    <DefineConstants>TRACE;DEBUG;NO_SAMPLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Net40\Oracle\ODP.NET.Unmanaged\DataBooster.DbWebApi.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\Net40\Oracle\ODP.NET.Unmanaged\</OutputPath>
+    <IntermediateOutputPath>obj\Release\Net40\Oracle\ODP.NET.Unmanaged\</IntermediateOutputPath>
+    <DefineConstants>TRACE;NO_SAMPLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Net40\Oracle\ODP.NET.Unmanaged\DataBooster.DbWebApi.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>$(SolutionDir)\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CsvHelper.2.13.2.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DbParallel.DataAccess, Version=1.7.9.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.Oracle.ODP.1.7.9.5\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>$(SolutionDir)\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Culture=neutral, PublicKeyToken=89b483f429c47342">
+      <HintPath>Oracle.DataAccess.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.7.3.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RazorEngine.3.7.3\lib\net40\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Http">
+      <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\DalCenter.partial.cs" />
+    <Compile Include="DataAccess\Oracle.ODP\ConfigHelper.sample.cs" />
+    <Compile Include="DataAccess\Oracle.ODP\DalCenter.partial.sample.cs" />
+    <Compile Include="DataAccess\Oracle.ODP\DalCenter.sample.cs" />
+    <Compile Include="DataAccess\Oracle.ODP\DbPackage.sample.cs" />
+    <Compile Include="DataAccess\Oracle.ODP\MyBizMain.sample.cs" />
+    <Compile Include="DerivedParametersCache\WebApiExtensions.partial.cs" />
+    <Compile Include="Csv\CsvDateTimeConverter.cs" />
+    <Compile Include="Csv\CsvExporter.cs" />
+    <Compile Include="Csv\CsvFormatPlug.cs" />
+    <Compile Include="DataAccess\ConfigHelper.partial.cs" />
+    <Compile Include="DbWebApiOptions.cs" />
+    <Compile Include="DeunderscorePropertyNamesContractResolver.cs" />
+    <Compile Include="Excel\XlsxFormatPlug.cs" />
+    <Compile Include="IDbWebApiAuthorization.cs" />
+    <Compile Include="IFormatPlug.cs" />
+    <Compile Include="ParameterConvert.cs" />
+    <Compile Include="Jsonp\JsonpMediaTypeFormatter.cs" />
+    <Compile Include="Jsonp\JsonpQueryStringMapping.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PseudoContentNegotiator.cs" />
+    <Compile Include="PseudoMediaTypeFormatter.cs" />
+    <Compile Include="Razor\RazorContext.cs" />
+    <Compile Include="Razor\SerializableResponseData.cs" />
+    <Compile Include="Razor\RazorMediaTypeFormatter.cs" />
+    <Compile Include="TypeHelper.cs" />
+    <Compile Include="WebApiExtensions.cs" />
+    <Compile Include="WebApiExtensions.parameters.cs" />
+    <Compile Include="WebApiExtensions.register.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="DbWebApi.cd" />
+    <None Include="DerivedParametersCache\SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
+    <None Include="packages.DataBooster.DbWebApi.Net40.Oracle.ODP.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="DerivedParametersCache\SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

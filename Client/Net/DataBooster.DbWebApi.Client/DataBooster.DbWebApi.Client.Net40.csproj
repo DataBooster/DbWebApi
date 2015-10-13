@@ -38,6 +38,10 @@
     <DocumentationFile>bin\Release\Net40\DataBooster.DbWebApi.Client.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DbParallel.DataAccess.StoredProcedureData, Version=1.7.9.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.ClientModels.StoredProcedureData.1.7.9-beta\lib\net40-Client\DbParallel.DataAccess.StoredProcedureData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>

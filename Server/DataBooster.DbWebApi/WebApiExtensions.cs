@@ -99,15 +99,11 @@ namespace DataBooster.DbWebApi
 
 				using (DalCenter dbContext = new DalCenter())
 				{
-					dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
+					dbContext.SetDynamicDataStyle(apiController.Request.GetQueryStringDictionary());
 
 					if (negotiationResult != null)
-					{
-						if (negotiationResult.Formatter is XmlMediaTypeFormatter)
-							return apiController.Request.CreateResponse(HttpStatusCode.OK, new ResponseRoot(dbContext.ExecuteDbApi(sp, parameters)));
-						else if (negotiationResult.Formatter is RazorMediaTypeFormatter)
+						if (negotiationResult.Formatter is RazorMediaTypeFormatter)
 							return apiController.Request.CreateResponse(HttpStatusCode.OK, new RazorContext(dbContext.ExecuteDbApi(sp, parameters), parameters));
-					}
 
 					return apiController.Request.CreateResponse(HttpStatusCode.OK, dbContext.ExecuteDbApi(sp, parameters));
 				}
@@ -140,29 +136,18 @@ namespace DataBooster.DbWebApi
 
 				using (DalCenter dbContext = new DalCenter())
 				{
-					dbContext.SetNamingConvention(apiController.Request.GetQueryStringDictionary());
+					dbContext.SetDynamicDataStyle(apiController.Request.GetQueryStringDictionary());
 
 					if (negotiationResult != null)
-					{
 						if (negotiationResult.Formatter is RazorMediaTypeFormatter)
 							return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
-						else if (negotiationResult.Formatter is XmlMediaTypeFormatter)
-						{
-							ResponseRoot[] xmlResponses = new ResponseRoot[listOfParameters.Count];
 
-							for (int i = 0; i < xmlResponses.Length; i++)
-								xmlResponses[i] = new ResponseRoot(dbContext.ExecuteDbApi(sp, listOfParameters[i]));
+					StoredProcedureResponse[] spResponses = new StoredProcedureResponse[listOfParameters.Count];
 
-							return apiController.Request.CreateResponse(HttpStatusCode.OK, xmlResponses.AsQueryable());
-						}
-					}
+					for (int i = 0; i < spResponses.Length; i++)
+						spResponses[i] = dbContext.ExecuteDbApi(sp, listOfParameters[i]);
 
-					StoredProcedureResponse[] jsonResponses = new StoredProcedureResponse[listOfParameters.Count];
-
-					for (int i = 0; i < jsonResponses.Length; i++)
-						jsonResponses[i] = dbContext.ExecuteDbApi(sp, listOfParameters[i]);
-
-					return apiController.Request.CreateResponse(HttpStatusCode.OK, jsonResponses.AsQueryable());
+					return apiController.Request.CreateResponse(HttpStatusCode.OK, spResponses.AsQueryable());
 				}
 			}
 			finally

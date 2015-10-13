@@ -50,7 +50,7 @@ namespace DataBooster.DbWebApi.Excel
 			using (XLWorkbook workbook = new XLWorkbook())
 			using (DalCenter dbContext = new DalCenter())
 			{
-				dbContext.SetNamingConvention(queryStrings);
+				dbContext.SetDynamicDataStyle(queryStrings);
 
 				IXLWorksheet currentWorksheet = null;
 

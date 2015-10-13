@@ -24,6 +24,16 @@ namespace DataBooster.DbWebApi
 			const string _DefaultRazorEncodingParameterName = "RazorEncoding";
 			const string _DefaultRazorLanguageParameterName = "RazorLanguage";
 			const string _DefaultRazorTemplateParameterName = "RazorTemplate";
+			const string _DefaultXmlAsAttributeParameterName = "XmlAsAttribute";
+			const string _DefaultXmlNullValueParameterName = "XmlNullValue";
+			const string _DefaultXmlTypeSchemaParameterName = "XmlTypeSchema";
+
+			private static string _ReservedParameterPrefix = string.Empty;
+			public static string ReservedParameterPrefix
+			{
+				get { return _ReservedParameterPrefix; }
+				set { _ReservedParameterPrefix = value ?? string.Empty; }
+			}
 
 			private static string _MediaTypeParameterName = _DefaultMediaTypeParameterName;
 			public static string MediaTypeParameterName
@@ -93,6 +103,27 @@ namespace DataBooster.DbWebApi
 			{
 				get { return _RazorTemplateParameterName; }
 				set { _RazorTemplateParameterName = string.IsNullOrEmpty(value) ? _DefaultRazorTemplateParameterName : value; }
+			}
+
+			private static string _XmlAsAttributeParameterName = _DefaultXmlAsAttributeParameterName;
+			public static string XmlAsAttributeParameterName
+			{
+				get { return _XmlAsAttributeParameterName; }
+				set { _XmlAsAttributeParameterName = string.IsNullOrEmpty(value) ? _DefaultXmlAsAttributeParameterName : value; }
+			}
+
+			private static string _XmlNullValueParameterName = _DefaultXmlNullValueParameterName;
+			public static string XmlNullValueParameterName
+			{
+				get { return _XmlNullValueParameterName; }
+				set { _XmlNullValueParameterName = string.IsNullOrEmpty(value) ? _DefaultXmlNullValueParameterName : value; }
+			}
+
+			private static string _XmlTypeSchemaParameterName = _DefaultXmlTypeSchemaParameterName;
+			public static string XmlTypeSchemaParameterName
+			{
+				get { return _XmlTypeSchemaParameterName; }
+				set { _XmlTypeSchemaParameterName = string.IsNullOrEmpty(value) ? _DefaultXmlTypeSchemaParameterName : value; }
 			}
 		}
 
