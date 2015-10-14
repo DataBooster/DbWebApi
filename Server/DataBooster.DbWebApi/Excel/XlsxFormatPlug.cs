@@ -48,10 +48,8 @@ namespace DataBooster.DbWebApi.Excel
 			MemoryStream memoryStream = new MemoryStream();	// TBD: To find a more efficient way later
 
 			using (XLWorkbook workbook = new XLWorkbook())
-			using (DalCenter dbContext = new DalCenter())
+			using (DalCenter dbContext = new DalCenter(queryStrings))
 			{
-				dbContext.SetDynamicDataStyle(queryStrings);
-
 				IXLWorksheet currentWorksheet = null;
 
 				dbContext.ExecuteDbApi(sp, parameters, rs =>

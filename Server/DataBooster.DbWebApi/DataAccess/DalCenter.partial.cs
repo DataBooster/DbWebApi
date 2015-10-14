@@ -12,21 +12,32 @@ namespace DataBooster.DbWebApi.DataAccess
 {
 	public partial class DalCenter
 	{
+		public DalCenter(IDictionary<string, string> queryStringsForDynamicDataStyle)
+			: this()
+		{
+			SetDynamicDataStyle(queryStringsForDynamicDataStyle);
+		}
+
 		public void SetDynamicDataStyle(IDictionary<string, string> queryStrings)
 		{
 			string queryNamingCase = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName);
 
-			if (!string.IsNullOrEmpty(queryNamingCase))
+			if (string.IsNullOrEmpty(queryNamingCase))
+				DynamicPropertyNamingConvention = DbWebApiOptions.DefaultPropertyNamingConvention;
+			else
 				switch (char.ToUpper(queryNamingCase[0]))
 				{
 					case 'N':
-						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.None;
+						DynamicPropertyNamingConvention = PropertyNamingConvention.None;
 						break;
 					case 'P':
-						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.PascalCase;
+						DynamicPropertyNamingConvention = PropertyNamingConvention.PascalCase;
 						break;
 					case 'C':
-						_DbAccess.DynamicPropertyNamingConvention = PropertyNamingConvention.CamelCase;
+						DynamicPropertyNamingConvention = PropertyNamingConvention.CamelCase;
+						break;
+					default:
+						DynamicPropertyNamingConvention = DbWebApiOptions.DefaultPropertyNamingConvention;
 						break;
 				}
 

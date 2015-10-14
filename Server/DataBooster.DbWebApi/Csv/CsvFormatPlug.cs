@@ -66,10 +66,8 @@ namespace DataBooster.DbWebApi.Csv
 			{
 				StreamWriter textWriter = (negotiatedEncoding == null) ? new StreamWriter(stream) : new StreamWriter(stream, negotiatedEncoding);
 
-				using (DalCenter dbContext = new DalCenter())
+				using (DalCenter dbContext = new DalCenter(queryStrings))
 				{
-					dbContext.SetDynamicDataStyle(queryStrings);
-
 					CsvExporter csvExporter = new CsvExporter(textWriter);
 
 					dbContext.ExecuteDbApi(sp, parameters, null,

@@ -97,10 +97,8 @@ namespace DataBooster.DbWebApi
 						return formatPlug.Respond(apiController, sp, parameters, negotiationResult.MediaType, negotiatedEncoding);
 				}
 
-				using (DalCenter dbContext = new DalCenter())
+				using (DalCenter dbContext = new DalCenter(apiController.Request.GetQueryStringDictionary()))
 				{
-					dbContext.SetDynamicDataStyle(apiController.Request.GetQueryStringDictionary());
-
 					if (negotiationResult != null)
 						if (negotiationResult.Formatter is RazorMediaTypeFormatter)
 							return apiController.Request.CreateResponse(HttpStatusCode.OK, new RazorContext(dbContext.ExecuteDbApi(sp, parameters), parameters));
@@ -135,10 +133,8 @@ namespace DataBooster.DbWebApi
 					if (negotiationResult.Formatter is PseudoMediaTypeFormatter || negotiationResult.Formatter is RazorMediaTypeFormatter)
 						return apiController.Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
 
-				using (DalCenter dbContext = new DalCenter())
+				using (DalCenter dbContext = new DalCenter(apiController.Request.GetQueryStringDictionary()))
 				{
-					dbContext.SetDynamicDataStyle(apiController.Request.GetQueryStringDictionary());
-
 					StoredProcedureResponse[] spResponses = new StoredProcedureResponse[listOfParameters.Count];
 
 					for (int i = 0; i < spResponses.Length; i++)
