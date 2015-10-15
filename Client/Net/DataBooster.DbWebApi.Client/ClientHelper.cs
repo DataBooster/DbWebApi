@@ -109,11 +109,49 @@ namespace DataBooster.DbWebApi.Client
 			return content.Headers.ContentType.MediaType;
 		}
 
+		public static void ConvertNullToDBNull(this StoredProcedureResponse spResponse)
+		{
+			if (spResponse == null)
+				throw new ArgumentNullException("spResponse");
+
+			spResponse.OutputParameters.ConvertNullToDBNull();
+
+			foreach (var resultSet in spResponse.ResultSets)
+				foreach (var record in resultSet)
+					record.ConvertNullToDBNull();
+		}
+
+		private static void ConvertNullToDBNull(this IDictionary<string, object> dynObject)
+		{
+			foreach (var prop in dynObject)
+				if (prop.Value == null)
+					dynObject[prop.Key] = DBNull.Value;
+		}
+
+		public static void ConvertDBNullToNull(this StoredProcedureResponse spResponse)
+		{
+			if (spResponse == null)
+				throw new ArgumentNullException("spResponse");
+
+			spResponse.OutputParameters.ConvertDBNullToNull();
+
+			foreach (var resultSet in spResponse.ResultSets)
+				foreach (var record in resultSet)
+					record.ConvertDBNullToNull();
+		}
+
+		private static void ConvertDBNullToNull(this IDictionary<string, object> dynObject)
+		{
+			foreach (var prop in dynObject)
+				if (Convert.IsDBNull(prop.Value))
+					dynObject[prop.Key] = null;
+		}
+
 		#endregion
 
 		#region Read response as LINQ to JSON (JObject or JArray) extentions
 
-		public static JToken ReadAsJson(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "son")
+		internal static J ReadAsJson<J>(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "son")
 		{
 			var content = httpResponse.Content;
 
@@ -130,7 +168,7 @@ namespace DataBooster.DbWebApi.Client
 						throw new HttpRequestException("Response Content-Type is not JSON/BSON");
 				}
 
-				Task<JToken> readTask = content.ReadAsAsync<JToken>(ReadAsMediaTypeFormatterCollection);
+				Task<J> readTask = content.ReadAsAsync<J>(ReadAsMediaTypeFormatterCollection);
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
@@ -145,7 +183,7 @@ namespace DataBooster.DbWebApi.Client
 
 		#region Read response as XML extentions
 
-		public static XDocument ReadAsXml(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "/xml")
+		internal static XDocument ReadAsXml(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "/xml")
 		{
 			var content = httpResponse.Content;
 

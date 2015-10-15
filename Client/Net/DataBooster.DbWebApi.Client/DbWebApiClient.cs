@@ -237,42 +237,42 @@ namespace DataBooster.DbWebApi.Client
 
 		#region Bulk ExecAsJson overrides
 #if WEB_API2
-		public async Task<JToken> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public async Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadAsJson();
+			return httpResponse.ReadAsJson<JObject[]>();
 		}
 #else	// ASP.NET Web API 1
-		public Task<JToken> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<JToken>(requestTask =>
+				ContinueWith<JObject[]>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadAsJson();
+					return requestTask.Result.ReadAsJson<JObject[]>();
 				});
 		}
 #endif
-		public Task<JToken> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
+		public Task<JObject[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<JToken> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			return ExecAsJsonAsync(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
-		public Task<JToken> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public Task<JObject[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		public JToken ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
+		public JObject[] ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
 			try
 			{
@@ -294,7 +294,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public JToken ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
+		public JObject[] ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
 			return ExecAsJson(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
@@ -302,43 +302,43 @@ namespace DataBooster.DbWebApi.Client
 
 		#region ExecAsJson overrides
 #if WEB_API2
-		public async Task<JToken> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		public async Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadAsJson();
+			return httpResponse.ReadAsJson<JObject>();
 		}
 #else	// ASP.NET Web API 1
-		public Task<JToken> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		public Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
-				ContinueWith<JToken>(requestTask =>
+				ContinueWith<JObject>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadAsJson();
+					return requestTask.Result.ReadAsJson<JObject>();
 				});
 		}
 #endif
 
-		public Task<JToken> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		public Task<JObject> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
 		}
 
-		public Task<JToken> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		public Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
 			return ExecAsJsonAsync(requestUri, inputParameters, CancellationToken.None);
 		}
 
-		public Task<JToken> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public Task<JObject> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
 
-		public JToken ExecAsJson(string requestUri, IDictionary<string, object> inputParameters = null)
+		public JObject ExecAsJson(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
 			try
 			{
@@ -360,7 +360,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public JToken ExecAsJson(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		public JObject ExecAsJson(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAsJson(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
