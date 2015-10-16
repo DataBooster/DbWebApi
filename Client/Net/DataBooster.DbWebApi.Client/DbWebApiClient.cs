@@ -29,6 +29,11 @@ namespace DataBooster.DbWebApi.Client
 			get { return _HttpClient; }
 		}
 
+		public HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> AcceptMediaType
+		{
+			get { return _HttpClient.DefaultRequestHeaders.Accept; }
+		}
+
 		private HttpMethod _HttpMethod = HttpMethod.Post;
 		public HttpMethod HttpMethod
 		{
