@@ -37,7 +37,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		internal static T ReadAs<T>(this HttpResponseMessage httpResponse)
+		internal static T ReadAs<T>(this HttpResponseMessage httpResponse) where T : class
 		{
 			var content = httpResponse.Content;
 
@@ -46,16 +46,65 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<T> readTask = content.ReadAsAsync<T>(ReadAsMediaTypeFormatterCollection);
-				T result = readTask.Result;
+				Type type = typeof(T);
 
-				if (readTask.IsFaulted)
-					throw readTask.Exception;
-				else
-					return result;
+				if (typeof(string) == type)
+					return content.ReadContentAsString() as T;
+
+				if (typeof(XDocument) == type)
+					return content.ReadContentAsXDocument() as T;
+
+				if (typeof(XElement) == type)
+					return content.ReadContentAsXElement() as T;
+
+				return content.ReadContentAs<T>();
 			}
 			else
 				throw httpResponse.CreateUnsuccessException();
+		}
+
+		private static T ReadContentAs<T>(this HttpContent content)
+		{
+			Task<T> readTask = content.ReadAsAsync<T>(ReadAsMediaTypeFormatterCollection);
+			T result = readTask.Result;
+
+			if (readTask.IsFaulted)
+				throw readTask.Exception;
+			else
+				return result;
+		}
+
+		private static string ReadContentAsString(this HttpContent content)
+		{
+			Task<string> readTask = content.ReadAsStringAsync();
+			string result = readTask.Result;
+
+			if (readTask.IsFaulted)
+				throw readTask.Exception;
+			else
+				return result;
+		}
+
+		private static XDocument ReadContentAsXDocument(this HttpContent content)
+		{
+			Task<Stream> readTask = content.ReadAsStreamAsync();
+			Stream result = readTask.Result;
+
+			if (readTask.IsFaulted)
+				throw readTask.Exception;
+			else
+				return XDocument.Load(result);
+		}
+
+		private static XElement ReadContentAsXElement(this HttpContent content)
+		{
+			Task<Stream> readTask = content.ReadAsStreamAsync();
+			Stream result = readTask.Result;
+
+			if (readTask.IsFaulted)
+				throw readTask.Exception;
+			else
+				return XElement.Load(result);
 		}
 
 		private static HttpRequestException CreateUnsuccessException(this HttpResponseMessage httpResponse)
@@ -85,40 +134,6 @@ namespace DataBooster.DbWebApi.Client
 				return null;
 			return content.Headers.ContentType;
 		}
-
-		#region Read response as XML extentions
-
-		internal static XDocument ReadAsXml(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "/xml")
-		{
-			var content = httpResponse.Content;
-
-			if (content == null)
-				throw new ArgumentNullException("httpResponse.Content");
-
-			if (httpResponse.IsSuccessStatusCode)
-			{
-				if (!string.IsNullOrEmpty(checkContentTypeEndsWith))
-				{
-					var contentType = content.GetContentType();
-
-					if (contentType != null && contentType.MediaType != null &&
-						contentType.MediaType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
-						throw new HttpRequestException("Response Content-Type is not XML");
-				}
-
-				Task<Stream> readTask = content.ReadAsStreamAsync();
-				Stream result = readTask.Result;
-
-				if (readTask.IsFaulted)
-					throw readTask.Exception;
-
-				return XDocument.Load(result);
-			}
-			else
-				throw httpResponse.CreateUnsuccessException();
-		}
-
-		#endregion
 
 		#region SeparateArrayByProperties overloads
 

@@ -104,376 +104,248 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk Exec as StoredProcedureResponse overrides
-#if WEB_API2
-		public async Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
-		{
-			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadAs<StoredProcedureResponse[]>();
-		}
-#else	// ASP.NET Web API 1
 		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
-			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<StoredProcedureResponse[]>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.ReadAs<StoredProcedureResponse[]>();
-				});
+			return ExecAsAsync<StoredProcedureResponse[], T>(requestUri, listOfInputParameters, cancellationToken);
 		}
-#endif
 
 		public Task<StoredProcedureResponse[]> ExecAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
-			return ExecAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
+			return ExecAsAsync<StoredProcedureResponse[]>(requestUri, listOfAnonymousTypeParameters, cancellationToken);
 		}
 
 		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			return ExecAsync(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsAsync<StoredProcedureResponse[], T>(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
 		public Task<StoredProcedureResponse[]> ExecAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
-			return ExecAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+			return ExecAsAsync<StoredProcedureResponse[]>(requestUri, listOfAnonymousTypeParameters);
 		}
 
 		public StoredProcedureResponse[] Exec<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			try
-			{
-				return ExecAsync(requestUri, listOfInputParameters).Result;
-			}
-			catch (AggregateException ae)
-			{
-				if (ae.InnerExceptions.Count == 1)
-				{
-					Exception eInner = ae.InnerException;
-
-					if (eInner.InnerException != null)
-						eInner = eInner.InnerException;
-
-					throw eInner;
-				}
-				else
-					throw;
-			}
+			return ExecAs<StoredProcedureResponse[], T>(requestUri, listOfInputParameters);
 		}
 
 		public StoredProcedureResponse[] Exec(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
-			return Exec(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+			return ExecAs<StoredProcedureResponse[]>(requestUri, listOfAnonymousTypeParameters);
 		}
 		#endregion
 
 		#region Exec as StoredProcedureResponse overrides
-#if WEB_API2
-		public async Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
-		{
-			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadAs<StoredProcedureResponse>();
-		}
-#else	// ASP.NET Web API 1
 		public Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
-			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
-				ContinueWith<StoredProcedureResponse>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.ReadAs<StoredProcedureResponse>();
-				});
+			return ExecAsAsync<StoredProcedureResponse>(requestUri, inputParameters, cancellationToken);
 		}
-#endif
 
 		public Task<StoredProcedureResponse> ExecAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
-			return ExecAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+			return ExecAsAsync<StoredProcedureResponse>(requestUri, anonymousTypeInstanceAsInputParameters, cancellationToken);
 		}
 
 		public Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
-			return ExecAsync(requestUri, inputParameters, CancellationToken.None);
+			return ExecAsAsync<StoredProcedureResponse>(requestUri, inputParameters);
 		}
 
 		public Task<StoredProcedureResponse> ExecAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return ExecAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+			return ExecAsAsync<StoredProcedureResponse>(requestUri, anonymousTypeInstanceAsInputParameters);
 		}
 
 		public StoredProcedureResponse Exec(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
-			try
-			{
-				return ExecAsync(requestUri, inputParameters).Result;
-			}
-			catch (AggregateException ae)
-			{
-				if (ae.InnerExceptions.Count == 1)
-				{
-					Exception eInner = ae.InnerException;
-
-					if (eInner.InnerException != null)
-						eInner = eInner.InnerException;
-
-					throw eInner;
-				}
-				else
-					throw;
-			}
+			return ExecAs<StoredProcedureResponse>(requestUri, inputParameters);
 		}
 
 		public StoredProcedureResponse Exec(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return Exec(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+			return ExecAs<StoredProcedureResponse>(requestUri, anonymousTypeInstanceAsInputParameters);
 		}
 		#endregion
 
 		#region Bulk ExecAsJson overrides
-#if WEB_API2
-		public async Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
-		{
-			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadAs<JObject[]>();
-		}
-#else	// ASP.NET Web API 1
 		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
-			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<JObject[]>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.ReadAs<JObject[]>();
-				});
+			return ExecAsAsync<JObject[], T>(requestUri, listOfInputParameters, cancellationToken);
 		}
-#endif
+
 		public Task<JObject[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
-			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
+			return ExecAsAsync<JObject[]>(requestUri, listOfAnonymousTypeParameters, cancellationToken);
 		}
 
 		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			return ExecAsJsonAsync(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsAsync<JObject[], T>(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
 		public Task<JObject[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
-			return ExecAsJsonAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+			return ExecAsAsync<JObject[]>(requestUri, listOfAnonymousTypeParameters);
 		}
 
 		public JObject[] ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			try
-			{
-				return ExecAsJsonAsync(requestUri, listOfInputParameters).Result;
-			}
-			catch (AggregateException ae)
-			{
-				if (ae.InnerExceptions.Count == 1)
-				{
-					Exception eInner = ae.InnerException;
-
-					if (eInner.InnerException != null)
-						eInner = eInner.InnerException;
-
-					throw eInner;
-				}
-				else
-					throw;
-			}
+			return ExecAs<JObject[], T>(requestUri, listOfInputParameters);
 		}
 
 		public JObject[] ExecAsJson(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
-			return ExecAsJson(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+			return ExecAs<JObject[]>(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 		#endregion
 
 		#region ExecAsJson overrides
-#if WEB_API2
-		public async Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
-		{
-			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadAs<JObject>();
-		}
-#else	// ASP.NET Web API 1
 		public Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
-			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
-				ContinueWith<JObject>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.ReadAs<JObject>();
-				});
+			return ExecAsAsync<JObject>(requestUri, inputParameters, cancellationToken);
 		}
-#endif
 
 		public Task<JObject> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
-			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+			return ExecAsAsync<JObject>(requestUri, anonymousTypeInstanceAsInputParameters, cancellationToken);
 		}
 
 		public Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
-			return ExecAsJsonAsync(requestUri, inputParameters, CancellationToken.None);
+			return ExecAsAsync<JObject>(requestUri, inputParameters);
 		}
 
 		public Task<JObject> ExecAsJsonAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return ExecAsJsonAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+			return ExecAsAsync<JObject>(requestUri, anonymousTypeInstanceAsInputParameters);
 		}
 
 		public JObject ExecAsJson(string requestUri, IDictionary<string, object> inputParameters = null)
 		{
-			try
-			{
-				return ExecAsJsonAsync(requestUri, inputParameters).Result;
-			}
-			catch (AggregateException ae)
-			{
-				if (ae.InnerExceptions.Count == 1)
-				{
-					Exception eInner = ae.InnerException;
-
-					if (eInner.InnerException != null)
-						eInner = eInner.InnerException;
-
-					throw eInner;
-				}
-				else
-					throw;
-			}
+			return ExecAs<JObject>(requestUri, inputParameters);
 		}
 
 		public JObject ExecAsJson(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
-			return ExecAsJson(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+			return ExecAs<JObject>(requestUri, anonymousTypeInstanceAsInputParameters);
 		}
 		#endregion
 
 		#region Bulk ExecAsXml overrides
-#if WEB_API2
-		public async Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
-		{
-			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadAsXml();
-		}
-#else	// ASP.NET Web API 1
 		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
-			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
-				ContinueWith<XDocument>(requestTask =>
-				{
-					if (requestTask.IsCanceled)
-						return null;
-					if (requestTask.IsFaulted)
-						throw requestTask.Exception;
-
-					return requestTask.Result.ReadAsXml();
-				});
+			return ExecAsAsync<XDocument, T>(requestUri, listOfInputParameters, cancellationToken);
 		}
-#endif
+
 		public Task<XDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken)
 		{
-			return ExecAsXmlAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
+			return ExecAsAsync<XDocument>(requestUri, listOfAnonymousTypeParameters, cancellationToken);
 		}
 
 		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			return ExecAsXmlAsync(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsAsync<XDocument, T>(requestUri, listOfInputParameters);
 		}
 
 		public Task<XDocument> ExecAsXmlAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
-			return ExecAsXmlAsync(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+			return ExecAsAsync<XDocument>(requestUri, listOfAnonymousTypeParameters);
 		}
 
 		public XDocument ExecAsXml<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			try
-			{
-				return ExecAsXmlAsync(requestUri, listOfInputParameters).Result;
-			}
-			catch (AggregateException ae)
-			{
-				if (ae.InnerExceptions.Count == 1)
-				{
-					Exception eInner = ae.InnerException;
-
-					if (eInner.InnerException != null)
-						eInner = eInner.InnerException;
-
-					throw eInner;
-				}
-				else
-					throw;
-			}
+			return ExecAs<XDocument>(requestUri, listOfInputParameters);
 		}
 
 		public XDocument ExecAsXml(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
 		{
-			return ExecAsXml(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+			return ExecAs<XDocument>(requestUri, listOfAnonymousTypeParameters);
 		}
 		#endregion
 
 		#region ExecAsXml overrides
-#if WEB_API2
-		public async Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
-		{
-			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadAsXml();
-		}
-#else	// ASP.NET Web API 1
 		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
-			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
-				ContinueWith<XDocument>(requestTask =>
+			return ExecAsAsync<XDocument>(requestUri, inputParameters, cancellationToken);
+		}
+
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsAsync<XDocument>(requestUri, anonymousTypeInstanceAsInputParameters, cancellationToken);
+		}
+
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAsAsync<XDocument>(requestUri, inputParameters);
+		}
+
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsAsync<XDocument>(requestUri, anonymousTypeInstanceAsInputParameters);
+		}
+
+		public XDocument ExecAsXml(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAs<XDocument>(requestUri, inputParameters);
+		}
+
+		public XDocument ExecAsXml(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAs<XDocument>(requestUri, anonymousTypeInstanceAsInputParameters);
+		}
+		#endregion
+
+		#region Bulk Exec as Generic overrides
+#if WEB_API2
+		protected async Task<TResult> ExecAsAsync<TResult, TDic>(string requestUri, ICollection<TDic> listOfInputParameters, CancellationToken cancellationToken)
+			where TResult : class
+			where TDic : IDictionary<string, object>
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
+			return httpResponse.ReadAs<TResult>();
+		}
+#else	// ASP.NET Web API 1
+		protected Task<TResult> ExecAsAsync<TResult, TDic>(string requestUri, ICollection<TDic> listOfInputParameters, CancellationToken cancellationToken)
+			where TResult : class
+			where TDic : IDictionary<string, object>
+		{
+			return ExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
+				ContinueWith<TResult>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
 						return null;
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadAsXml();
+					return requestTask.Result.ReadAs<TResult>();
 				});
 		}
 #endif
 
-		public Task<XDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		protected Task<T> ExecAsAsync<T>(string requestUri, ICollection<object> listOfAnonymousTypeParameters, CancellationToken cancellationToken) where T : class
 		{
-			return ExecAsXmlAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+			return ExecAsAsync<T>(requestUri, AsInputParameters(listOfAnonymousTypeParameters), cancellationToken);
 		}
 
-		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		protected Task<TResult> ExecAsAsync<TResult, TDic>(string requestUri, ICollection<TDic> listOfInputParameters)
+			where TResult : class
+			where TDic : IDictionary<string, object>
 		{
-			return ExecAsXmlAsync(requestUri, inputParameters, CancellationToken.None);
+			return ExecAsAsync<TResult>(requestUri, listOfInputParameters, CancellationToken.None);
 		}
 
-		public Task<XDocument> ExecAsXmlAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		protected Task<T> ExecAsAsync<T>(string requestUri, ICollection<object> listOfAnonymousTypeParameters) where T : class
 		{
-			return ExecAsXmlAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+			return ExecAsAsync<T>(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
 		}
 
-		public XDocument ExecAsXml(string requestUri, IDictionary<string, object> inputParameters = null)
+		protected TResult ExecAs<TResult, TDic>(string requestUri, ICollection<TDic> listOfInputParameters)
+			where TResult : class
+			where TDic : IDictionary<string, object>
 		{
 			try
 			{
-				return ExecAsXmlAsync(requestUri, inputParameters).Result;
+				return ExecAsAsync<TResult>(requestUri, listOfInputParameters).Result;
 			}
 			catch (AggregateException ae)
 			{
@@ -491,9 +363,75 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		public XDocument ExecAsXml(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		protected T ExecAs<T>(string requestUri, ICollection<object> listOfAnonymousTypeParameters) where T : class
 		{
-			return ExecAsXml(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+			return ExecAs<T>(requestUri, AsInputParameters(listOfAnonymousTypeParameters));
+		}
+		#endregion
+
+		#region Exec as Generic overrides
+#if WEB_API2
+		protected async Task<T> ExecAsAsync<T>(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken) where T : class
+		{
+			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
+			return httpResponse.ReadAs<T>();
+		}
+#else	// ASP.NET Web API 1
+		protected Task<T> ExecAsAsync<T>(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken) where T : class
+		{
+			return ExecRawAsync(requestUri, inputParameters, cancellationToken).
+				ContinueWith<T>(requestTask =>
+				{
+					if (requestTask.IsCanceled)
+						return null;
+					if (requestTask.IsFaulted)
+						throw requestTask.Exception;
+
+					return requestTask.Result.ReadAs<T>();
+				});
+		}
+#endif
+
+		protected Task<T> ExecAsAsync<T>(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken) where T : class
+		{
+			return ExecAsAsync<T>(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
+		}
+
+		protected Task<T> ExecAsAsync<T>(string requestUri, IDictionary<string, object> inputParameters = null) where T : class
+		{
+			return ExecAsAsync<T>(requestUri, inputParameters, CancellationToken.None);
+		}
+
+		protected Task<T> ExecAsAsync<T>(string requestUri, object anonymousTypeInstanceAsInputParameters) where T : class
+		{
+			return ExecAsAsync<T>(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
+		}
+
+		protected T ExecAs<T>(string requestUri, IDictionary<string, object> inputParameters = null) where T : class
+		{
+			try
+			{
+				return ExecAsAsync<T>(requestUri, inputParameters).Result;
+			}
+			catch (AggregateException ae)
+			{
+				if (ae.InnerExceptions.Count == 1)
+				{
+					Exception eInner = ae.InnerException;
+
+					if (eInner.InnerException != null)
+						eInner = eInner.InnerException;
+
+					throw eInner;
+				}
+				else
+					throw;
+			}
+		}
+
+		protected T ExecAs<T>(string requestUri, object anonymousTypeInstanceAsInputParameters) where T : class
+		{
+			return ExecAs<T>(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters));
 		}
 		#endregion
 
