@@ -108,7 +108,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.BulkReadResponse();
+			return httpResponse.ReadAs<StoredProcedureResponse[]>();
 		}
 #else	// ASP.NET Web API 1
 		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
@@ -121,7 +121,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.BulkReadResponse();
+					return requestTask.Result.ReadAs<StoredProcedureResponse[]>();
 				});
 		}
 #endif
@@ -174,7 +174,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadResponse();
+			return httpResponse.ReadAs<StoredProcedureResponse>();
 		}
 #else	// ASP.NET Web API 1
 		public Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
@@ -187,7 +187,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadResponse();
+					return requestTask.Result.ReadAs<StoredProcedureResponse>();
 				});
 		}
 #endif
@@ -240,7 +240,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
-			return httpResponse.ReadAsJson<JObject[]>();
+			return httpResponse.ReadAs<JObject[]>();
 		}
 #else	// ASP.NET Web API 1
 		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
@@ -253,7 +253,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadAsJson<JObject[]>();
+					return requestTask.Result.ReadAs<JObject[]>();
 				});
 		}
 #endif
@@ -305,7 +305,7 @@ namespace DataBooster.DbWebApi.Client
 		public async Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			HttpResponseMessage httpResponse = await ExecRawAsync(requestUri, inputParameters, cancellationToken);
-			return httpResponse.ReadAsJson<JObject>();
+			return httpResponse.ReadAs<JObject>();
 		}
 #else	// ASP.NET Web API 1
 		public Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
@@ -318,7 +318,7 @@ namespace DataBooster.DbWebApi.Client
 					if (requestTask.IsFaulted)
 						throw requestTask.Exception;
 
-					return requestTask.Result.ReadAsJson<JObject>();
+					return requestTask.Result.ReadAs<JObject>();
 				});
 		}
 #endif

@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Xml.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,9 +37,7 @@ namespace DataBooster.DbWebApi.Client
 			}
 		}
 
-		#region Read response as StoredProcedureResponse extentions
-
-		internal static StoredProcedureResponse[] BulkReadResponse(this HttpResponseMessage httpResponse)
+		internal static T ReadAs<T>(this HttpResponseMessage httpResponse)
 		{
 			var content = httpResponse.Content;
 
@@ -47,33 +46,13 @@ namespace DataBooster.DbWebApi.Client
 
 			if (httpResponse.IsSuccessStatusCode)
 			{
-				Task<StoredProcedureResponse[]> readTask = content.ReadAsAsync<StoredProcedureResponse[]>(ReadAsMediaTypeFormatterCollection);
-				StoredProcedureResponse[] dbWebApiResponse = readTask.Result;
-
-				if (readTask.IsFaulted)
-					throw readTask.Exception;
-
-				return dbWebApiResponse;
-			}
-			else
-				throw httpResponse.CreateUnsuccessException();
-		}
-
-		public static StoredProcedureResponse ReadResponse(this HttpResponseMessage httpResponse)
-		{
-			var content = httpResponse.Content;
-
-			if (content == null)
-				throw new ArgumentNullException("httpResponse.Content");
-
-			if (httpResponse.IsSuccessStatusCode)
-			{
-				Task<StoredProcedureResponse> readTask = content.ReadAsAsync<StoredProcedureResponse>(ReadAsMediaTypeFormatterCollection);
+				Task<T> readTask = content.ReadAsAsync<T>(ReadAsMediaTypeFormatterCollection);
+				T result = readTask.Result;
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
 				else
-					return readTask.Result;
+					return result;
 			}
 			else
 				throw httpResponse.CreateUnsuccessException();
@@ -98,88 +77,14 @@ namespace DataBooster.DbWebApi.Client
 				return new HttpResponseClientException(errorDictionary);
 		}
 
-		private static string GetContentType(this HttpContent content)
+		private static MediaTypeHeaderValue GetContentType(this HttpContent content)
 		{
 			if (content == null)
 				return null;
 			if (content.Headers == null)
 				return null;
-			if (content.Headers.ContentType == null)
-				return null;
-			return content.Headers.ContentType.MediaType;
+			return content.Headers.ContentType;
 		}
-
-		public static void ConvertNullToDBNull(this StoredProcedureResponse spResponse)
-		{
-			if (spResponse == null)
-				throw new ArgumentNullException("spResponse");
-
-			spResponse.OutputParameters.ConvertNullToDBNull();
-
-			foreach (var resultSet in spResponse.ResultSets)
-				foreach (var record in resultSet)
-					record.ConvertNullToDBNull();
-		}
-
-		private static void ConvertNullToDBNull(this IDictionary<string, object> dynObject)
-		{
-			foreach (var prop in dynObject)
-				if (prop.Value == null)
-					dynObject[prop.Key] = DBNull.Value;
-		}
-
-		public static void ConvertDBNullToNull(this StoredProcedureResponse spResponse)
-		{
-			if (spResponse == null)
-				throw new ArgumentNullException("spResponse");
-
-			spResponse.OutputParameters.ConvertDBNullToNull();
-
-			foreach (var resultSet in spResponse.ResultSets)
-				foreach (var record in resultSet)
-					record.ConvertDBNullToNull();
-		}
-
-		private static void ConvertDBNullToNull(this IDictionary<string, object> dynObject)
-		{
-			foreach (var prop in dynObject)
-				if (Convert.IsDBNull(prop.Value))
-					dynObject[prop.Key] = null;
-		}
-
-		#endregion
-
-		#region Read response as LINQ to JSON (JObject or JArray) extentions
-
-		internal static J ReadAsJson<J>(this HttpResponseMessage httpResponse, string checkContentTypeEndsWith = "son")
-		{
-			var content = httpResponse.Content;
-
-			if (content == null)
-				throw new ArgumentNullException("httpResponse.Content");
-
-			if (httpResponse.IsSuccessStatusCode)
-			{
-				if (!string.IsNullOrEmpty(checkContentTypeEndsWith))
-				{
-					var contentType = content.GetContentType();
-
-					if (contentType != null && contentType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
-						throw new HttpRequestException("Response Content-Type is not JSON/BSON");
-				}
-
-				Task<J> readTask = content.ReadAsAsync<J>(ReadAsMediaTypeFormatterCollection);
-
-				if (readTask.IsFaulted)
-					throw readTask.Exception;
-				else
-					return readTask.Result;
-			}
-			else
-				throw httpResponse.CreateUnsuccessException();
-		}
-
-		#endregion
 
 		#region Read response as XML extentions
 
@@ -196,16 +101,18 @@ namespace DataBooster.DbWebApi.Client
 				{
 					var contentType = content.GetContentType();
 
-					if (contentType != null && contentType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
+					if (contentType != null && contentType.MediaType != null &&
+						contentType.MediaType.EndsWith(checkContentTypeEndsWith, StringComparison.OrdinalIgnoreCase) == false)
 						throw new HttpRequestException("Response Content-Type is not XML");
 				}
 
 				Task<Stream> readTask = content.ReadAsStreamAsync();
+				Stream result = readTask.Result;
 
 				if (readTask.IsFaulted)
 					throw readTask.Exception;
 
-				return XDocument.Load(readTask.Result);
+				return XDocument.Load(result);
 			}
 			else
 				throw httpResponse.CreateUnsuccessException();
