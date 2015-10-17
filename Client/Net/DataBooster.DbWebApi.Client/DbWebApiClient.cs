@@ -29,7 +29,7 @@ namespace DataBooster.DbWebApi.Client
 			get { return _HttpClient; }
 		}
 
-		public HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> AcceptMediaType
+		public HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> AcceptMediaTypes
 		{
 			get { return _HttpClient.DefaultRequestHeaders.Accept; }
 		}
@@ -121,7 +121,7 @@ namespace DataBooster.DbWebApi.Client
 
 		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			return ExecAsAsync<StoredProcedureResponse[], T>(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsAsync<StoredProcedureResponse[], T>(requestUri, listOfInputParameters);
 		}
 
 		public Task<StoredProcedureResponse[]> ExecAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
@@ -185,7 +185,7 @@ namespace DataBooster.DbWebApi.Client
 
 		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters) where T : IDictionary<string, object>
 		{
-			return ExecAsAsync<JObject[], T>(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsAsync<JObject[], T>(requestUri, listOfInputParameters);
 		}
 
 		public Task<JObject[]> ExecAsJsonAsync(string requestUri, ICollection<object> listOfAnonymousTypeParameters)
