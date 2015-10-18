@@ -3,6 +3,7 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.IO;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
@@ -297,6 +298,70 @@ namespace DataBooster.DbWebApi.Client
 		public XDocument ExecAsXml(string requestUri, object anonymousTypeInstanceAsInputParameters)
 		{
 			return ExecAs<XDocument>(requestUri, anonymousTypeInstanceAsInputParameters);
+		}
+		#endregion
+
+		#region ExecAsString overrides
+		public Task<string> ExecAsStringAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsAsync<string>(requestUri, inputParameters, cancellationToken);
+		}
+
+		public Task<string> ExecAsStringAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsAsync<string>(requestUri, anonymousTypeInstanceAsInputParameters, cancellationToken);
+		}
+
+		public Task<string> ExecAsStringAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAsAsync<string>(requestUri, inputParameters);
+		}
+
+		public Task<string> ExecAsStringAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsAsync<string>(requestUri, anonymousTypeInstanceAsInputParameters);
+		}
+
+		public string ExecAsString(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAs<string>(requestUri, inputParameters);
+		}
+
+		public string ExecAsString(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAs<string>(requestUri, anonymousTypeInstanceAsInputParameters);
+		}
+		#endregion
+
+		#region ExecAsStream overrides
+		public Task<Stream> ExecAsStreamAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsAsync<Stream>(requestUri, inputParameters, cancellationToken);
+		}
+
+		public Task<Stream> ExecAsStreamAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		{
+			return ExecAsAsync<Stream>(requestUri, anonymousTypeInstanceAsInputParameters, cancellationToken);
+		}
+
+		public Task<Stream> ExecAsStreamAsync(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAsAsync<Stream>(requestUri, inputParameters);
+		}
+
+		public Task<Stream> ExecAsStreamAsync(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAsAsync<Stream>(requestUri, anonymousTypeInstanceAsInputParameters);
+		}
+
+		public Stream ExecAsStream(string requestUri, IDictionary<string, object> inputParameters = null)
+		{
+			return ExecAs<Stream>(requestUri, inputParameters);
+		}
+
+		public Stream ExecAsStream(string requestUri, object anonymousTypeInstanceAsInputParameters)
+		{
+			return ExecAs<Stream>(requestUri, anonymousTypeInstanceAsInputParameters);
 		}
 		#endregion
 

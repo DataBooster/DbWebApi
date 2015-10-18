@@ -51,6 +51,9 @@ namespace DataBooster.DbWebApi.Client
 				if (typeof(string) == type)
 					return content.ReadContentAsString() as T;
 
+				if (typeof(Stream) == type)
+					return content.ReadContentAsStream() as T;
+
 				if (typeof(XDocument) == type)
 					return content.ReadContentAsXDocument() as T;
 
@@ -85,7 +88,7 @@ namespace DataBooster.DbWebApi.Client
 				return result;
 		}
 
-		private static XDocument ReadContentAsXDocument(this HttpContent content)
+		private static Stream ReadContentAsStream(this HttpContent content)
 		{
 			Task<Stream> readTask = content.ReadAsStreamAsync();
 			Stream result = readTask.Result;
@@ -93,18 +96,17 @@ namespace DataBooster.DbWebApi.Client
 			if (readTask.IsFaulted)
 				throw readTask.Exception;
 			else
-				return XDocument.Load(result);
+				return result;
+		}
+
+		private static XDocument ReadContentAsXDocument(this HttpContent content)
+		{
+			return XDocument.Load(content.ReadContentAsStream());
 		}
 
 		private static XElement ReadContentAsXElement(this HttpContent content)
 		{
-			Task<Stream> readTask = content.ReadAsStreamAsync();
-			Stream result = readTask.Result;
-
-			if (readTask.IsFaulted)
-				throw readTask.Exception;
-			else
-				return XElement.Load(result);
+			return XElement.Load(content.ReadContentAsStream());
 		}
 
 		private static HttpRequestException CreateUnsuccessException(this HttpResponseMessage httpResponse)
