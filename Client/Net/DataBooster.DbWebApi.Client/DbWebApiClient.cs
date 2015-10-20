@@ -549,7 +549,7 @@ namespace DataBooster.DbWebApi.Client
 				return BulkPostRawAsync(requestUri, listOfInputParameters, cancellationToken);
 		}
 
-		protected Task<HttpResponseMessage> BulkPostRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		private Task<HttpResponseMessage> BulkPostRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			if (listOfInputParameters == null)
 				throw new ArgumentNullException("listOfInputParameters");

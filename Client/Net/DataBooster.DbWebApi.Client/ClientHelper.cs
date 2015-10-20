@@ -29,7 +29,7 @@ namespace DataBooster.DbWebApi.Client
 				{
 					_ReadAsMediaTypeFormatterCollection = new MediaTypeFormatterCollection();
 #if WEB_API2
-					_ReadAsMediaTypeFormatterCollection.Insert(0, new BsonMediaTypeFormatter());
+					_ReadAsMediaTypeFormatterCollection.Add(new BsonMediaTypeFormatter());
 #endif
 				}
 
