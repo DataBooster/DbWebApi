@@ -4,7 +4,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -136,20 +135,6 @@ namespace DataBooster.DbWebApi.Client
 			if (content.Headers == null)
 				return null;
 			return content.Headers.ContentType;
-		}
-
-		internal static IDictionary<string, object> AsInputParameters(this object anonymousTypeInstanceAsInputParameters)
-		{
-			IDictionary<string, object> inputParameterDictionary = anonymousTypeInstanceAsInputParameters as IDictionary<string, object>;
-
-			return inputParameterDictionary ?? new InputParameterDictionary(anonymousTypeInstanceAsInputParameters);
-		}
-
-		public static ICollection<IDictionary<string, object>> AsBulkInputParameters(this ICollection<object> listOfAnonymousTypeParameters)
-		{
-			ICollection<IDictionary<string, object>> listOfInputParameterDictionary = listOfAnonymousTypeParameters as ICollection<IDictionary<string, object>>;
-
-			return listOfInputParameterDictionary ?? listOfAnonymousTypeParameters.Select(o => AsInputParameters(o)).ToList();
 		}
 
 		#region SeparateArrayByProperties overloads
