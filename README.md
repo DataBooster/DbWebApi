@@ -85,7 +85,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
 ***
 
 ### Overview  
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet). While being regarded as a proxy service, DbWebApi reflects in two directions: Data Access Proxy and Media Format Proxy.
+DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet). While being regarded as a proxy service, DbWebApi reflects in two directions: Data Access Proxy and Media Format Proxy.
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
@@ -471,73 +471,115 @@ For response to bulk execute request, each of such JSON object will be further e
 ##### application/xml, text/xml  
     Sample:
 ``` XML
-<ResponseRoot xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/DbParallel.DataAccess">
-  <OutputParameters>
-    <outRuleDesc i:type="x:string" xmlns="">This is a test output parameter value.</outRuleDesc>
-    <outSumTotal i:type="x:decimal" xmlns="">888888.88</outSumTotal>
-    <outRC1 i:nil="true" xmlns="" />
-  </OutputParameters>
+<StoredProcedureResponse xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" SerializePropertyAsAttribute="false" EmitNullValue="true" TypeSchema="Xsd">
   <ResultSets>
-    <ArrayOfBindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_1 i:type="x:dateTime" xmlns="">2015-02-03T00:00:00</COL_1>
-        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
-        <COL_3 i:type="x:string" xmlns="">Hello World1</COL_3>
-        <COL_4 i:nil="true" xmlns=""/>
-        <COL_5 i:type="x:int" xmlns="">0</COL_5>
-      </BindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_1 i:type="x:dateTime" xmlns="">2015-02-02T00:00:00</COL_1>
-        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
-        <COL_3 i:nil="true" xmlns=""/>
-        <COL_4 i:type="x:decimal" xmlns="">1234567.800099</COL_4>
-        <COL_5 i:type="x:int" xmlns="">1</COL_5>
-      </BindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_1 i:type="x:dateTime" xmlns="">2015-02-01T00:00:00</COL_1>
-        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
-        <COL_3 i:type="x:string" xmlns="">Hello World3</COL_3>
-        <COL_4 i:nil="true" xmlns=""/>
-        <COL_5 i:type="x:int" xmlns="">2</COL_5>
-      </BindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_1 i:type="x:dateTime" xmlns="">2015-01-31T00:00:00</COL_1>
-        <COL_2 i:type="x:decimal" xmlns="">3.14159</COL_2>
-        <COL_3 i:nil="true" xmlns=""/>
-        <COL_4 i:type="x:decimal" xmlns="">9876541.230091</COL_4>
-        <COL_5 i:type="x:int" xmlns="">3</COL_5>
-      </BindableDynamicObject>
-    </ArrayOfBindableDynamicObject>
-    <ArrayOfBindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_A i:type="x:int" xmlns="">100</COL_A>
-        <COL_B i:type="x:string" xmlns="">fooA</COL_B>
-        <COL_C i:type="x:int" xmlns="">0</COL_C>
-      </BindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_A i:type="x:int" xmlns="">200</COL_A>
-        <COL_B i:type="x:string" xmlns="">fooB</COL_B>
-        <COL_C i:nil="true" xmlns=""/>
-      </BindableDynamicObject>
-      <BindableDynamicObject>
-        <COL_A i:type="x:int" xmlns="">300</COL_A>
-        <COL_B i:type="x:string" xmlns="">fooC</COL_B>
-        <COL_C i:type="x:int" xmlns="">1</COL_C>
-      </BindableDynamicObject>
-    </ArrayOfBindableDynamicObject>
-    <ArrayOfBindableDynamicObject>
-      <BindableDynamicObject>
-        <NOTE i:type="x:string" xmlns="">Test1 for the third result set</NOTE>
-      </BindableDynamicObject>
-      <BindableDynamicObject>
-        <NOTE i:type="x:string" xmlns="">Test2 for the third result set</NOTE>
-      </BindableDynamicObject>
-    </ArrayOfBindableDynamicObject>
+    <ResultSet>
+      <Record>
+        <COL_1 i:type="x:dateTime">2015-02-03T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal">3.14159</COL_2>
+        <COL_3 i:type="x:string">Hello World1</COL_3>
+        <COL_4 i:nil="true"/>
+        <COL_5 i:type="x:int">0</COL_5>
+      </Record>
+      <Record>
+        <COL_1 i:type="x:dateTime">2015-02-02T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal">3.14159</COL_2>
+        <COL_3 i:nil="true"/>
+        <COL_4 i:type="x:decimal">1234567.800099</COL_4>
+        <COL_5 i:type="x:int">1</COL_5>
+      </Record>
+      <Record>
+        <COL_1 i:type="x:dateTime">2015-02-01T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal">3.14159</COL_2>
+        <COL_3 i:type="x:string">Hello World3</COL_3>
+        <COL_4 i:nil="true"/>
+        <COL_5 i:type="x:int">2</COL_5>
+      </Record>
+      <Record>
+        <COL_1 i:type="x:dateTime">2015-01-31T00:00:00</COL_1>
+        <COL_2 i:type="x:decimal">3.14159</COL_2>
+        <COL_3 i:nil="true"/>
+        <COL_4 i:type="x:decimal">9876541.230091</COL_4>
+        <COL_5 i:type="x:int">3</COL_5>
+      </Record>
+    </ResultSet>
+    <ResultSet>
+      <Record>
+        <COL_A i:type="x:int">100</COL_A>
+        <COL_B i:type="x:string">fooA</COL_B>
+        <COL_C i:type="x:int">0</COL_C>
+      </Record>
+      <Record>
+        <COL_A i:type="x:int">200</COL_A>
+        <COL_B i:type="x:string">fooB</COL_B>
+        <COL_C i:nil="true"/>
+      </Record>
+      <Record>
+        <COL_A i:type="x:int">300</COL_A>
+        <COL_B i:type="x:string">fooC</COL_B>
+        <COL_C i:type="x:int">1</COL_C>
+      </Record>
+    </ResultSet>
+    <ResultSet>
+      <Record>
+        <NOTE i:type="x:string">Test1 for the third result set</NOTE>
+      </Record>
+      <Record>
+        <NOTE i:type="x:string">Test2 for the third result set</NOTE>
+      </Record>
+    </ResultSet>
   </ResultSets>
+  <OutputParameters>
+    <outRuleDesc i:type="x:string">This is a test output parameter value.</outRuleDesc>
+    <outSumTotal i:type="x:decimal">888888.88</outSumTotal>
+    <outRC1 i:nil="true" />
+  </OutputParameters>
   <ReturnValue i:nil="true" />
-</ResponseRoot>
+</StoredProcedureResponse>
 ```
 For response to bulk execute request, each of such XML object will be further encapsulated into an outer array.
+
+There are a few options can be applied in Url **query string** to control the XML style:
+* XmlNullValue
+    - **true**: **(default)** Emit all null(DBNull) value properties(columns) into XML.
+    - false: Do not emit any null(DBNull) value properties(columns) into XML.
+
+* XmlAsAttribute
+    - **false**: **(default)** Serialize properties(columns) as XML elements.
+    - true: Serialize properties(columns) as XML attributes, null(DBNull) value will be rendered as empty string if *XmlNullValue=true*.  
+For above example stored procedure with *XmlAsAttribute=true*, the response becomes:
+``` XML
+<StoredProcedureResponse xmlns:i="http://www.w3.org/2001/XMLSchema-instance" SerializePropertyAsAttribute="true" EmitNullValue="true" TypeSchema="None">
+  <ResultSets>
+    <ResultSet>
+      <Record COL_1="2015-02-03T00:00:00" COL_2="3.14159" COL_3="Hello World1" COL_4="" COL_5="0" />
+      <Record COL_1="2015-02-02T00:00:00" COL_2="3.14159" COL_3="" COL_4="1234567.800099" COL_5="1" />
+      <Record COL_1="2015-02-01T00:00:00" COL_2="3.14159" COL_3="Hello World3" COL_4="" COL_5="2" />
+      <Record COL_1="2015-01-31T00:00:00" COL_2="3.14159" COL_3="" COL_4="9876541.230091" COL_5="3" />
+    </ResultSet>
+    <ResultSet>
+      <Record COL_A="100" COL_B="fooA" COL_C="0" />
+      <Record COL_A="200" COL_B="fooB" COL_C="" />
+      <Record COL_A="300" COL_B="fooC" COL_C="1" />
+    </ResultSet>
+    <ResultSet>
+      <Record NOTE="Test1 for the third result set" />
+      <Record NOTE="Test2 for the third result set" />
+    </ResultSet>
+  </ResultSets>
+  <OutputParameters outRuleDesc="This is a test output parameter value." outSumTotal="888888.88" outRC1="" />
+  <ReturnValue i:nil="true" />
+</StoredProcedureResponse>
+```
+* XmlTypeSchema *(only available when XmlAsAttribute=false)*
+    - **Xsd**: **(default)** Emit XSD data type information *(E.g. i:type="x:dateTime" ...)* for each property(column)'s XML element.
+    - Net: Emit .Net data type information *(E.g. z:Type="System.DateTime" ...)* for each property(column)'s XML element.
+    - None: Do not emit any data type information in XML.
+
+Above options only provide some simple controls on XML styles.  
+For other XML format controls, you may still need to further apply [XDT](http://xdt.codeplex.com/) or raw XSLT transformations ... even hard coding in client side.
+
+.
 
 ##### text/csv  
     Sample:
