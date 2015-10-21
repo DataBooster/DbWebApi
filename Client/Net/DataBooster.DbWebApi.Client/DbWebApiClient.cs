@@ -109,7 +109,7 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Exec as StoredProcedureResponse overrides
+		#region Exec as StoredProcedureResponse overloads
 		public Task<StoredProcedureResponse> ExecAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsAsync<StoredProcedureResponse>(requestUri, inputParameters, cancellationToken);
@@ -151,7 +151,7 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Bulk Exec as StoredProcedureResponse overrides
+		#region Bulk Exec as StoredProcedureResponse overloads
 		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
 		{
 			return BulkExecAsAsync<StoredProcedureResponse[]>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
@@ -174,7 +174,7 @@ namespace DataBooster.DbWebApi.Client
 
 		#endregion
 
-		#region ExecAsJson overrides
+		#region ExecAsJson overloads
 		public Task<JObject> ExecAsJsonAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsAsync<JObject>(requestUri, inputParameters, cancellationToken);
@@ -216,7 +216,7 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Bulk ExecAsJson overrides
+		#region Bulk ExecAsJson overloads
 		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
 		{
 			return BulkExecAsAsync<JObject[]>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
@@ -238,7 +238,7 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region ExecAsXml overrides
+		#region ExecAsXml overloads
 		public Task<XDocument> ExecAsXmlAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsAsync<XDocument>(requestUri, inputParameters, cancellationToken);
@@ -280,7 +280,7 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Bulk ExecAsXml overrides
+		#region Bulk ExecAsXml overloads
 		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
 		{
 			return BulkExecAsAsync<XDocument>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
@@ -303,7 +303,7 @@ namespace DataBooster.DbWebApi.Client
 
 		#endregion
 
-		#region ExecAsString overrides
+		#region ExecAsString overloads
 		public Task<string> ExecAsStringAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsAsync<string>(requestUri, inputParameters, cancellationToken);
@@ -345,7 +345,29 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region ExecAsStream overrides
+		#region Bulk ExecAsString overloads
+		public Task<string> ExecAsStringAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		{
+			return BulkExecAsAsync<string>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+		}
+
+		public Task<string> ExecAsStringAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		{
+			return ExecAsStringAsync<T>(requestUri, listOfInputParameters, CancellationToken.None);
+		}
+
+		public string ExecAsString<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		{
+			return BulkExecAs<string>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+		}
+
+		public string ExecAsString<T>(string requestUri, ICollection<T> listOfInputParameters)
+		{
+			return ExecAsString<T>(requestUri, listOfInputParameters, CancellationToken.None);
+		}
+		#endregion
+
+		#region ExecAsStream overloads
 		public Task<Stream> ExecAsStreamAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			return ExecAsAsync<Stream>(requestUri, inputParameters, cancellationToken);
@@ -387,7 +409,29 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Exec as Generic overrides
+		#region Bulk ExecAsStream overloads
+		public Task<Stream> ExecAsStreamAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		{
+			return BulkExecAsAsync<Stream>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+		}
+
+		public Task<Stream> ExecAsStreamAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		{
+			return ExecAsStreamAsync<T>(requestUri, listOfInputParameters, CancellationToken.None);
+		}
+
+		public Stream ExecAsStream<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		{
+			return BulkExecAs<Stream>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+		}
+
+		public Stream ExecAsStream<T>(string requestUri, ICollection<T> listOfInputParameters)
+		{
+			return ExecAsStream<T>(requestUri, listOfInputParameters, CancellationToken.None);
+		}
+		#endregion
+
+		#region Exec as Generic overloads
 #if WEB_API2
 		protected async Task<T> ExecAsAsync<T>(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken) where T : class
 		{
@@ -443,7 +487,7 @@ namespace DataBooster.DbWebApi.Client
 		}
 		#endregion
 
-		#region Bulk Exec as Generic overrides
+		#region Bulk Exec as Generic overloads
 #if WEB_API2
 		protected async Task<T> BulkExecAsAsync<T>(string requestUri, ICollection<IDictionary<string, object>> listOfInputParameters, CancellationToken cancellationToken) where T : class
 		{
@@ -491,7 +535,7 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Raw Methods
-		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
+		protected Task<HttpResponseMessage> ExecRawAsync(string requestUri, IDictionary<string, object> inputParameters, CancellationToken cancellationToken)
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				return GetRawAsync(requestUri, inputParameters, cancellationToken);
@@ -499,7 +543,7 @@ namespace DataBooster.DbWebApi.Client
 				return PostRawAsync(requestUri, inputParameters, cancellationToken);
 		}
 
-		public Task<HttpResponseMessage> ExecRawAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
+		protected Task<HttpResponseMessage> ExecRawAsync(string requestUri, object anonymousTypeInstanceAsInputParameters, CancellationToken cancellationToken)
 		{
 			return ExecRawAsync(requestUri, AsInputParameters(anonymousTypeInstanceAsInputParameters), cancellationToken);
 		}
