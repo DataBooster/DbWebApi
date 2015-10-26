@@ -26,21 +26,25 @@ namespace DataBooster.DbWebApi
 
 			queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-			string strName, strValue;
+			string strName, strValue, existingValue;
 			var queryNameValuePairs = request.GetQueryNameValuePairs();
 
 			if (queryNameValuePairs == null)
 				return queryStrings;
 
 			foreach (var pair in queryNameValuePairs)
-				if (pair.Value != null)
-				{
-					strName = pair.Key.Trim();
-					strValue = pair.Value.Trim();
+			{
+				strName = pair.Key.Trim();
+				strValue = pair.Value;
 
-					if (strName.Length > 0 && strValue.Length > 0)
-						queryStrings[strName] = strValue;
+				if (strName.Length > 0)
+				{
+					if (queryStrings.TryGetValue(strName, out existingValue))
+						queryStrings[strName] = existingValue + "," + strValue;
+					else
+						queryStrings.Add(strName, strValue);
 				}
+			}
 
 			_QueryStringCache.TryAdd(request.RequestUri, queryStrings);
 
