@@ -3,7 +3,9 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -51,6 +53,60 @@ namespace DataBooster.DbWebApi
 			_BulkParameters = jBulkParameters.ToObject<List<Dictionary<string, object>>>();
 		}
 
+		private void ReadXml(XElement xNode, IDictionary<string, object> dynObject)
+		{
+			XNamespace ns = xNode.Name.Namespace;
+			string name;
+
+			foreach (XElement x in xNode.Elements())
+			{
+				name = x.Name.LocalName;
+
+				if (dynObject.ContainsKey(name))
+					continue;
+
+				if (x.HasElements)
+				{
+					Dictionary<string, object> subDic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+					dynObject.Add(name, subDic);
+				}
+				else
+				{
+					dynObject.Add(name, x.Value);
+				}
+			}
+
+			var attributes = xNode.Attributes().Where(a => a.Name.Namespace == ns);
+
+			foreach (XAttribute a in attributes)
+			{
+				name = a.Name.LocalName;
+				if (dynObject.ContainsKey(name) == false)
+					dynObject.Add(name, a.Value);
+			}
+		}
+
+		private bool IsBulkXml(XElement xRoot)
+		{
+			XName lastName = null;
+			int count = 0;
+
+			foreach (XElement x in xRoot.Elements())
+			{
+				if (x.HasElements == false && x.Attributes().Any(a => a.Name.Namespace == x.Name.Namespace) == false)
+					return false;
+
+				if (lastName != null)
+					if (x.Name != lastName)
+						return false;
+
+				lastName = x.Name;
+				count++;
+			}
+
+			return count > 0;
+		}
+
 		XmlSchema IXmlSerializable.GetSchema()
 		{
 			return null;
@@ -58,7 +114,30 @@ namespace DataBooster.DbWebApi
 
 		void IXmlSerializable.ReadXml(XmlReader reader)
 		{
-			throw new NotImplementedException();
+			XElement xRoot = XNode.ReadFrom(reader) as XElement;
+
+			if (xRoot == null)
+				return;
+
+			if (IsBulkXml(xRoot))
+			{
+				_ForBulkExecuting = true;
+				_BulkParameters = new List<Dictionary<string, object>>();
+				Dictionary<string, object> dic;
+
+				foreach (XElement x in xRoot.Elements())
+				{
+					dic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+					ReadXml(xRoot, dic);
+					_BulkParameters.Add(dic);
+				}
+			}
+			else
+			{
+				_ForBulkExecuting = false;
+				_Parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+				ReadXml(xRoot, _Parameters);
+			}
 		}
 
 		void IXmlSerializable.WriteXml(XmlWriter writer)
