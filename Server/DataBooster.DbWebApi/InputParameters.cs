@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DataBooster.DbWebApi
 {
-	[XmlRoot(Namespace = "")]
+	[XmlSchemaProvider(null, IsAny = true)]
 	[JsonConverter(typeof(InputParametersJsonConverter))]
 	public class InputParameters : IXmlSerializable
 	{
@@ -127,7 +127,7 @@ namespace DataBooster.DbWebApi
 			if (string.IsNullOrEmpty(strValue))
 				return DBNull.Value;
 			else
-				return JsonConvert.DeserializeObject("\"" + strValue + "\"");
+				return strValue;	//	JsonConvert.DeserializeObject("\"" + strValue + "\"");
 		}
 
 		private IDictionary<string, object>[] ReadXmlArray(XElement xContainer)
