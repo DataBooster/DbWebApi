@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,6 +19,11 @@ namespace DataBooster.DbWebApi
 	[JsonConverter(typeof(InputParametersJsonConverter))]
 	public class InputParameters : IXmlSerializable
 	{
+		private const string _NsNet = "http://schemas.microsoft.com/2003/10/Serialization/";
+		private static readonly XNamespace _XNsXsi = XmlSchema.InstanceNamespace;
+		private static readonly XName _XnType = _XNsXsi + "type";
+		private static readonly XName _XnNil = _XNsXsi + "nil";
+
 		private bool _ForBulkExecuting;
 		public bool ForBulkExecuting
 		{
@@ -30,8 +36,8 @@ namespace DataBooster.DbWebApi
 			get { return _Parameters; }
 		}
 
-		private IList<Dictionary<string, object>> _BulkParameters;
-		public IList<Dictionary<string, object>> BulkParameters
+		private IList<IDictionary<string, object>> _BulkParameters;
+		public IList<IDictionary<string, object>> BulkParameters
 		{
 			get { return _BulkParameters; }
 		}
@@ -50,48 +56,99 @@ namespace DataBooster.DbWebApi
 		internal InputParameters(JArray jBulkParameters)
 		{
 			_ForBulkExecuting = true;
-			_BulkParameters = jBulkParameters.ToObject<List<Dictionary<string, object>>>();
+			_BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
 		}
 
-		private void ReadXml(XElement xNode, IDictionary<string, object> dynObject)
+		private IDictionary<string, object> ReadXml(XElement xContainer)
 		{
-			XNamespace ns = xNode.Name.Namespace;
+			var dynObject = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 			string name;
 
-			foreach (XElement x in xNode.Elements())
+			foreach (XElement x in xContainer.Elements())
 			{
 				name = x.Name.LocalName;
 
-				if (dynObject.ContainsKey(name))
-					continue;
-
-				if (x.HasElements)
-				{
-					Dictionary<string, object> subDic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-					dynObject.Add(name, subDic);
-				}
-				else
-				{
-					dynObject.Add(name, x.Value);
-				}
+				if (dynObject.ContainsKey(name) == false)
+					dynObject.Add(name, ReadElementValue(x));
 			}
 
-			var attributes = xNode.Attributes().Where(a => a.Name.Namespace == ns);
+			XNamespace ns = xContainer.Name.Namespace;
+			var attributes = xContainer.Attributes().Where(a => a.Name.Namespace == ns);
 
 			foreach (XAttribute a in attributes)
 			{
 				name = a.Name.LocalName;
+
 				if (dynObject.ContainsKey(name) == false)
-					dynObject.Add(name, a.Value);
+					dynObject.Add(name, ReadStringValue(a.Value));
 			}
+
+			return dynObject;
 		}
 
-		private bool IsBulkXml(XElement xRoot)
+		private object ReadElementValue(XElement xValue)
+		{
+			XAttribute nilAttribute = xValue.Attribute(_XnNil);
+
+			if (nilAttribute != null && (bool)nilAttribute)
+				return DBNull.Value;
+
+			XAttribute typeAttribute = xValue.Attribute(_XnType);
+
+			if (typeAttribute != null)
+				return ReadXsdValue(xValue);
+
+			if (xValue.Attributes().Any(a => a.Name.LocalName == "Type" && a.Name.NamespaceName.StartsWith(_NsNet)))
+				return ReadNetValue(xValue);
+
+			if (IsXmlArray(xValue))
+				return ReadXmlArray(xValue);
+
+			if (xValue.HasElements)
+				return ReadXml(xValue);
+			else
+				return ReadStringValue(xValue.Value);
+		}
+
+		private object ReadXsdValue(XElement xValue)
+		{
+			var xsdDataContractSerializer = new DataContractSerializer(typeof(object));
+			return xsdDataContractSerializer.ReadObject(xValue.CreateReader(), false);
+		}
+
+		private object ReadNetValue(XElement xValue)
+		{
+			var netDataContractSerializer = new NetDataContractSerializer();
+			return netDataContractSerializer.ReadObject(xValue.CreateReader(), false);
+		}
+
+		private object ReadStringValue(string strValue)
+		{
+			if (string.IsNullOrEmpty(strValue))
+				return DBNull.Value;
+			else
+				return JsonConvert.DeserializeObject("\"" + strValue + "\"");
+		}
+
+		private IDictionary<string, object>[] ReadXmlArray(XElement xContainer)
+		{
+			var children = xContainer.Elements().ToList();
+			var dynObjects = new IDictionary<string, object>[children.Count];
+
+			for (int i = 0; i < children.Count; i++)
+				dynObjects[i] = ReadXml(children[i]);
+
+			return dynObjects;
+		}
+
+		private bool IsXmlArray(XElement xContainer)
 		{
 			XName lastName = null;
-			int count = 0;
 
-			foreach (XElement x in xRoot.Elements())
+			if (xContainer.HasElements == false)
+				return false;
+
+			foreach (XElement x in xContainer.Elements())
 			{
 				if (x.HasElements == false && x.Attributes().Any(a => a.Name.Namespace == x.Name.Namespace) == false)
 					return false;
@@ -101,10 +158,9 @@ namespace DataBooster.DbWebApi
 						return false;
 
 				lastName = x.Name;
-				count++;
 			}
 
-			return count > 0;
+			return true;
 		}
 
 		XmlSchema IXmlSerializable.GetSchema()
@@ -119,24 +175,15 @@ namespace DataBooster.DbWebApi
 			if (xRoot == null)
 				return;
 
-			if (IsBulkXml(xRoot))
+			if (IsXmlArray(xRoot))
 			{
 				_ForBulkExecuting = true;
-				_BulkParameters = new List<Dictionary<string, object>>();
-				Dictionary<string, object> dic;
-
-				foreach (XElement x in xRoot.Elements())
-				{
-					dic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-					ReadXml(xRoot, dic);
-					_BulkParameters.Add(dic);
-				}
+				_BulkParameters = ReadXmlArray(xRoot);
 			}
 			else
 			{
 				_ForBulkExecuting = false;
-				_Parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-				ReadXml(xRoot, _Parameters);
+				_Parameters = ReadXml(xRoot);
 			}
 		}
 
