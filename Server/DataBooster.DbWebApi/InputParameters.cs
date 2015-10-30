@@ -59,6 +59,16 @@ namespace DataBooster.DbWebApi
 			_BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
 		}
 
+		public static implicit operator InputParameters(JObject jParameters)
+		{
+			return new InputParameters(jParameters);
+		}
+
+		public static implicit operator InputParameters(JArray jBulkParameters)
+		{
+			return new InputParameters(jBulkParameters);
+		}
+
 		private IDictionary<string, object> ReadXml(XElement xContainer)
 		{
 			var dynObject = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -80,7 +90,10 @@ namespace DataBooster.DbWebApi
 				name = a.Name.LocalName;
 
 				if (dynObject.ContainsKey(name) == false)
-					dynObject.Add(name, ReadStringValue(a.Value));
+					if (a.Value.Length == 0)
+						dynObject.Add(name, DBNull.Value);
+					else
+						dynObject.Add(name, a.Value);
 			}
 
 			return dynObject;
@@ -107,7 +120,7 @@ namespace DataBooster.DbWebApi
 			if (xValue.HasElements)
 				return ReadXml(xValue);
 			else
-				return ReadStringValue(xValue.Value);
+				return xValue;
 		}
 
 		private object ReadXsdValue(XElement xValue)
@@ -120,14 +133,6 @@ namespace DataBooster.DbWebApi
 		{
 			var netDataContractSerializer = new NetDataContractSerializer();
 			return netDataContractSerializer.ReadObject(xValue.CreateReader(), false);
-		}
-
-		private object ReadStringValue(string strValue)
-		{
-			if (string.IsNullOrEmpty(strValue))
-				return DBNull.Value;
-			else
-				return strValue;	//	JsonConvert.DeserializeObject("\"" + strValue + "\"");
 		}
 
 		private IDictionary<string, object>[] ReadXmlArray(XElement xContainer)
