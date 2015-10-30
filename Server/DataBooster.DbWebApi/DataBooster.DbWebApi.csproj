@@ -125,6 +125,7 @@
     <Compile Include="WebApiExtensions.cs" />
     <Compile Include="WebApiExtensions.parameters.cs" />
     <Compile Include="WebApiExtensions.register.cs" />
+    <Compile Include="WebForm\WebFormUrlEncodedMediaTypeFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

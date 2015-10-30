@@ -64,11 +64,16 @@ namespace DataBooster.DbWebApi
 		internal InputParameters(JObject jParameters)
 		{
 			Parameters = jParameters.ToObject<Dictionary<string, object>>();
+
+			NormalizeValues(Parameters);
 		}
 
 		internal InputParameters(JArray jBulkParameters)
 		{
 			BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
+
+			foreach (var ps in BulkParameters)
+				NormalizeValues(ps);
 		}
 
 		private IDictionary<string, object> ReadXml(XElement xContainer)
@@ -168,6 +173,19 @@ namespace DataBooster.DbWebApi
 			}
 
 			return true;
+		}
+
+		private void NormalizeValues(IDictionary<string, object> jv)
+		{
+			var ja = jv.Where(p => p.Value is JArray).ToList();
+
+			foreach (var p in ja)
+				jv[p.Key] = (p.Value as JArray).ToObject<object[]>();
+
+			var jo = jv.Where(p => p.Value is JObject).ToList();
+
+			foreach (var p in jo)
+				jv[p.Key] = (p.Value as JObject).ToObject<Dictionary<string, object>>();
 		}
 
 		XmlSchema IXmlSerializable.GetSchema()
