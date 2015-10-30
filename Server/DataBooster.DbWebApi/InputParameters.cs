@@ -71,16 +71,6 @@ namespace DataBooster.DbWebApi
 			BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
 		}
 
-		public static implicit operator InputParameters(JObject jParameters)
-		{
-			return new InputParameters(jParameters);
-		}
-
-		public static implicit operator InputParameters(JArray jBulkParameters)
-		{
-			return new InputParameters(jBulkParameters);
-		}
-
 		private IDictionary<string, object> ReadXml(XElement xContainer)
 		{
 			var dynObject = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -132,7 +122,7 @@ namespace DataBooster.DbWebApi
 			if (xValue.HasElements)
 				return ReadXml(xValue);
 			else
-				return xValue;
+				return xValue.Value;
 		}
 
 		private object ReadXsdValue(XElement xValue)
