@@ -24,39 +24,51 @@ namespace DataBooster.DbWebApi
 		private static readonly XName _XnType = _XNsXsi + "type";
 		private static readonly XName _XnNil = _XNsXsi + "nil";
 
-		private bool _ForBulkExecuting;
 		public bool ForBulkExecuting
 		{
-			get { return _ForBulkExecuting; }
+			get { return (_BulkParameters != null); }
 		}
 
 		private IDictionary<string, object> _Parameters;
 		public IDictionary<string, object> Parameters
 		{
-			get { return _Parameters; }
+			get
+			{
+				return _Parameters;
+			}
+			protected set
+			{
+				_BulkParameters = null;
+				_Parameters = value;
+			}
 		}
 
 		private IList<IDictionary<string, object>> _BulkParameters;
 		public IList<IDictionary<string, object>> BulkParameters
 		{
-			get { return _BulkParameters; }
+			get
+			{
+				return _BulkParameters;
+			}
+			protected set
+			{
+				_Parameters = null;
+				_BulkParameters = value;
+			}
 		}
 
 		public InputParameters()
 		{
-			_ForBulkExecuting = false;
 		}
 
 		internal InputParameters(JObject jParameters)
 		{
-			_ForBulkExecuting = false;
-			_Parameters = jParameters.ToObject<Dictionary<string, object>>();
+			Parameters = jParameters.ToObject<Dictionary<string, object>>();
 		}
 
 		internal InputParameters(JArray jBulkParameters)
 		{
-			_ForBulkExecuting = true;
-			_BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
+			BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
 		}
 
 		public static implicit operator InputParameters(JObject jParameters)
@@ -181,15 +193,9 @@ namespace DataBooster.DbWebApi
 				return;
 
 			if (IsXmlArray(xRoot))
-			{
-				_ForBulkExecuting = true;
-				_BulkParameters = ReadXmlArray(xRoot);
-			}
+				BulkParameters = ReadXmlArray(xRoot);
 			else
-			{
-				_ForBulkExecuting = false;
-				_Parameters = ReadXml(xRoot);
-			}
+				Parameters = ReadXml(xRoot);
 		}
 
 		void IXmlSerializable.WriteXml(XmlWriter writer)
@@ -200,7 +206,6 @@ namespace DataBooster.DbWebApi
 
 	internal class InputParametersJsonConverter : JsonConverter
 	{
-
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
 			serializer.Serialize(writer, value);
