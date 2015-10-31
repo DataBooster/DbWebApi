@@ -57,23 +57,28 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
-		public InputParameters()
+		private InputParameters()
 		{
 		}
 
 		internal InputParameters(JObject jParameters)
 		{
-			Parameters = jParameters.ToObject<Dictionary<string, object>>();
-
-			NormalizeValues(Parameters);
+			if (jParameters != null)
+			{
+				Parameters = jParameters.ToObject<Dictionary<string, object>>();
+				NormalizeValues(Parameters);
+			}
 		}
 
 		internal InputParameters(JArray jBulkParameters)
 		{
-			BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
+			if (jBulkParameters != null)
+			{
+				BulkParameters = jBulkParameters.ToObject<Dictionary<string, object>[]>();
 
-			foreach (var ps in BulkParameters)
-				NormalizeValues(ps);
+				foreach (var ps in BulkParameters)
+					NormalizeValues(ps);
+			}
 		}
 
 		private IDictionary<string, object> ReadXml(XElement xContainer)
@@ -175,17 +180,75 @@ namespace DataBooster.DbWebApi
 			return true;
 		}
 
-		private void NormalizeValues(IDictionary<string, object> jv)
+		private IDictionary<string, object> NormalizeValues(IDictionary<string, object> dic)
 		{
-			var ja = jv.Where(p => p.Value is JArray).ToList();
+			var list = dic.ToList();
 
-			foreach (var p in ja)
-				jv[p.Key] = (p.Value as JArray).ToObject<object[]>();
+			foreach (var p in list)
+			{
+				var ja = p.Value as JArray;
+				if (ja != null)
+				{
+					dic[p.Key] = NormalizeValues(ja.ToObject<object[]>());
+					continue;
+				}
 
-			var jo = jv.Where(p => p.Value is JObject).ToList();
+				var jo = p.Value as JObject;
+				if (jo != null)
+				{
+					dic[p.Key] = NormalizeValues(jo.ToObject<Dictionary<string, object>>());
+					continue;
+				}
 
-			foreach (var p in jo)
-				jv[p.Key] = (p.Value as JObject).ToObject<Dictionary<string, object>>();
+				NormalizeValueFurther(p.Value);
+			}
+
+			return dic;
+		}
+
+		private object[] NormalizeValues(object[] array)
+		{
+			object item;
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				item = array[i];
+
+				var ja = item as JArray;
+				if (ja != null)
+				{
+					array[i] = NormalizeValues(ja.ToObject<object[]>());
+					continue;
+				}
+
+				var jo = item as JObject;
+				if (jo != null)
+				{
+					array[i] = NormalizeValues(jo.ToObject<Dictionary<string, object>>());
+					continue;
+				}
+
+				NormalizeValueFurther(item);
+			}
+
+			return array;
+		}
+
+		private void NormalizeValueFurther(object itemValue)
+		{
+			var oa = itemValue as object[];
+			if (oa != null)
+			{
+				NormalizeValues(oa);
+				return;
+			}
+
+			var dic = itemValue as IDictionary<string, object>;
+			if (dic != null)
+			{
+				NormalizeValues(dic);
+				return;
+			}
 		}
 
 		XmlSchema IXmlSerializable.GetSchema()

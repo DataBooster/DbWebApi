@@ -10,8 +10,12 @@ using System.Web.Http.ModelBinding;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace DataBooster.DbWebApi.WebForm
+namespace DataBooster.DbWebApi.Form
 {
+	/// <summary>
+	/// Replacement of JQueryMvcFormUrlEncodedFormatter to support
+	/// InputParameters for handling application/x-www-form-urlencoded
+	/// </summary>
 	public class WebFormUrlEncodedMediaTypeFormatter : JQueryMvcFormUrlEncodedFormatter
 	{
 		/// <param name="type">The type of object to read.</param>
@@ -24,8 +28,8 @@ namespace DataBooster.DbWebApi.WebForm
 		{
 			if (type.IsAssignableFrom(typeof(InputParameters)))
 			{
-				JObject jObj = await base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger) as JObject;
-				return new InputParameters(jObj);
+				JObject jInput = await base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger) as JObject;
+				return new InputParameters(jInput);
 			}
 			else
 				return base.ReadFromStreamAsync(type, readStream, content, formatterLogger);
@@ -38,12 +42,11 @@ namespace DataBooster.DbWebApi.WebForm
 				return base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger).ContinueWith<object>(jTask =>
 					{
 						if (jTask.IsCanceled)
-							return null;
+							throw new TaskCanceledException();
 						if (jTask.IsFaulted)
 							throw jTask.Exception;
 
-						JObject jObj = jTask.Result as JObject;
-						return new InputParameters(jObj);
+						return new InputParameters(jTask.Result as JObject);
 					});
 			}
 			else
