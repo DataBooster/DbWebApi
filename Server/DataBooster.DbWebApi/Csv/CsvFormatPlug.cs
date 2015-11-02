@@ -15,18 +15,16 @@ namespace DataBooster.DbWebApi.Csv
 {
 	public class CsvFormatPlug : IFormatPlug
 	{
-		private readonly MediaTypeHeaderValue _DefaultMediaType;
 		private readonly MediaTypeHeaderValue[] _SupportedMediaTypes;
 
 		public CsvFormatPlug()
 		{
-			_DefaultMediaType = new MediaTypeHeaderValue("text/csv");
-			_SupportedMediaTypes = new MediaTypeHeaderValue[] { _DefaultMediaType };
+			_SupportedMediaTypes = new MediaTypeHeaderValue[] { DefaultMediaType };
 		}
 
 		public MediaTypeHeaderValue DefaultMediaType
 		{
-			get { return _DefaultMediaType; }
+			get { return MediaTypeConstants.TextCsvMediaType; }
 		}
 
 		public IEnumerable<MediaTypeHeaderValue> SupportedMediaTypes
@@ -94,7 +92,7 @@ namespace DataBooster.DbWebApi.Csv
 				}
 
 				stream.Close();
-			}, negotiatedMediaType ?? _DefaultMediaType);
+			}, negotiatedMediaType ?? DefaultMediaType);
 
 			csvResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = queryStrings.GetQueryFileName(DbWebApiOptions.QueryStringContract.FileNameParameterName, FormatShortName) };
 

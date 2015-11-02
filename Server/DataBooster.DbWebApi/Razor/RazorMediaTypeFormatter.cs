@@ -16,8 +16,8 @@ namespace DataBooster.DbWebApi.Razor
 	public class RazorMediaTypeFormatter : BufferedMediaTypeFormatter
 	{
 		const string _FormatShortName = "razor";
-		private static readonly MediaTypeHeaderValue _TextRazor = new MediaTypeHeaderValue("text/razor");
-		private static readonly MediaTypeHeaderValue _ApplicationRazor = new MediaTypeHeaderValue("application/razor");
+		private readonly MediaTypeHeaderValue _TextRazor = MediaTypeConstants.TextRazorMediaType;
+		private readonly MediaTypeHeaderValue _ApplicationRazor = MediaTypeConstants.ApplicationRazorMediaType;
 
 		public RazorMediaTypeFormatter()
 		{
@@ -33,7 +33,7 @@ namespace DataBooster.DbWebApi.Razor
 
 		public static MediaTypeHeaderValue DefaultMediaType
 		{
-			get { return _TextRazor; }
+			get { return MediaTypeConstants.TextRazorMediaType; }
 		}
 
 		public override bool CanReadType(Type type)

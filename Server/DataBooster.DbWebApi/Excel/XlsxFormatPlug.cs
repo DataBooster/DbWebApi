@@ -15,19 +15,17 @@ namespace DataBooster.DbWebApi.Excel
 {
 	public class XlsxFormatPlug : IFormatPlug
 	{
-		private readonly MediaTypeHeaderValue _DefaultMediaType;
 		private readonly MediaTypeHeaderValue[] _SupportedMediaTypes;
 
 		public XlsxFormatPlug()
 		{
-			_DefaultMediaType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			_SupportedMediaTypes = new MediaTypeHeaderValue[] { _DefaultMediaType,
-				new MediaTypeHeaderValue("application/ms-excel"), new MediaTypeHeaderValue("application/xlsx") };
+			_SupportedMediaTypes = new MediaTypeHeaderValue[] { MediaTypeConstants.ApplicationVndOpenXmlSheetMediaType,
+				MediaTypeConstants.ApplicationMsExcelMediaType, MediaTypeConstants.ApplicationXlsxMediaType };
 		}
 
 		public MediaTypeHeaderValue DefaultMediaType
 		{
-			get { return _DefaultMediaType; }
+			get { return MediaTypeConstants.ApplicationVndOpenXmlSheetMediaType; }
 		}
 
 		public IEnumerable<MediaTypeHeaderValue> SupportedMediaTypes

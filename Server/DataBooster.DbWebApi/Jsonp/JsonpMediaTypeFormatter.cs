@@ -16,9 +16,9 @@ namespace DataBooster.DbWebApi.Jsonp
 	public class JsonpMediaTypeFormatter : JsonMediaTypeFormatter
 	{
 		const string _FormatShortName = "jsonp";
-		private static readonly MediaTypeHeaderValue _ApplicationJavaScript = new MediaTypeHeaderValue("application/javascript");
-		private static readonly MediaTypeHeaderValue _ApplicationJsonp = new MediaTypeHeaderValue("application/json-p");
-		private static readonly MediaTypeHeaderValue _TextJavaScript = new MediaTypeHeaderValue("text/javascript");
+		private readonly MediaTypeHeaderValue _ApplicationJavaScript = MediaTypeConstants.ApplicationJavascriptMediaType;
+		private readonly MediaTypeHeaderValue _ApplicationJsonp = MediaTypeConstants.ApplicationJsonpMediaType;
+		private readonly MediaTypeHeaderValue _TextJavaScript = MediaTypeConstants.TextJavascriptMediaType;
 		private readonly string _CallbackQueryParameter;
 		private readonly string _JsonpStateQueryParameter;
 		private readonly string _Callback;
@@ -54,7 +54,7 @@ namespace DataBooster.DbWebApi.Jsonp
 
 		new public static MediaTypeHeaderValue DefaultMediaType
 		{
-			get { return _ApplicationJavaScript; }
+			get { return MediaTypeConstants.ApplicationJavascriptMediaType; }
 		}
 
 		/// <param name="type">The type to format.</param>
