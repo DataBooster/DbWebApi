@@ -44,7 +44,7 @@ namespace DataBooster.DbWebApi.Excel
 			MediaTypeHeaderValue negotiatedMediaType, Encoding negotiatedEncoding)
 		{
 			HttpResponseMessage csvResponse = apiController.Request.CreateResponse();
-			IDictionary<string, string> queryStrings = apiController.Request.GetQueryStringDictionary();
+			IDictionary<string, object> queryStrings = apiController.Request.GetQueryStringDictionary();
 			MemoryStream memoryStream = new MemoryStream();	// TBD: To find a more efficient way later
 
 			using (XLWorkbook workbook = new XLWorkbook())

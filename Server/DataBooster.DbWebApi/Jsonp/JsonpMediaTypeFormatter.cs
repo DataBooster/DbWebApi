@@ -68,7 +68,7 @@ namespace DataBooster.DbWebApi.Jsonp
 			if (request == null)
 				throw new ArgumentNullException("request");
 
-			IDictionary<string, string> queryStrings = request.GetQueryStringDictionary();
+			IDictionary<string, object> queryStrings = request.GetQueryStringDictionary();
 
 			string callback = queryStrings.GetQueryParameterValue(_CallbackQueryParameter);
 

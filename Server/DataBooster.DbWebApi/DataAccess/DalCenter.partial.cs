@@ -12,13 +12,13 @@ namespace DataBooster.DbWebApi.DataAccess
 {
 	public partial class DalCenter
 	{
-		public DalCenter(IDictionary<string, string> queryStringsForDynamicDataStyle)
+		public DalCenter(IDictionary<string, object> queryStringsForDynamicDataStyle)
 			: this()
 		{
 			SetDynamicDataStyle(queryStringsForDynamicDataStyle);
 		}
 
-		public void SetDynamicDataStyle(IDictionary<string, string> queryStrings)
+		public void SetDynamicDataStyle(IDictionary<string, object> queryStrings)
 		{
 			string queryNamingCase = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.NamingCaseParameterName);
 

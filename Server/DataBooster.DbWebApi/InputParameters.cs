@@ -61,7 +61,7 @@ namespace DataBooster.DbWebApi
 		{
 		}
 
-		internal InputParameters(JObject jParameters)
+		public InputParameters(JObject jParameters)
 		{
 			if (jParameters != null)
 			{
@@ -70,7 +70,7 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
-		internal InputParameters(JArray jBulkParameters)
+		public InputParameters(JArray jBulkParameters)
 		{
 			if (jBulkParameters != null)
 			{
@@ -79,6 +79,12 @@ namespace DataBooster.DbWebApi
 				foreach (var ps in BulkParameters)
 					NormalizeValues(ps);
 			}
+		}
+
+		public InputParameters(IEnumerable<KeyValuePair<string, string>> nameValuePairs)
+		{
+			if (nameValuePairs != null)
+				_Parameters = nameValuePairs.NameValuePairsToDictionary();
 		}
 
 		private IDictionary<string, object> ReadXml(XElement xContainer)

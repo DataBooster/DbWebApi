@@ -22,7 +22,7 @@ namespace DataBooster.DbWebApi
 	{
 		private static Collection<IFormatPlug> _FormatPlugs;
 		private static PseudoContentNegotiator _PseudoContentNegotiator;
-		private static CacheDictionary<Uri, IDictionary<string, string>> _QueryStringCache;
+		private static CacheDictionary<Uri, IDictionary<string, object>> _QueryStringCache;
 		private static TimeSpan _QueryStringCacheLifetime;
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace DataBooster.DbWebApi
 		{
 			_FormatPlugs = new Collection<IFormatPlug>();
 			_PseudoContentNegotiator = new PseudoContentNegotiator();
-			_QueryStringCache = new CacheDictionary<Uri, IDictionary<string, string>>();
+			_QueryStringCache = new CacheDictionary<Uri, IDictionary<string, object>>();
 			_QueryStringCacheLifetime = TimeSpan.FromSeconds(180);
 		}
 

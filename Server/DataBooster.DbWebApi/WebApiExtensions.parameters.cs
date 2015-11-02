@@ -14,44 +14,36 @@ namespace DataBooster.DbWebApi
 	{
 		#region QueryString Utilities
 
-		public static IDictionary<string, string> GetQueryStringDictionary(this HttpRequestMessage request)
+		public static IDictionary<string, object> GetQueryStringDictionary(this HttpRequestMessage request)
 		{
 			if (request == null)
 				return null;
 
-			IDictionary<string, string> queryStrings;
+			IDictionary<string, object> queryStrings;
 
 			if (_QueryStringCache.TryGetValue(request.RequestUri, out queryStrings))
 				return queryStrings;
 
-			queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+			queryStrings = request.GetQueryNameValuePairs().NameValuePairsToDictionary();
 
-			string strName, strValue, existingValue;
-			var queryNameValuePairs = request.GetQueryNameValuePairs();
-
-			if (queryNameValuePairs == null)
-				return queryStrings;
-
-			foreach (var pair in queryNameValuePairs)
-			{
-				strName = pair.Key.Trim();
-				strValue = pair.Value;
-
-				if (strName.Length > 0)
-				{
-					if (queryStrings.TryGetValue(strName, out existingValue))
-						queryStrings[strName] = existingValue + "," + strValue;
-					else
-						queryStrings.Add(strName, strValue);
-				}
-			}
+			if (queryStrings == null)
+				return new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
 			_QueryStringCache.TryAdd(request.RequestUri, queryStrings);
 
 			return queryStrings;
 		}
 
-		internal static string GetQueryFileName(this IDictionary<string, string> queryStrings, string queryName, string filenameExtension)
+		internal static IDictionary<string, object> NameValuePairsToDictionary(this IEnumerable<KeyValuePair<string, string>> nameValuePairs)
+		{
+			if (nameValuePairs == null)
+				return null;
+			else
+				return nameValuePairs.GroupBy(n => n.Key.Trim(), v => v.Value, StringComparer.OrdinalIgnoreCase)
+					.ToDictionary(k => k.Key, v => (v.Count() == 1) ? (object)v.First() : (object)v.ToArray(), StringComparer.OrdinalIgnoreCase);
+		}
+
+		internal static string GetQueryFileName(this IDictionary<string, object> queryStrings, string queryName, string filenameExtension)
 		{
 			string queryFileName = queryStrings.GetQueryParameterValue(queryName);
 
@@ -81,21 +73,41 @@ namespace DataBooster.DbWebApi
 			return "[save_as]." + filenameExtension;
 		}
 
-		internal static string GetQueryParameterValue(this IDictionary<string, string> queryStringDictionary, string parameterName)
+		internal static string GetQueryParameterValue(this IDictionary<string, object> queryStringDictionary, string parameterName)
 		{
 			if (queryStringDictionary == null || queryStringDictionary.Count == 0 || string.IsNullOrEmpty(parameterName))
 				return null;
 
-			string parameterValue, prefix = DbWebApiOptions.QueryStringContract.ReservedParameterPrefix;
+			string prefix = DbWebApiOptions.QueryStringContract.ReservedParameterPrefix;
+			object parameterValue;
 
 			if (prefix.Length > 0)
 				if (queryStringDictionary.TryGetValue(prefix + parameterName, out parameterValue))
-					return parameterValue;
+					return GetFirstStringFromObject(parameterValue);
 
 			if (queryStringDictionary.TryGetValue(parameterName, out parameterValue))
-				return parameterValue;
+				return GetFirstStringFromObject(parameterValue);
 			else
 				return null;
+		}
+
+		private static string GetFirstStringFromObject(object oValue)
+		{
+			if (oValue == null)
+				return null;
+
+			string strValue = oValue as string;
+			if (strValue != null)
+				return strValue;
+
+			string[] strValues = oValue as string[];
+			if (strValues != null)
+				if (strValues.Length > 0)
+					return strValues[0];
+				else
+					return null;
+
+			return oValue.ToString();
 		}
 
 		#endregion
@@ -131,13 +143,13 @@ namespace DataBooster.DbWebApi
 			if (parametersFromBody != null)
 				return parametersFromBody;
 
-			IDictionary<string, string> queryStringDictionary = request.GetQueryStringDictionary();
-			string jsonInputString;
+			IDictionary<string, object> queryStringDictionary = request.GetQueryStringDictionary();
+			string jsonInputString = queryStringDictionary.GetQueryParameterValue(jsonInput);
 
-			if (queryStringDictionary.TryGetValue(jsonInput, out jsonInputString))
-				return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonInputString);
+			if (string.IsNullOrWhiteSpace(jsonInputString))
+				return queryStringDictionary;
 			else
-				return queryStringDictionary.ToDictionary(t => t.Key, t => t.Value as object, StringComparer.OrdinalIgnoreCase);
+				return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonInputString);
 		}
 
 		public static void BulkGatherInputParameters<T>(this HttpRequestMessage request, IList<T> listOfParametersFromBody, string jsonInput) where T : IDictionary<string, object>
