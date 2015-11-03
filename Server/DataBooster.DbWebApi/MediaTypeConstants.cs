@@ -87,7 +87,13 @@ namespace DataBooster.DbWebApi
 		public static MediaTypeHeaderValue ApplicationRazorMediaType
 		{
 			get { return _ApplicationRazorMediaType.Clone(); }
-		} 
+		}
+
+		private static readonly MediaTypeHeaderValue _MultipartFormDataMediaType = new MediaTypeHeaderValue("multipart/form-data");
+		public static MediaTypeHeaderValue MultipartFormDataMediaType
+		{
+			get { return _MultipartFormDataMediaType.Clone(); }
+		}
 
 		internal static T Clone<T>(this T value) where T : ICloneable
 		{
