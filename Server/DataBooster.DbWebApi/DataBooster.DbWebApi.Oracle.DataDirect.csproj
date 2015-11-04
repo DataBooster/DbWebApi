@@ -113,6 +113,7 @@
     <Compile Include="DeunderscorePropertyNamesContractResolver.cs" />
     <Compile Include="Excel\XlsxFormatPlug.cs" />
     <Compile Include="Form\MultipartFormDataMediaTypeFormatter.cs" />
+    <Compile Include="Form\MultipartFormDataMemoryStreamProvider.cs" />
     <Compile Include="IDbWebApiAuthorization.cs" />
     <Compile Include="IFormatPlug.cs" />
     <Compile Include="InputParameters.cs" />
