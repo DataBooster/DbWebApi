@@ -84,7 +84,19 @@ namespace DataBooster.DbWebApi
 		public InputParameters(IEnumerable<KeyValuePair<string, string>> nameValuePairs)
 		{
 			if (nameValuePairs != null)
-				_Parameters = nameValuePairs.NameValuePairsToDictionary();
+				Parameters = nameValuePairs.NameValuePairsToDictionary();
+		}
+
+		public InputParameters(IDictionary<string, object> parametersDictionary)
+		{
+			if (parametersDictionary != null)
+				Parameters = parametersDictionary;
+		}
+
+		public InputParameters(IDictionary<string, object>[] bulkParametersDictionaries)
+		{
+			if (bulkParametersDictionaries != null)
+				BulkParameters = bulkParametersDictionaries;
 		}
 
 		private IDictionary<string, object> ReadXml(XElement xContainer)

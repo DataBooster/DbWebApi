@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Web.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DataBooster.DbWebApi.Form
 {
@@ -43,17 +46,38 @@ namespace DataBooster.DbWebApi.Form
 		public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, HttpContent content, IFormatterLogger formatterLogger)
 		{
 			if (type == null)
-			{
 				throw new ArgumentNullException("type");
-			}
 
-			if (readStream == null)
-			{
-				throw new ArgumentNullException("readStream");
-			}
+			if (!CanReadType(type))
+				throw new InvalidOperationException();
 
-			// TODO
-			return null;
+			if (content == null)
+				throw new ArgumentNullException("content");
+
+			if (!content.IsMimeMultipartContent())
+				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+			return ReadFormDataAsync(content);
 		}
+
+#if WEB_API2
+		private async Task<object> ReadFormDataAsync(HttpContent content)
+		{
+			// TODO
+			MultipartMemoryStreamProvider multipartProvider = await content.ReadAsMultipartAsync();
+
+			return null;
+
+		}
+#else  // ASP.NET Web API 1
+		private Task<object> ReadFormDataAsync(HttpContent content)
+		{
+			// TODO
+			MultipartMemoryStreamProvider multipartProvider = content.ReadAsMultipartAsync().Result;
+
+			return null;
+
+		}
+#endif
 	}
 }
