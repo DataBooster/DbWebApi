@@ -10,6 +10,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -103,6 +104,63 @@ namespace DataBooster.DbWebApi
 		{
 			if (bulkParametersDictionaries != null)
 				BulkParameters = bulkParametersDictionaries;
+		}
+
+		/// <summary>
+		/// <para>Gather required parameters of database stored procedure/function either from body or from uri query string.</para>
+		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
+		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
+		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
+		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs </para>
+		/// </summary>
+		/// <param name="request">The HTTP request.</param>
+		public void SupplementQueryString(HttpRequestMessage request)
+		{
+			if (ForBulkExecuting)
+				request.BulkGatherInputParameters(_BulkParameters);
+			else if (_Parameters != null)
+				request.GatherInputParameters(_Parameters);
+		}
+
+		public object SetParameter(string name, object newValue, bool replace = true)
+		{
+			if (string.IsNullOrEmpty(name))
+				throw new ArgumentNullException("name");
+
+			if (ForBulkExecuting)
+			{
+				object oldValue = null;
+
+				foreach (var parameters in _BulkParameters)
+					oldValue = SetParameter(parameters, name, newValue, replace);
+
+				return oldValue;
+			}
+			else
+			{
+				if (_Parameters == null)
+					_Parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+				return SetParameter(_Parameters, name, newValue, replace);
+			}
+		}
+
+		private object SetParameter(IDictionary<string, object> parameters, string name, object newValue, bool replace = true)
+		{
+			object oldValue;
+
+			if (parameters.TryGetValue(name, out oldValue))
+			{
+				if (replace)
+					parameters[name] = newValue ?? DBNull.Value;
+			}
+			else
+			{
+				parameters.Add(name, newValue ?? DBNull.Value);
+				oldValue = null;
+			}
+
+			return oldValue;
 		}
 
 		private IDictionary<string, object> ReadXml(XElement xContainer)

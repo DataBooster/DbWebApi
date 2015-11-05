@@ -149,6 +149,17 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
+		public static HttpResponseMessage DynExecuteDbApi(this ApiController apiController, string sp, InputParameters dynParameters)
+		{
+			if (dynParameters == null)
+				return apiController.ExecuteDbApi(sp, null);
+
+			if (dynParameters.ForBulkExecuting)
+				return apiController.BulkExecuteDbApi(sp, dynParameters.BulkParameters);
+			else
+				return apiController.ExecuteDbApi(sp, dynParameters.Parameters);
+		}
+
 		private static void CleanupCache(Uri requestUri)
 		{
 			_QueryStringCache.TryRemove(requestUri);
