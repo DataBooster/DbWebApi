@@ -14,17 +14,34 @@ namespace DataBooster.DbWebApi.Form
 {
 	public class MultipartFormDataMemoryStreamProvider : MultipartFormDataStreamProvider	// Not base on MultipartFormDataRemoteStreamProvider for compatibility with Wep API 1
 	{
-		private Collection<KeyValuePair<HttpContentHeaders, MemoryStream>> _Streams;
+		private Collection<KeyValuePair<HttpContentHeaders, MemoryStream>> _UploadedStreams;
+		public Collection<KeyValuePair<HttpContentHeaders, MemoryStream>> UploadedStreams
+		{
+			get { return _UploadedStreams; }
+		}
 
 		public MultipartFormDataMemoryStreamProvider()
 			: base(".")
 		{
-			_Streams = new Collection<KeyValuePair<HttpContentHeaders, MemoryStream>>();
+			_UploadedStreams = new Collection<KeyValuePair<HttpContentHeaders, MemoryStream>>();
 		}
 
-		public IEnumerable<KeyValuePair<string, byte[]>> GetUploadedData()
+		public IEnumerable<KeyValuePair<string, object>> GetAllInputData()
 		{
-			return _Streams.Select(p => new KeyValuePair<string, byte[]>(GetFormFieldName(p.Key), p.Value.ToArray()));
+			for (int i = 0; i < FormData.Count; i++)
+			{
+				string key = FormData.GetKey(i);
+				string[] values = FormData.GetValues(i);
+
+				if (values == null)
+					yield return new KeyValuePair<string, object>(key, null);
+				else
+					for (int j = 0; j < values.Length; j++)
+						yield return new KeyValuePair<string, object>(key, values[j]);
+			}
+
+			foreach (var upload in _UploadedStreams)
+				yield return new KeyValuePair<string, object>(GetFormFieldName(upload.Key), upload.Value.ToArray());
 		}
 
 		/// <param name="parent">The HTTP content that contains this body part.</param>
@@ -44,7 +61,7 @@ namespace DataBooster.DbWebApi.Form
 			if (localFileName != null)
 			{
 				FileData.Add(new MultipartFileData(headers, localFileName));
-				_Streams.Add(new KeyValuePair<HttpContentHeaders, MemoryStream>(headers, memoryStream));
+				_UploadedStreams.Add(new KeyValuePair<HttpContentHeaders, MemoryStream>(headers, memoryStream));
 			}
 
 			return memoryStream;

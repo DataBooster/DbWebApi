@@ -34,12 +34,12 @@ namespace DataBooster.DbWebApi
 			return queryStrings;
 		}
 
-		internal static IDictionary<string, object> NameValuePairsToDictionary(this IEnumerable<KeyValuePair<string, string>> nameValuePairs)
+		internal static IDictionary<string, object> NameValuePairsToDictionary<T>(this IEnumerable<KeyValuePair<string, T>> nameValuePairs)
 		{
 			if (nameValuePairs == null)
 				return null;
 			else
-				return nameValuePairs.GroupBy(n => n.Key.Trim(), v => v.Value, StringComparer.OrdinalIgnoreCase)
+				return nameValuePairs.GroupBy(n => n.Key.Trim(), v => v.Value, StringComparer.OrdinalIgnoreCase).Where(n => n.Key.Length > 0)
 					.ToDictionary(k => k.Key, v => (v.Count() == 1) ? (object)v.First() : (object)v.ToArray(), StringComparer.OrdinalIgnoreCase);
 		}
 

@@ -11,6 +11,7 @@ using DataBooster.DbWebApi.Csv;
 using DataBooster.DbWebApi.Excel;
 using DataBooster.DbWebApi.Jsonp;
 using DataBooster.DbWebApi.Razor;
+using DataBooster.DbWebApi.Form;
 
 namespace DataBooster.DbWebApi
 {
@@ -19,7 +20,7 @@ namespace DataBooster.DbWebApi
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 
 		#region Registration
-		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true)
+		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true, bool supportFormUrlEncoded = true, bool supportMultipartForm = true)
 		{
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
 
@@ -39,6 +40,10 @@ namespace DataBooster.DbWebApi
 				config.Formatters.Add(new JsonpMediaTypeFormatter());
 			if (supportRazor)
 				config.Formatters.Add(new RazorMediaTypeFormatter());
+			if (supportFormUrlEncoded)
+				WebFormUrlEncodedMediaTypeFormatter.ReplaceJQueryMvcFormUrlEncodedFormatter(config.Formatters);
+			if (supportMultipartForm)
+				config.Formatters.Add(new MultipartFormDataMediaTypeFormatter());
 		}
 
 		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = null)

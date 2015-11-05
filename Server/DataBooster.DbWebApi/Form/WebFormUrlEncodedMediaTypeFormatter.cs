@@ -39,12 +39,17 @@ namespace DataBooster.DbWebApi.Form
 		{
 			if (type.IsAssignableFrom(typeof(InputParameters)))
 			{
-				return base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger).ContinueWith<object>(jTask =>
+				return base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger).ContinueWith<object>(
+					jTask =>
 					{
-						if (jTask.IsCanceled)
-							throw new TaskCanceledException();
 						if (jTask.IsFaulted)
 							throw jTask.Exception;
+
+						if (jTask.IsCanceled)
+							if (jTask.Exception == null)
+								throw new TaskCanceledException();
+							else
+								throw jTask.Exception;
 
 						return new InputParameters(jTask.Result as JObject);
 					});

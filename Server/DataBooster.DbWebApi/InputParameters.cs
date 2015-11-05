@@ -57,7 +57,7 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
-		private InputParameters()
+		internal InputParameters()
 		{
 		}
 
@@ -82,6 +82,12 @@ namespace DataBooster.DbWebApi
 		}
 
 		public InputParameters(IEnumerable<KeyValuePair<string, string>> nameValuePairs)
+		{
+			if (nameValuePairs != null)
+				Parameters = nameValuePairs.NameValuePairsToDictionary();
+		}
+
+		public InputParameters(IEnumerable<KeyValuePair<string, object>> nameValuePairs)
 		{
 			if (nameValuePairs != null)
 				Parameters = nameValuePairs.NameValuePairsToDictionary();

@@ -1,12 +1,15 @@
-﻿using System;
+﻿// Copyright (c) 2015 Abel Cheng <abelcys@gmail.com> and other contributors.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Repository:	https://github.com/DataBooster/DbWebApi
+
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Web.Http;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Web.Http;
 
 namespace DataBooster.DbWebApi.Form
 {
@@ -57,26 +60,54 @@ namespace DataBooster.DbWebApi.Form
 			if (!content.IsMimeMultipartContent())
 				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 
-			return ReadFormDataAsync(content);
+			try
+			{
+				return ReadFormDataAsync(content);
+			}
+			catch (Exception e)
+			{
+				if (formatterLogger == null)
+					throw;
+
+				formatterLogger.LogError(string.Empty, e);
+#if WEB_API2
+				return Task.FromResult<object>(new InputParameters());
+#else  // ASP.NET Web API 1
+				var tcs = new TaskCompletionSource<object>();
+				tcs.SetResult(new InputParameters());
+				return tcs.Task;
+#endif
+			}
 		}
 
 #if WEB_API2
 		private async Task<object> ReadFormDataAsync(HttpContent content)
 		{
-			// TODO
-			MultipartMemoryStreamProvider multipartProvider = await content.ReadAsMultipartAsync();
+			var multipartProvider = new MultipartFormDataMemoryStreamProvider();
 
-			return null;
+			await content.ReadAsMultipartAsync(multipartProvider);
 
+			return new InputParameters(multipartProvider.GetAllInputData());
 		}
 #else  // ASP.NET Web API 1
 		private Task<object> ReadFormDataAsync(HttpContent content)
 		{
-			// TODO
-			MultipartMemoryStreamProvider multipartProvider = content.ReadAsMultipartAsync().Result;
+			var multipartProvider = new MultipartFormDataMemoryStreamProvider();
 
-			return null;
+			return content.ReadAsMultipartAsync(multipartProvider).ContinueWith<object>(
+				pTask =>
+				{
+					if (pTask.IsFaulted)
+						throw pTask.Exception;
 
+					if (pTask.IsCanceled)
+						if (pTask.Exception == null)
+							throw new TaskCanceledException();
+						else
+							throw pTask.Exception;
+
+					return new InputParameters(pTask.Result.GetAllInputData());
+				});
 		}
 #endif
 	}
