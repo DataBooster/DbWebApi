@@ -7,11 +7,14 @@ namespace MyDbWebApi.Controllers
 	[DbWebApiAuthorize]
 	public class DbWebApiController : ApiController
 	{
-		#region Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
+		// Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
 		public HttpResponseMessage DynExecute(string sp, InputParameters dynParameters)
 		{
-			dynParameters.SupplementQueryString(Request);
+			if (dynParameters == null)
+				dynParameters = new InputParameters(Request.GatherInputParameters(null));
+			else
+				dynParameters.SupplementQueryString(Request);
 
 			if (!string.IsNullOrEmpty(ConfigHelper.UserNameReservedParameter) && User != null && User.Identity != null)
 			{
@@ -23,6 +26,5 @@ namespace MyDbWebApi.Controllers
 
 			return this.DynExecuteDbApi(sp, dynParameters);
 		}
-		#endregion
 	}
 }
