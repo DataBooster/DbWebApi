@@ -76,7 +76,6 @@ namespace DataBooster.DbWebApi
 
 		/// <summary>
 		/// <para>ExecuteDbApi is the DbWebApi extension method to ApiController.</para>
-		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs </para>
 		/// </summary>
 		/// <param name="apiController">Your ApiController to invoke this extension method</param>
 		/// <param name="sp">Specifies the fully qualified name of database stored procedure or function</param>
@@ -149,6 +148,16 @@ namespace DataBooster.DbWebApi
 			}
 		}
 
+		/// <summary>
+		/// <para>The main DbWebApi extension method to ApiController.</para>
+		/// <para>This method combines ExecuteDbApi and BulkExecuteDbApi together,</para>
+		/// <para>Its actual behavior determined by the InputParameters(from request body) dynamically.</para>
+		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs </para>
+		/// </summary>
+		/// <param name="apiController">Your ApiController to invoke this extension method</param>
+		/// <param name="sp">Specifies the fully qualified name of database stored procedure or function</param>
+		/// <param name="dynParameters">The InputParameters auto-binding from the request body</param>
+		/// <returns>A complete HttpResponseMessage contains result data returned by the database</returns>
 		public static HttpResponseMessage DynExecuteDbApi(this ApiController apiController, string sp, InputParameters dynParameters)
 		{
 			if (dynParameters == null)

@@ -111,7 +111,7 @@ namespace DataBooster.DbWebApi
 		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
 		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
 		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
-		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Examples/MyDbWebApi/Controllers/DbWebApiController.cs </para>
+		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs </para>
 		/// </summary>
 		/// <param name="request">The HTTP request.</param>
 		public void SupplementQueryString(HttpRequestMessage request)
