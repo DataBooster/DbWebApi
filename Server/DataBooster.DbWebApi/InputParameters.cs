@@ -94,11 +94,6 @@ namespace DataBooster.DbWebApi
 				Parameters = nameValuePairs.NameValuePairsToDictionary();
 		}
 
-		public InputParameters(HttpRequestMessage request)
-			: this(request.GatherInputParameters(null))
-		{
-		}
-
 		public InputParameters(IDictionary<string, object> parametersDictionary)
 		{
 			if (parametersDictionary != null)
@@ -112,19 +107,28 @@ namespace DataBooster.DbWebApi
 		}
 
 		/// <summary>
-		/// <para>Gather required parameters of database stored procedure/function either from body or from uri query string.</para>
-		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
-		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
-		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
+		/// <para>Gather required parameters of database stored procedure/function from body and from uri query string.</para>
+		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a message body;</para>
+		/// <para>2. Suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
+		/// <para>3. Any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
 		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs </para>
 		/// </summary>
+		/// <param name="parametersFromBody">Auto-binded InputParameters from the request body.</param>
 		/// <param name="request">The HTTP request.</param>
-		public void SupplementQueryString(HttpRequestMessage request)
+		public static InputParameters SupplementFromQueryString(InputParameters parametersFromBody, HttpRequestMessage request)
 		{
-			if (ForBulkExecuting)
-				request.BulkGatherInputParameters(_BulkParameters);
-			else if (_Parameters != null)
-				request.GatherInputParameters(_Parameters);
+			if (parametersFromBody == null)
+				return new InputParameters(request.GatherInputParameters(null));
+
+			if (parametersFromBody.ForBulkExecuting)
+				request.BulkGatherInputParameters(parametersFromBody.BulkParameters);
+			else
+				if (parametersFromBody.Parameters == null)
+					parametersFromBody.Parameters = request.GatherInputParameters(null);
+				else
+					request.GatherInputParameters(parametersFromBody.Parameters);
+
+			return parametersFromBody;
 		}
 
 		public object SetParameter(string name, object newValue, bool replace = true)

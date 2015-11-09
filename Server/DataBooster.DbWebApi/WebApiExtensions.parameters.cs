@@ -113,14 +113,13 @@ namespace DataBooster.DbWebApi
 		#endregion
 
 		/// <summary>
-		/// <para>Gather required parameters of database stored procedure/function either from body or from uri query string.</para>
-		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
-		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
-		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
-		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs </para>
+		/// <para>Gather required parameters of database stored procedure/function from body and from uri query string.</para>
+		/// <para>1. From body is the first priority, the input parameters will be gathered from body if the request has a message body;</para>
+		/// <para>2. Suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
+		/// <para>3. Any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
 		/// </summary>
 		/// <param name="request">The HTTP request. This is an extension method to HttpRequestMessage, when you use instance method syntax to call this method, omit this parameter.</param>
-		/// <param name="parametersFromBody">The parameters read from body. If not null, this method won't further try to gather input parameters from uri query string.</param>
+		/// <param name="parametersFromBody">The parameters read from body.</param>
 		/// <returns>Final input parameters dictionary (name-value pairs) to pass to database call.</returns>
 		public static IDictionary<string, object> GatherInputParameters(this HttpRequestMessage request, IDictionary<string, object> parametersFromBody)
 		{
@@ -128,28 +127,34 @@ namespace DataBooster.DbWebApi
 		}
 
 		/// <summary>
-		/// <para>Gather required parameters of database stored procedure/function either from body or from uri query string.</para>
-		/// <para>1. From body is the first priority, the input parameters will only be gathered from body if the request has a body (JSON object) even though it contains none valid parameter;</para>
-		/// <para>2. If the request has no message body, suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
-		/// <para>3. If none of above exist, any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
-		/// <para>See example at https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs </para>
+		/// <para>Gather required parameters of database stored procedure/function from body and from uri query string.</para>
+		/// <para>1. From body is the first priority, the input parameters will be gathered from body if the request has a message body;</para>
+		/// <para>2. Suppose all required input parameters were encapsulated as a JSON string into a special query string named "JsonInput";</para>
+		/// <para>3. Any query string which name matched with stored procedure input parameter' name will be forwarded to database.</para>
 		/// </summary>
 		/// <param name="request">The HTTP request. This is an extension method to HttpRequestMessage, when you use instance method syntax to call this method, omit this parameter.</param>
-		/// <param name="parametersFromBody">The parameters read from body. If not null, this method won't further try to gather input parameters from uri query string.</param>
+		/// <param name="parametersFromBody">The parameters read from body.</param>
 		/// <param name="jsonInput">The special pre-arranged name in query string. Default as JsonInput.</param>
 		/// <returns>Final input parameters dictionary (name-value pairs) to pass to database call.</returns>
 		public static IDictionary<string, object> GatherInputParameters(this HttpRequestMessage request, IDictionary<string, object> parametersFromBody, string jsonInput)
 		{
-			if (parametersFromBody != null)
-				return parametersFromBody;
-
 			IDictionary<string, object> queryStringDictionary = request.GetQueryStringDictionary();
 			string jsonInputString = queryStringDictionary.GetQueryParameterValue(jsonInput);
 
-			if (string.IsNullOrWhiteSpace(jsonInputString))
+			if (!string.IsNullOrWhiteSpace(jsonInputString))
+				queryStringDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonInputString);
+
+			if (parametersFromBody == null)
 				return queryStringDictionary;
-			else
-				return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonInputString);
+
+			if (queryStringDictionary == null)
+				return parametersFromBody;
+
+			foreach (KeyValuePair<string, object> fromUri in queryStringDictionary)
+				if (!parametersFromBody.ContainsKey(fromUri.Key))
+					parametersFromBody.Add(fromUri);			// As a supplement
+
+			return parametersFromBody;
 		}
 
 		public static void BulkGatherInputParameters<T>(this HttpRequestMessage request, IList<T> listOfParametersFromBody, string jsonInput) where T : IDictionary<string, object>
@@ -163,7 +168,7 @@ namespace DataBooster.DbWebApi
 				foreach (IDictionary<string, object> batch in listOfParametersFromBody)
 					foreach (KeyValuePair<string, object> fromUri in fixedParametersFromUri)
 						if (!batch.ContainsKey(fromUri.Key))
-							batch.Add(fromUri);
+							batch.Add(fromUri);					// As a supplement
 		}
 
 		public static void BulkGatherInputParameters<T>(this HttpRequestMessage request, IList<T> listOfParametersFromBody) where T : IDictionary<string, object>

@@ -11,19 +11,16 @@ namespace MyDbWebApi.Controllers
 		/// Auto-detect a post request body. Invoking BulkExecute if sets of input parameters are wrapped in an arrray; or invoking Execute if input parameters are wrapped in a single dictionary.
 		/// </summary>
 		/// <param name="sp">Stored Procedure's fully qualified name</param>
-		/// <param name="dynParameters">Auto-binding from the request body</param>
+		/// <param name="allParameters">Auto-binding from the request body</param>
 		/// <returns></returns>
 		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
-		public HttpResponseMessage DynExecute(string sp, InputParameters dynParameters)
+		public HttpResponseMessage DynExecute(string sp, InputParameters allParameters)
 		{
-			if (dynParameters == null)
-				dynParameters = new InputParameters(Request);	// Gather input parameters from the URI (query string) if not in the request body.
-			else
-				dynParameters.SupplementQueryString(Request);	// Accept URI query string as as a supplementary.
+			allParameters = InputParameters.SupplementFromQueryString(allParameters, Request);	// Supplement input parameters from URI query string.
 
-			SetUserName(dynParameters);							// Set the conventional User Name Parameter if configured.
+			SetUserName(allParameters);							// Set the conventional User Name Parameter if configured.
 
-			return this.DynExecuteDbApi(sp, dynParameters);		// The main entry point to call the DbWebApi.
+			return this.DynExecuteDbApi(sp, allParameters);		// The main entry point to call the DbWebApi.
 		}
 
 		private void SetUserName(InputParameters dynParameters)
