@@ -12,7 +12,7 @@ namespace MyDbWebApi.Controllers
 		public HttpResponseMessage DynExecute(string sp, InputParameters dynParameters)
 		{
 			if (dynParameters == null)
-				dynParameters = new InputParameters(Request.GatherInputParameters(null));
+				dynParameters = new InputParameters(Request);
 			else
 				dynParameters.SupplementQueryString(Request);
 

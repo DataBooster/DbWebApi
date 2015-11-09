@@ -94,6 +94,11 @@ namespace DataBooster.DbWebApi
 				Parameters = nameValuePairs.NameValuePairsToDictionary();
 		}
 
+		public InputParameters(HttpRequestMessage request)
+			: this(request.GatherInputParameters(null))
+		{
+		}
+
 		public InputParameters(IDictionary<string, object> parametersDictionary)
 		{
 			if (parametersDictionary != null)
