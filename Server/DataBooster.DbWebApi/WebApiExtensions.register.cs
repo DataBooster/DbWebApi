@@ -17,13 +17,18 @@ namespace DataBooster.DbWebApi
 {
 	public static partial class WebApiExtensions
 	{
+		private static bool _Registered = false;
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 
 		#region Registration
 		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true, bool supportFormUrlEncoded = true, bool supportMultipartForm = true)
 		{
+			if (_Registered)
+				throw new InvalidOperationException("Duplicate Registered");
+
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
 
+			config.SupportMediaTypeShortMapping();
 #if WEB_API2
 			if (supportBson)
 			{
@@ -44,6 +49,8 @@ namespace DataBooster.DbWebApi
 				WebFormUrlEncodedMediaTypeFormatter.ReplaceJQueryMvcFormUrlEncodedFormatter(config.Formatters);
 			if (supportMultipartForm)
 				config.Formatters.Add(new MultipartFormDataMediaTypeFormatter());
+
+			_Registered = true;
 		}
 
 		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = null)
@@ -53,7 +60,7 @@ namespace DataBooster.DbWebApi
 
 			if (_FormatPlugs.Count == 0)
 			{
-				config.SupportMediaTypeShortMapping(queryStringParameterName);
+				//	config.SupportMediaTypeShortMapping(queryStringParameterName);
 
 				_PseudoFormatter = new PseudoMediaTypeFormatter(config.Formatters.JsonFormatter);
 				config.Formatters.Add(_PseudoFormatter);
@@ -74,8 +81,8 @@ namespace DataBooster.DbWebApi
 			_PseudoFormatter.AddMediaTypeMapping(formatPlug.FormatShortName, formatPlug.DefaultMediaType, queryStringParameterName);
 		}
 
-		[Obsolete("This method is deprecated and will be removed from public in the next major release.", false)]
-		public static void SupportMediaTypeShortMapping(this HttpConfiguration config, string queryStringParameterName = null)
+		//	[Obsolete("This method is deprecated and will be removed from public in the next major release.", false)]
+		private static void SupportMediaTypeShortMapping(this HttpConfiguration config, string queryStringParameterName = null)
 		{
 			if (string.IsNullOrEmpty(queryStringParameterName))
 				queryStringParameterName = DbWebApiOptions.QueryStringContract.MediaTypeParameterName;
