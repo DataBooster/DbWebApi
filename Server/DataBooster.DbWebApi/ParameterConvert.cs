@@ -50,7 +50,7 @@ namespace DataBooster.DbWebApi
 			if (rawValue == null)
 				return DBNull.Value;
 
-			if (rawValue is IConvertible || rawValue is DataTable || rawValue is DbDataReader)
+			if (rawValue is IConvertible || rawValue is DataTable || rawValue is DbDataReader || rawValue is byte[])
 				return rawValue;
 
 			JArray jArrayValue = rawValue as JArray;
