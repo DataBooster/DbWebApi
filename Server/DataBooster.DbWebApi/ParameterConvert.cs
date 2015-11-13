@@ -61,8 +61,13 @@ namespace DataBooster.DbWebApi
 			Array arrayValue = rawValue as Array;
 
 			if (arrayValue != null)
-				if (arrayValue.Length == 0 || arrayValue.GetValue(0) is IConvertible)
+			{
+				if (arrayValue.Length == 0)
+					return null;	// null: not to send the parameter	-- To review for empty SQL Server Table-Valued Parameter and Oracle Associative Array Parameter
+
+				if (arrayValue.GetValue(0) is IConvertible)
 					return arrayValue;
+			}
 
 			Type elementType = rawValue.GetType().GetEnumerableElementType();
 
