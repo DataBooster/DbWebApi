@@ -12,8 +12,8 @@ namespace MyDbWebApi.Controllers
 		/// </summary>
 		/// <param name="sp">Stored Procedure's fully qualified name</param>
 		/// <param name="allParameters">Auto-binding from the request body</param>
-		/// <returns></returns>
-		[AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
+		/// <returns>A complete HttpResponseMessage contains result data returned from the database</returns>
+		[AcceptVerbs("GET", "POST", "PUT", "DELETE")]
 		public HttpResponseMessage DynExecute(string sp, InputParameters allParameters)
 		{
 			allParameters = InputParameters.SupplementFromQueryString(allParameters, Request);	// Supplement input parameters from URI query string.

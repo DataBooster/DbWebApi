@@ -10,12 +10,7 @@ namespace MyDbWebApi
 		{
 			// Web API configuration and services
 
-			if (!string.IsNullOrEmpty(ConfigHelper.CorsOrigins))
-			{
-				var cors = new EnableCorsAttribute(ConfigHelper.CorsOrigins, "*", "*");
-				cors.SupportsCredentials = ConfigHelper.SupportsCredentials;
-				config.EnableCors(cors);
-			}
+			EnableCors(config);
 
 			// Web API routes
 
@@ -40,6 +35,21 @@ namespace MyDbWebApi
 		//	DbWebApiOptions.DefaultPropertyNamingConvention = PropertyNamingConvention.PascalCase;
 
 			DbWebApiAuthorizeAttribute.RegisterWebApiAuthorization<MyDbWebApiAuthorization>();
+		}
+
+		private static void EnableCors(HttpConfiguration config)
+		{
+			if (!string.IsNullOrEmpty(ConfigHelper.CorsOrigins))
+			{
+				var cors = new EnableCorsAttribute(ConfigHelper.CorsOrigins, "*", "*");
+
+				cors.SupportsCredentials = ConfigHelper.SupportsCredentials;
+
+				if (ConfigHelper.PreflightMaxAge > 0L)
+					cors.PreflightMaxAge = ConfigHelper.PreflightMaxAge;
+
+				config.EnableCors(cors);
+			}
 		}
 	}
 }

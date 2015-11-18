@@ -7,6 +7,7 @@ namespace MyDbWebApi
 		private const string _UserNameReservedParameterSettingKey = "UserNameReservedParameter";
 		private const string _CorsOriginsSettingKey = "CorsOrigins";
 		private const string _SupportsCredentialsSettingKey = "CorsSupportsCredentials";
+		private const string _PreflightMaxAgeSettingKey = "CorsPreflightMaxAge";
 
 		private static string _UserNameReservedParameter = null;
 		public static string UserNameReservedParameter
@@ -70,9 +71,32 @@ namespace MyDbWebApi
 			}
 			set
 			{
-				ConfigHelper._SupportsCredentials = value;
+				_SupportsCredentials = value;
 			}
 		}
 
+		private static long? _PreflightMaxAge = null;
+		public static long PreflightMaxAge
+		{
+			get
+			{
+				if (_PreflightMaxAge == null)
+				{
+					string strPreflightMaxAge = ConfigurationManager.AppSettings[_PreflightMaxAgeSettingKey];
+					long preflightMaxAge = 0L;
+
+					if (!string.IsNullOrEmpty(strPreflightMaxAge))
+						long.TryParse(strPreflightMaxAge, out preflightMaxAge);
+
+					_PreflightMaxAge = preflightMaxAge;
+				}
+
+				return _PreflightMaxAge.Value;
+			}
+			set
+			{
+				_PreflightMaxAge = value;
+			}
+		}
 	}
 }
