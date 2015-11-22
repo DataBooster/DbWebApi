@@ -67,8 +67,9 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
     - [.Net Client](#net-client)
     - [JavaScript Client](#javascript-client)
         - [Cross-domain](#cross-domain)
-            - [JSONP for now](#jsonp-for-now-added-server-lib-v124-client-js-v108-alpha)
-            - [CORS later](#cors-later)
+            - [CORS](#cors)
+            - [JSONP](#jsonp-added-server-lib-v124-client-js-v108-alpha)
+            - [IE option](#ie-option)
     - [PowerShell Client](#powershell-client)
         - [Bulk Data Post Back](#bulk-data-post-back)
             - [Hundreds or less](#hundreds-or-less)
@@ -115,7 +116,6 @@ Please reference the sample [DbWebApiController.cs](https://github.com/DataBoost
 ``` CSharp
 using System.Net.Http;
 using System.Web.Http;
-using System.Collections.Generic;
 using DataBooster.DbWebApi;
 
 namespace MyDbWebApi.Controllers
@@ -123,43 +123,24 @@ namespace MyDbWebApi.Controllers
     [DbWebApiAuthorize]
     public class DbWebApiController : ApiController
     {
+        /// <param name="sp">Stored Procedure's fully qualified name</param>
+        /// <param name="allParameters">Auto-binding from the request body</param>
         [AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
-        public HttpResponseMessage Execute(string sp, Dictionary<string, object> parameters)
+        public HttpResponseMessage DynExecute(string sp, InputParameters allParameters)
         {
-            return this.ExecuteDbApi(sp, Request.GatherInputParameters(parameters));
-        }
+            // Supplement input parameters from URI query string.
+            allParameters = InputParameters.SupplementFromQueryString(allParameters, Request);
 
-        [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage BulkExecute(string sp, List<Dictionary<string, object>> listOfParametersDict)
-        {
-            Request.BulkGatherInputParameters(listOfParametersDict);
-            return this.BulkExecuteDbApi(sp, listOfParametersDict);
+            // The main entry point to call the DbWebApi.
+            return this.DynExecuteDbApi(sp, allParameters);
         }
     }
 }
 ```
-That's all, ExecuteDbApi and BulkExecuteDbApi are extension methods to ApiController.  
-Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs), you can also see another using approach that combines the Execute and BulkExecute as a DynExecute which auto-detect a post request body, invoking BulkExecute if sets of input parameters are encapsulated in an arrray; or invoking Execute if input parameters are encapsulated in a single dictionary.  
-
-``` CSharp
-// Execute a DbApi with a input parameters' dictionary
-// ExecuteDbApi built-in supports JSON, JSONP, XML, Excel xlsx, CSV and Razor Templating responses.
-public static HttpResponseMessage ExecuteDbApi(this ApiController apiController,
-                                               string sp, IDictionary<string, object> parameters)
-// sp:         Specifies the fully qualified name of database stored procedure or function
-// parameters: Specifies required input-parameters as name-value pairs
-```
-``` CSharp
-// Bulk execute a DbApi with a IList<IDictionary<string, object>> (a collection of input parameters collection)
-// Notes: BulkExecuteDbApi only supports JSON and XML MediaType responses.
-public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController,
-                                               string sp, IList<T> listOfParameters)
-                                               where T : IDictionary<string, object>
-// sp:         Specifies the fully qualified name of database stored procedure or function
-// listOfParameters:
-//             Specifies a collection of required parameter dictionary for every call in the bulk execution
-```
-The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/App_Start/WebApiConfig.cs) demonstrates the Web API routing for these two actions.
+That's all, DynExecute is the extension method to ApiController.  
+_(It combines the Execute and BulkExecute methods internally, auto-detect a post request body, invoking BulkExecute if sets of input parameters are encapsulated in an arrray; or invoking Execute if input parameters are encapsulated in a single dictionary)_  
+Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs).
+And the sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/App_Start/WebApiConfig.cs) demonstrates the Web API routing for this action.
 
 #### Web.config  
 "<u>DataBooster.DbWebApi.MainConnection</u>" is the only one configuration item needs to be customized:
@@ -172,8 +153,15 @@ The sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master
 #### HTTP Request  
 ##### Url:  
 As registered in your [WebApiConfig](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/App_Start/WebApiConfig.cs) Routes (e.g. http://BaseUrl/Your.StoredProcedure.FullyQualifiedName)  
-##### Input Parameters
-* <a name="simple-parameters"></a>Simple Parameters  
+##### Input Parameters  
+DbWebApi takes advantages of the Parameter-Binding mechanism in ASP.NET Web API. Current implementation is self-adaptive to four kinds of media types:
+- JSON format request _(Content-Type: application/json or text/json)_
+- XML format request _(Content-Type: application/xml or text/xml)_
+- HTML Form request _(Content-Type: application/x-www-form-urlencoded)_
+- Multipart MIME request _(Content-Type: multipart/form-data)_ - for file upload
+
+
+###### <u>Simple Parameters</u>  
 Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
 For example, a SQL Server Stored Procedure:  
 ``` SQL
@@ -193,7 +181,62 @@ The payload JSON should look like:
 ```
 Parameter names are case-insensitive.
 
-* <a name="array-of-parameter-sets"></a>Array of Parameter Sets  
+If you use XML request _(content-Type: application/xml or text/xml)_, the message body should look like:
+``` XML
+<AnyRootName>
+  <inRuleDate>2015-02-03T00:00:00Z</inRuleDate>
+  <inRuleId>108</inRuleId>
+</AnyRootName>
+```
+or
+``` XML
+<AnyRootName xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema">
+  <inRuleDate i:type="x:dateTime">2015-02-03T00:00:00Z</inRuleDate>
+  <inRuleId i:type="x:int">108</inRuleId>
+</AnyRootName>
+```
+or
+``` XML
+<AnyRootName xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
+  <inRuleDate z:Type="System.DateTime" z:Assembly="0">2015-02-03T00:00:00Z</inRuleDate>
+  <inRuleId z:Type="System.Int32" z:Assembly="0">108</inRuleId>
+</AnyRootName>
+```
+or
+``` XML
+<AnyName inRuleDate="2015-02-03T00:00:00Z" inRuleId="108" />
+```
+If you want to use HTML Form (although you are unlikely to do so), the form body can be:
+``` HTML
+<form id="form1" method="post" action="api/Your.StoredProcedure.FullyQualifiedName/json"
+    enctype="application/x-www-form-urlencoded">
+    <div><label for="inRuleDate">Input Rule Date</label></div>
+    <div><input name="inRuleDate" type="text" /></div>
+    <div><label for="inRuleId">Input Rule Id</label></div>
+    <div><input name="inRuleId" type="text" /></div>
+    <div><input type="submit" value="Submit" /></div>
+</form>
+```
+If you need to upload some files into database, Multipart Form Data is a really simple way:
+``` HTML
+<form id="form1" method="post" action="api/Your.StoredProcedure.FullyQualifiedName/json"
+    enctype="multipart/form-data">
+    <div><label for="inRuleDate">Input Rule Date</label></div>
+    <div><input name="inRuleDate" type="text" /></div>
+    <div><label for="inRuleId">Input Rule Id</label></div>
+    <div><input name="inRuleId" type="text" /></div>
+    <div><label for="inImageData">Image File</label><input name="inImageData" type="file" /></div>
+    <div><label for="inTextData">Text File</label><input name="inTextData" type="file" /></div>
+    <div><input type="submit" value="Submit" /></div>
+</form>
+```
+Notes:
+- For a binary type parameter of stored procedure, the uploaded binary data will be passed in straightforward without any transformation; _(for above instance, "inImageData" parameter)_  
+- For a string(text) type parameter of stored procedure, the uploaded stream will be treated as UTF-8 encoding to be decoded back to a string, unless your file contains BOM (Byte Order Marks) _- it will detect encoding from the BOM_. Then pass the string into the stores procedure. _(for above instance, "inTextData" parameter)_
+
+.
+
+###### <u>Array of Parameter Sets</u>  
 To pass bulk of same structure data back to database, you can just encapsulate all sets of parameters into an array like:
 ``` JSON
 [
@@ -746,14 +789,63 @@ By default, the $.postDb sets the withCredentials property of the internal xhrFi
 As the name implies, $.postDb uses HTTP POST to send a request;  
 Alternatively, $.getDb can be used for HTTP GET if need be. All input parameters are encapsulated into a special query string, and appended to the url for GET-requests.
 
-For the moment, the Client JavaScript Library (prerelease version 1.0.8-alpha) was tested on IE9 only.
 
 ##### Cross-domain  
-![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
-For intranet scenarios, browsers settings can be managed by your system administrator centralizedly. However, for internet scenarios, we can't just assume that end users will set their browsers to allow cross-domain calls.  
+###### CORS  
+The sample server projects _(.Net4.5/WebApi2 versions)_ in this repository have built-in support for CORS _(Cross-Origin Resource Sharing)_. You can change the "CorsOrigins" item of appSettings in the Web.config if you want to specify particular Origins.
+``` XML
+<configuration>
+  <appSettings>
+    <add key="CorsOrigins" value="*" />
+    <add key="CorsSupportsCredentials" value="true" />
+    <add key="CorsPreflightMaxAge" value="3600" />
+  </appSettings>
+</configuration>
+```
+_<u>Preflight Request 401 Issue with Windows Authentication</u>_
 
-###### JSONP for now (Added: Server Lib v1.2.4, Client JS v1.0.8-alpha) 
-JSONP is a practicable way _(although it seems a little rascal)_ to solve the cross-domain access puzzle before CORS (Cross-Origin Resource Sharing) is supported by all popular browsers.  
+Today (until 2015) a very common usage scenario:
+- Only Integrated Windows Authentication is enabled on IIS _(without anonymous authentication)_, and
+- The request body is JSON or XML media types - _the Content-Type header is application/json, text/json, application/xml or text/xml._
+
+Usually the CORS preflight will fail by a 401 unauthorized error _(Access is denied due to invalid credentials)_ in this scenario. The root of this problem came from an awkward preflight rule in W3C specifications.
+- Since above case doesn't meet the exemption conditions for browser to skip the preflight request, so browser will start the additional preflight request;
+- Browser would never include user credentials in preflight request; _(Even though both server side's **SupportsCredentials** and browser side's **withCredentials** have been set to be true, they only apply to subsequent actual cross-origin requests instead of the preflight request.)_
+- IIS would return a 401 to any anonymous request, within the 401 response would have some Windows Authentication headers that expect the client to start an authentication handshake. However the browser still stubbornly believe that preflight request shouldn't include any user credential, so just gives up;
+- If the preflight request fails, the browser would never send the actual cross-origin request at all.
+
+<u>There are several ways to get around this uncomfortable issue</u>:
+- Use HTTP GET method to avoid sending application/json (or xml) Content-Type header - _Browser never send any body in GET request._  
+$.getDb(...) can encode input JSON object into a special parameter in query string.  
+_But there is a limitation on length of the URL, large data still requires the use of POST method, see the next ways then:_
+- Attach cross-origin POST requests in any one very lightweight GET request's callback function, as in the following example:
+``` javascript
+    ....
+    var input = {
+        inDate: $.utcDate(2015,03,10)
+    };
+    $.getDb('http://dbwebapi.dev.com/oradev/api/Misc/WhoAmI', null, function (me) {
+        $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
+             input,
+             function (data) {
+                 ....
+             });
+        ...
+        $.postDb('http://dbwebapi.dev.com/oradev/other_more', ...);
+        ...
+    });
+    ....
+```
+Here $.getDb('.../WhoAmI') acts as a bootstrapper, it makes the browser to start an authentication handshake, once IIS authenticates the request, [the default behavior of IIS](https://msdn.microsoft.com/en-us/library/aa347548.aspx) will cache a token or ticket on the server for the connection, then the immediate preflight request on the same connection is not required to be authenticated again, so the preflight request will succeed, then the browser can continue the [actual CORS request](http://www.asp.net/web-api/overview/security/enabling-cross-origin-requests-in-web-api).  
+
+.
+
+.
+
+.
+
+###### JSONP (Added: Server Lib v1.2.4, Client JS v1.0.8-alpha) 
+JSONP is a practicable way _(although it seems a little rascal)_ to solve the cross-domain access puzzle before CORS is supported by all popular browsers.  
 Below example is a JSONP approach of above example,
 ``` javascript
     ....
@@ -769,17 +861,20 @@ Below example is a JSONP approach of above example,
 ```
 Notes: since JSONP sends request by HTTP GET method, BulkExecute can not be used by JSONP.  
 
-The server side:
+The server side [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/App_Start/WebApiConfig.cs):
 ``` CSharp
     config.RegisterDbWebApi();
 ```
-will include JSONP support by default. If you don't want to support JSONP, you can remove the JsonpMediaTypeFormatter from the *config.Formatters* collection after that.  
-
-
-###### CORS later  
-Currently, the example server project in this repository supports _(untested)_ CORS in server side. However, IE's security setting _(Access data sources across domains)_ still disables CORS requests by default.
-``` javascript
+which will include JSONP support by default. If you don't want to support JSONP, please specify supportJsonp to be false:
+``` CSharp
+    config.RegisterDbWebApi(supportJsonp: false);
 ```
+###### IE option
+A third option is to change IE setting if neither of above options is applicable to your situation.  
+For intranet scenarios, browsers settings can be managed by your system administrator centralizedly.
+![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
+
+.
 
 #### PowerShell Client  
 In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) cmdlet is readily available. See following sample:
