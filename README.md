@@ -717,46 +717,43 @@ using DataBooster.DbWebApi.Client;
 ```
 ``` CSharp
 DbWebApiClient client = new DbWebApiClient("http://dbwebapi.dev.com/oradev/");
-
 //  client.HttpMethod = HttpMethod.Get;    // Default is POST
 
-// Synchronous call. If need asynchronous call, please use ExecAsJsonAsync(..) instead.
-DbWebApiResponse data = client.ExecAsJson("test_schema.prj_package.foo",
+// Synchronous call. If need asynchronous call, please use ExecAsync(..) instead.
+StoredProcedureResponse data = client.Exec("test_schema.prj_package.foo",
     new {
         inDate = new DateTime(2015, 3, 16)
         //, ... other input parameters, if any.
     });
-
-// You can either consume JObject[] (LINQ to JSON) directly or cast to your strong-type business class as below:
-IEnumerable<MyStrongTypeCls> strongTypeObjs = data.ResultSets[0].Select(j => j.ToObject<MyStrongTypeCls>());
 ```
-The second argument of ExecAsJson can be a dictionary that contains every parameters, or an anonymous type object that each property indicate a parameter name-value.  
-If an array of input parameter sets is passed into the second argument of ExecAsJson, the return will be an array -- DbWebApiResponse[].  
-`  
-If you just need the response content stream (E.g. CSV, Excel xlsx or generated text) to be stored as a file or transfer forward to somewhere else on the network, see below example, replacing ExecAsJson() by ExecRawAsync(), then [write the HTTP content to a stream](https://msdn.microsoft.com/en-us/library/hh138076.aspx) dicectly.
+The second argument of Exec(...) can be a dictionary that contains every parameters, or an anonymous type object that each property indicate a parameter name-value.  
+If an array of input parameter sets is passed into the second argument of Exec(...), the return will be an array -- StoredProcedureResponse[].  
+_All Exec... overloads will use HTTP POST method by default. You can change the default behavior to HTTP GET if need be. (as the comment line in above example code)_  
+.
+
+If you just need the response content stream (E.g. CSV, Excel xlsx or generated text) to be stored as a file or transfer forward to somewhere else on the network, see below example, replacing Exec() by ExecAsStream().
 ``` CSharp
 ....
-var task = client.ExecRawAsync("test_schema.prj_package.foo",
+Stream stream = client.ExecAsStream("test_schema.prj_package.foo",
     new {
         inDate = new DateTime(2015, 3, 16)
         //, ... other input parameters, if any.
     });
 using (FileStream file = File.Create(...))
 {
-    task.Result.Content.CopyToAsync(file).Wait();
+    stream.CopyTo(file);
 }
 ```
+For more general purpose, ExecAsStream _(or ExecAsStreamAsync)_, ExecAsJson _(or ExecAsJsonAsync)_, ExecAsXml _(or ExecAsXmlAsync)_ and ExecAsString _(or ExecAsStringAsync)_ overloads can be used to invoke any REST API, not limited to DbWebApi.
 
 By default, the DbWebApiClient uses Windows authentication for the convenience of intranet usage scenarios. Please see its constructor overrides for other options.
-
-All Exec... methods will use HTTP POST method by default. You can change the default behavior to HTTP GET if need be. (as the comment line in above example code)
 
 #### JavaScript Client  
 You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
     Sample:
 ``` javascript
-    <script src="Scripts/jquery-2.1.3.js" type="text/javascript"></script>
-    <script src="Scripts/dbwebapi_client-1.0.8-alpha.js" type="text/javascript"></script>
+<script src="Scripts/jquery-2.1.3.js" type="text/javascript"></script>
+<script src="Scripts/dbwebapi_client-1.0.8-alpha.js" type="text/javascript"></script>
 ```
 ``` javascript
 <script type="text/javascript">
@@ -770,7 +767,7 @@ You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Cli
     ....
 </script>
 ```
-The second argument of $.postDb - inputJson can be either a JSON string or a plain object. If it's a plain object, it will be converted by JSON.stringify before sending to the server. Below sample is equivalent to above sample.
+The second argument of $.postDb - _inputJson_ can be either a JSON string or a plain object. If it's a plain object, it will be converted by JSON.stringify before sending to the server. Below sample is equivalent to above sample.
 ``` javascript
     ....
     var input = {
@@ -792,7 +789,7 @@ Alternatively, $.getDb can be used for HTTP GET if need be. All input parameters
 
 ##### Cross-domain  
 ###### CORS  
-The sample server projects _(.Net4.5/WebApi2 versions)_ in this repository have built-in support for CORS _(Cross-Origin Resource Sharing)_. You can change the "CorsOrigins" item of appSettings in the Web.config if you want to specify particular Origins.
+The sample server projects _(.Net4.5/WebApi2 versions)_ in this repository have built-in support for [CORS _(Cross-Origin Resource Sharing)_](http://www.asp.net/web-api/overview/security/enabling-cross-origin-requests-in-web-api). You can change the "CorsOrigins" item of appSettings in the Web.config if you want to specify particular Origins.
 ``` XML
 <configuration>
   <appSettings>
@@ -818,7 +815,7 @@ Usually the CORS preflight will fail by a 401 unauthorized error _(Access is den
 - Use HTTP GET method to avoid sending application/json (or xml) Content-Type header - _Browser never send any body in GET request._  
 $.getDb(...) can encode input JSON object into a special parameter in query string.  
 _But there is a limitation on length of the URL, large data still requires the use of POST method, see the next ways then:_
-- Attach cross-origin POST requests in any one very lightweight GET request's callback function, as in the following example:
+- Attach cross-origin POST request in any one very lightweight GET request's callback function, as in the following example:
 ``` javascript
     ....
     var input = {
@@ -830,17 +827,12 @@ _But there is a limitation on length of the URL, large data still requires the u
              function (data) {
                  ....
              });
-        ...
-        $.postDb('http://dbwebapi.dev.com/oradev/other_more', ...);
-        ...
     });
     ....
 ```
-Here $.getDb('.../WhoAmI') acts as a bootstrapper, it makes the browser to start an authentication handshake, once IIS authenticates the request, [the default behavior of IIS](https://msdn.microsoft.com/en-us/library/aa347548.aspx) will cache a token or ticket on the server for the connection, then the immediate preflight request on the same connection is not required to be authenticated again, so the preflight request will succeed, then the browser can continue the [actual CORS request](http://www.asp.net/web-api/overview/security/enabling-cross-origin-requests-in-web-api).  
-
-.
-
-.
+Here $.getDb('.../WhoAmI') acts as a bootstrapper, it makes the browser to start an authentication handshake in advance, once IIS authenticates the request, [the default behavior of IIS](https://msdn.microsoft.com/en-us/library/aa347548.aspx) will cache a token/ticket on the server for the connection, then the immediate preflight request on the same connection is not required to be authenticated again, so the preflight request will succeed, then the browser can continue the actual CORS request.
+- HTML Form request _(Content-Type: application/x-www-form-urlencoded)_ and Multipart MIME request _(Content-Type: multipart/form-data)_ can also be used to send a fair amount of data to DbWebApi without preflight request.  
+_The limitation of these two media types' requests is that, they can only carry input parameters for a single execution of DbWebApi on each call. If you need a bulk execution of DbWebApi on one call, only the former way (all sets of input parameters are further encapsulated in an outer JSON or XML array) can satisfy the use._
 
 .
 
@@ -925,7 +917,7 @@ Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test
 *Using PowerShell array for large dataset, better to initialize an array with explicit size (instead of dynamic array with subsequent appending elements), otherwise most of performance will be lost in highly frequent memory reallocation, data copying over and over again.*  
 *You may notice that [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) takes many fixed arguments, to be lazier to type them all the time, you can import a convenient function [Invoke-DbWebApi](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) from [dbwebapi-client.ps1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
 
-PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. With PowerShell, you won't even want to use Fiddler for Web API testing any more. In PowerShell, the data is visualized and extremely flexible to be quickly modified interactively.  
+PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. In PowerShell, all data become visualized and extremely flexible to be quickly modified interactively.  
 
 
 ### Restrictions  
@@ -933,7 +925,7 @@ PowerShell is true powerful to do more solid work with less coding if being rati
 * Database User-Defined Types, Oracle composite data types (such as Collection Types, Varrays, Nested Tables, etc.) are currently not supported in result set columns nor in sp/func parameters.  
 [Table-Valued Parameters (SQL Server 2008)](https://msdn.microsoft.com/en-us/library/bb675163.aspx) and [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) are supported only in sp/func input parameters.    
 * All database procedure-names, function-names, column-names and parameter-names are regarded as case-insensitive.
-* [Oracle stored procedure or function overloading](https://docs.oracle.com/database/121/LNPLS/subprograms.htm#i12352) is not supported.
+* [Overloading of Oracle stored procedure or function](https://docs.oracle.com/database/121/LNPLS/subprograms.htm#i12352) is not supported.
 
 
 
