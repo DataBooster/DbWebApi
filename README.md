@@ -727,9 +727,16 @@ StoredProcedureResponse data = client.Exec("test_schema.prj_package.foo",
     });
 ```
 The second argument of Exec(...) can be a dictionary that contains every parameters, or an anonymous type object that each property indicate a parameter name-value.  
-If an array of input parameter sets is passed into the second argument of Exec(...), the return will be an array -- StoredProcedureResponse[].  
-_All Exec... overloads will use HTTP POST method by default. You can change the default behavior to HTTP GET if need be. (as the comment line in above example code)_  
-.
+If an array of input parameter sets is passed into the second argument of Exec(...), the return will be an array -- StoredProcedureResponse[].
+
+_If you expect a stored procedure would be time-consuming, please set the [HttpClient.Timeout](https://msdn.microsoft.com/en-us/library/system.net.http.httpclient.timeout(v=vs.110).aspx) to a sufficiently long time, such as:_
+``` CSharp
+client.HttpClient.Timeout = TimeSpan.FromMinutes(10);
+```
+_All Exec... overloads will use HTTP POST method by default. You can change the default behavior to HTTP GET if need to be:_
+``` CSharp
+client.HttpMethod = HttpMethod.Get;
+```
 
 If you just need the response content stream (E.g. CSV, Excel xlsx or generated text) to be stored as a file or transfer forward to somewhere else on the network, see below example, replacing Exec() by ExecAsStream().
 ``` CSharp
