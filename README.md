@@ -86,24 +86,24 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
 ***
 
 ### Overview  
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets (each resultset presents as an Excel worksheet). While being regarded as a proxy service, DbWebApi reflects in two directions: Data Access Proxy and Media Format Proxy.
+DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets _(each resultset presents as an Excel worksheet)_. While being regarded as a proxy service, DbWebApi reflects in two directions: Data Access Proxy and Media Format Proxy.
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
 In essence, DbWebApi is still a ASP.NET Web API instead of a naked tunnel for database. It just be generic, and provides a few extension methods to your ASP.NET Web API services.
 - Security:  
-What security you did for your existing Web API services, can still apply in the DbWebApi.
+The security of DbWebApi is entirely dependent on what you can do in ASP.NET Web API. What security you did for your existing Web API services, should still apply in the DbWebApi.
 
 - Data Contract:  
 Since there is no setup at all, the domain entities returned from DbWebApi simply reflect the result sets returned from your stored procedure. So the data contract is driven by your stored procedure.  
 To isolate the downstream consumers from the source raw schemas, you can slimly achieve the isolation in your stored procedure only once, or do some data transportation once after DbWebApi.  
-Actually, the contract transformation can be done in any one node of the intermediate links of your data flow. Just to keep the isolation simple, and reduce dogmatic data-isolations repeated in multiple links of a closed process chain over and over again.
+_Actually, the contract transformation can be done in any one node of the intermediate links of your data flow. Just to keep the isolation simple, and reduce dogmatic data-isolations repeated in multiple links of a closed process chain over and over again._
 
 ### What are the benefits of DbWebApi?
 
 - The underlying tenet:  
 Less coding, less configuration, less deployment, less maintenance.  
-The conciseness of using DbWebApi is down-to-earth for hands-on developers, to access database stored procedures or functions is completely coding-free and configuration-free. Don't need to explicitly specify any metadata about database objects (such as parameters type, size, direction... or columns attributes) by coding or configuration, don't need to write any controller for handling new data models from database, don't need to write any method for calling new stored procedures or functions ... No more dazzling _The Emperor's New Services(Clothes)_ to test(fitting), deploy or maintain.
+The conciseness of using DbWebApi is down-to-earth for hands-on developers, to access database stored procedures or functions is completely coding-free and configuration-free. Don't need to explicitly specify any metadata about database objects _(such as parameters type, size, direction... or columns attributes)_ by coding or configuration, don't need to write any controller for handling new data models from database, don't need to write any method for calling new stored procedures or functions ... No more dazzling _The Emperor's New Services(Clothes)_ to test(fitting), deploy or maintain.
 - In data-driven applications area, there are a large number of scenarios without substantial logic in data access web services, however they wasted a lot of our efforts on very boring data moving coding or configurations, we've had enough of it. Since now on, most of thus repetitive works can be dumped onto DbWebApi.
 - Unlike WCF Data Services or other similar web services, DbWebApi has no design time within the service itself. In terms of the overall system, stored procedures design has already undertaken the corresponding part of contract design when stored procedure based development was adopted as part of the whole development.  
 _It's unnecessary to repeat design for the same part of contract again. Repeated designs inevitably lead to redundant configuration, recompilation ... redeployment for every intermediate links._
@@ -137,7 +137,7 @@ namespace MyDbWebApi.Controllers
     }
 }
 ```
-That's all, DynExecute is the extension method to ApiController.  
+That's all, **DynExecute** is the extension method to ApiController.  
 _(It combines the Execute and BulkExecute methods internally, auto-detect a post request body, invoking BulkExecute if sets of input parameters are encapsulated in an arrray; or invoking Execute if input parameters are encapsulated in a single dictionary)_  
 Detail in [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs).
 And the sample [WebApiConfig.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/App_Start/WebApiConfig.cs) demonstrates the Web API routing for this action.
@@ -162,8 +162,8 @@ DbWebApi takes advantages of the Parameter-Binding mechanism in ASP.NET Web API.
 
 
 ###### <u>Simple Parameters</u>  
-Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format (Content-Type: application/json). Don't put parameter prefix ('@' or ':') in the JSON body.  
-For example, a SQL Server Stored Procedure:  
+Only required input-parameters of the stored procedure/function need to be specified in your request body as JSON format _(Content-Type: application/json)_. Don't put parameter prefix ('@' or ':') in the JSON body.  
+For example, a Stored Procedure _(in SQL Server)_:  
 ``` SQL
 ALTER PROCEDURE dbo.prj_GetRule
     @inRuleDate  datetime,
@@ -206,7 +206,7 @@ or
 ``` XML
 <AnyName inRuleDate="2015-02-03T00:00:00Z" inRuleId="108" />
 ```
-If you want to use HTML Form (although you are unlikely to do so), the form body can be:
+If you want to use HTML Form _(although you are unlikely to do so)_, the form body can be:
 ``` HTML
 <form id="form1" method="post" action="api/Your.StoredProcedure.FullyQualifiedName/json"
     enctype="application/x-www-form-urlencoded">
@@ -263,7 +263,7 @@ For above example, the Web API server side will iteratively invoking database st
 BulkExecute reads bulk sets of parameters from the request message body only, it means only HTTP POST and PUT can be used to send BulkExecute request, and only JSON and XML are acceptable media types for bulk response. If this limitation does counteract its conveniences you gain, please consider using following alternatives.*
 
 * <a name="associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
-In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake (avoid too many context switches between the PL/SQL and SQL engines). For example, in database side:
+In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake _(avoid too many context switches between the PL/SQL and SQL engines)_. For example, in database side:
 ``` SQL
 TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
 
@@ -376,23 +376,23 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
 .
 
 ##### Accept Response MediaType:  
-1. <a name="accept-json"></a>JSON (default)  
+1. <a name="accept-json"></a>JSON _(default)_  
     Specify in request header:  
     Accept: application/json  
     or  
     Accept: text/json  
     or specify in query string: ?format=json  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=json)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=json)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/json)_  
 
 2. <a name="accept-bson"></a>BSON _(only available to targetFramework="4.5" or higher - ASP.NET Web API 2)_  
     Specify in request header:  
     Accept: application/bson  
     or specify in query string: ?format=bson  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=bson)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=bson)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/bson)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/bson)_  
 
 3. <a name="accept-jsonp"></a>JSONP  
     QueryString must contain **callback** parameter _(the name can be configured)_  
@@ -404,9 +404,9 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or  
     Accept: application/json-p  
     or specify in query string: ?format=jsonp  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=jsonp)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=jsonp)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/jsonp)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/jsonp)_  
     )  
 
 4. <a name="accept-xml"></a>XML  
@@ -415,11 +415,11 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or  
     Accept: text/xml  
     or specify in query string: ?format=xml  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xml)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xml)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xml)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xml)_  
 
-5. <a name="accept-xlsx"></a>xlsx (Excel 2007 and later)  
+5. <a name="accept-xlsx"></a>xlsx _(Excel 2007 and later)_  
     Specify in request header:  
     Accept: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet  
     or  
@@ -427,18 +427,18 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or  
     Accept: application/xlsx  
     or specify in query string: ?format=xlsx  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xlsx)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=xlsx)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/xlsx)_  
     Notes: Since xlsx content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].xlsx).  
 
 6. <a name="accept-csv"></a>CSV  
     Specify in request header:  
     Accept: text/csv  
     or specify in query string: ?format=csv  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=csv)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=csv)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/csv)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/csv)_  
     Notes: CSV response will only return the first (or one specified zero indexed result set in query string: ResultSet=i) result set if your stored procedure has multiple result sets. Since CSV content presents as an attachment, so you can specify a filename for convenience by query string: FileName=\[save_as\] (default: \[save_as\].csv).  
 
 7. <a name="accept-razor-templating"></a>Razor Templating    
@@ -447,9 +447,9 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     or  
     Accept: application/razor  
     or specify in query string: ?format=razor  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=razor)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule?format=razor)_  
     or specify in UriPathExtension which depends on your url routing  
-       (e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/razor)  
+       _(e.g. http://BaseUrl/YourDatabase.dbo.prj_GetRule/razor)_  
     Notes: To send a Razor request, the template text must be provided in a conventionalized parameter {RazorTemplate=} in either json body of post request or query string of get request, if the template text is a output parameter name of the stored procedure, the string content of that output parameter will be used as the actual template text. Two optional parameters: {RazorEncoding=Raw|Html} _(default is Raw)_ and {RazorLanguage=CSharp|VisualBasic} _(default is CSharp)_.   
     Model's Data: Inside Razor template, the **@Model** directive represents your strored procedure's result data. _(E.g.  @Model.OutputParameters.outSomeThing - is the value of output parameter outSomeThing, @Model.ResultSets[0][0].SomeProperty - is the value of Some_Property column of the first row of the first resultset)_  
  
@@ -584,12 +584,12 @@ For response to bulk execute request, each of such XML object will be further en
 
 There are a few options can be applied in Url **query string** to control the XML style:
 * XmlNullValue
-    - **true**: **(default)** Emit all null(DBNull) value properties(columns) into XML.
-    - false: Do not emit any null(DBNull) value properties(columns) into XML.
+    - **true**: **(default)** Emit all null_(DBNull)_ value properties_(columns)_ into XML.
+    - false: Do not emit any null_(DBNull)_ value properties_(columns)_ into XML.
 
 * XmlAsAttribute
-    - **false**: **(default)** Serialize properties(columns) as XML elements.
-    - true: Serialize properties(columns) as XML attributes, null(DBNull) value will be rendered as empty string if *XmlNullValue=true*.  
+    - **false**: **(default)** Serialize properties_(columns)_ as XML elements.
+    - true: Serialize properties_(columns)_ as XML attributes, null_(DBNull)_ value will be rendered as empty string if *XmlNullValue=true*.  
 For above example stored procedure with *XmlAsAttribute=true*, the response becomes:
 ``` XML
 <StoredProcedureResponse xmlns:i="http://www.w3.org/2001/XMLSchema-instance" SerializePropertyAsAttribute="true" EmitNullValue="true" TypeSchema="None">
@@ -690,13 +690,13 @@ The example project shows using an authorization filter [DbWebApiAuthorize] to r
 ### UserName
 Recording current username is a common auditing requirement. Since the Web API never trust any self-identify username sent from client request data. So if a stored procedure requires the username as a parameter, the Web API should always replace that parameter sent from the client (or add that parameter if a client didn't send it) by the server side authentication. Any practical way as long as you think it's simple enough can be apply in your Web API implementation. For examples,
 * Make a naming convention for this special parameter in database within your enterprise, then the Web API always set (replace/add) this special parameter before pass the whole input parameters dictionary to ExecuteDbApi extension method. It won't hurt anything, because in its low level DataBooster will match stored procedure parameter names with the input parameters dictionary that you pass in, and discard non-matched parameters.
-* Or in a traditional way, create separate Controllers for those stored procedures individually, in their internal implementation set current username and then call the ExecuteDbApi extension method. :(
+* Or in a traditional way, create separate Controllers for those stored procedures individually, in their internal implementation set current username and then call the ExecuteDbApi extension method.
 * Or in a centralized table, register that which stored procedures which parameter require current UserName input, so that in the Web API can know when it need to replace/add which input parameter.
 * etc.
 
 ### Performance  
 * Connection Pool Tuning  
-Facing with concurrent requests from different clients in different business contexts. DbWebApi server opens a new database connection per request. All requests are using the same connection string. So the Connection Pool Tuning is very important to the performance of the whole responsiveness.
+Facing with concurrent requests from different clients in different business contexts. DbWebApi server opens a new database connection per request. All requests are using the same connection string. So the Connection Pool Tuning is important to the performance of the whole responsiveness.
 
 * Load Balancing  
 As a completely generic web service, DbWebApi makes the distributed deployment much simpler, every nodes in the distributed environment are equivalent. It is easier to apply any of today's existing web server load balance techniques.
@@ -733,7 +733,7 @@ _If you expect a stored procedure would be time-consuming, please set the [HttpC
 ``` CSharp
 client.HttpClient.Timeout = TimeSpan.FromMinutes(10);
 ```
-_All Exec... overloads will use HTTP POST method by default. You can change the default behavior to HTTP GET if need to be:_
+_All Exec... overloads will use HTTP POST method by default. You can change the default behavior to HTTP GET if need:_
 ``` CSharp
 client.HttpMethod = HttpMethod.Get;
 ```
@@ -869,7 +869,7 @@ which will include JSONP support by default. If you don't want to support JSONP,
     config.RegisterDbWebApi(supportJsonp: false);
 ```
 ###### IE option
-A third option is to change IE setting if neither of above options is applicable to your situation.  
+The third option is to change IE setting if neither of above options is applicable to your situation.  
 For intranet scenarios, browsers settings can be managed by your system administrator centralizedly.
 ![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
 
@@ -884,7 +884,7 @@ $response = Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://d
 $response contains all the result data. In Powershell ISE, the IntelliSense can show you all its member properties.  
 If an array of input parameter sets is passed into the body content, the return $response will be an array that contains the corresponding results of every iterative executions.  
 
-If you want to save the response body stream (such as CSV or Excel xlsx) into a specified output file, please use -OutFile parameter,
+If you want to save the response body stream _(such as CSV or Excel xlsx)_ into a specified output file, please use -OutFile parameter,
 ``` PowerShell
 Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo/xlsx" -Body (ConvertTo-Json $inpms) -ContentType "application/json" -OutFile "\\somewhere\somepath\filename.xlsx"
 ```
