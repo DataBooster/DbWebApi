@@ -584,12 +584,12 @@ For response to bulk execute request, each of such XML object will be further en
 
 There are a few options can be applied in Url **query string** to control the XML style:
 * XmlNullValue
-    - **true**: **(default)** Emit all null_(DBNull)_ value properties_(columns)_ into XML.
-    - false: Do not emit any null_(DBNull)_ value properties_(columns)_ into XML.
+    - **true**: **(default)** Emit all null _(DBNull)_ value properties _(columns)_ into XML.
+    - false: Do not emit any null _(DBNull)_ value properties _(columns)_ into XML.
 
 * XmlAsAttribute
-    - **false**: **(default)** Serialize properties_(columns)_ as XML elements.
-    - true: Serialize properties_(columns)_ as XML attributes, null_(DBNull)_ value will be rendered as empty string if *XmlNullValue=true*.  
+    - **false**: **(default)** Serialize properties _(columns)_ as XML elements.
+    - true: Serialize properties _(columns)_ as XML attributes, null _(DBNull)_ value will be rendered as empty string if *XmlNullValue=true*.  
 For above example stored procedure with *XmlAsAttribute=true*, the response becomes:
 ``` XML
 <StoredProcedureResponse xmlns:i="http://www.w3.org/2001/XMLSchema-instance" SerializePropertyAsAttribute="true" EmitNullValue="true" TypeSchema="None">
