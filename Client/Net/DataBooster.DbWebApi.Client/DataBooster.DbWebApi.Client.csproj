@@ -47,8 +47,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="StoredProcedureData, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.ClientModels.StoredProcedureData.1.8.0.0\lib\net40-Client\StoredProcedureData.dll</HintPath>
+    <Reference Include="StoredProcedureData, Version=1.8.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.ClientModels.StoredProcedureData.1.8.0.3\lib\net40-Client\StoredProcedureData.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
