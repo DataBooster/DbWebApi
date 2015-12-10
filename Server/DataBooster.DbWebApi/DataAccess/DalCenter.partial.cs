@@ -47,7 +47,7 @@ namespace DataBooster.DbWebApi.DataAccess
 				bool serializePropertyAsAttribute;
 
 				if (bool.TryParse(xmlAsAttribute, out serializePropertyAsAttribute))
-					_DbAccess.DynamicObjectXmlSettings.SerializePropertyAsAttribute = serializePropertyAsAttribute;
+					AccessChannel.DynamicObjectXmlSettings.SerializePropertyAsAttribute = serializePropertyAsAttribute;
 			}
 
 			string xmlNullValue = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.XmlNullValueParameterName);
@@ -56,7 +56,7 @@ namespace DataBooster.DbWebApi.DataAccess
 				bool emitNullValue;
 
 				if (bool.TryParse(xmlNullValue, out emitNullValue))
-					_DbAccess.DynamicObjectXmlSettings.EmitNullValue = emitNullValue;
+					AccessChannel.DynamicObjectXmlSettings.EmitNullValue = emitNullValue;
 			}
 
 			string xmlTypeSchema = queryStrings.GetQueryParameterValue(DbWebApiOptions.QueryStringContract.XmlTypeSchemaParameterName);
@@ -65,13 +65,13 @@ namespace DataBooster.DbWebApi.DataAccess
 				BindableDynamicObject.XmlSettings.DataTypeSchema dataTypeSchema;
 
 				if (Enum.TryParse(xmlTypeSchema, true, out dataTypeSchema))
-					_DbAccess.DynamicObjectXmlSettings.TypeSchema = dataTypeSchema;
+					AccessChannel.DynamicObjectXmlSettings.TypeSchema = dataTypeSchema;
 			}
 		}
 
 		public string ResolvePropertyName(string columnName)
 		{
-			return _DbAccess.DynamicPropertyNamingResolver(columnName);
+			return AccessChannel.DynamicPropertyNamingResolver(columnName);
 		}
 
 		public StoredProcedureResponse ExecuteDbApi(string sp, IDictionary<string, object> parameters)
@@ -81,13 +81,13 @@ namespace DataBooster.DbWebApi.DataAccess
 
 		public object ExecuteDbApi(string sp, IDictionary<string, object> parameters, Action<int> exportResultSetStartTag, Action<DbDataReader> exportHeader, Action<DbDataReader> exportRow, Action<int> exportResultSetEndTag, IDictionary<string, object> outputParametersContainer, int[] resultSetChoices = null, bool bulkRead = false)
 		{
-			return _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters.PretreatInputDictionary()), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
+			return AccessChannel.ExecuteStoredProcedure(new StoredProcedureRequest(sp, parameters.PretreatInputDictionary()), exportResultSetStartTag, exportHeader, exportRow, exportResultSetEndTag, outputParametersContainer, resultSetChoices, bulkRead);
 		}
 
 		// Invalidate Altered Stored Procedures from DerivedParametersCache
 		internal int InvalidateAlteredSpFromCache(string spDetectDdlChanges, TimeSpan elapsedTime)
 		{
-			string commaDelimitedString = string.Join(",", _DbAccess.ListCachedStoredProcedures().OrderBy(sp => sp));
+			string commaDelimitedString = string.Join(",", AccessChannel.ListCachedStoredProcedures().OrderBy(sp => sp));
 
 			if (string.IsNullOrEmpty(commaDelimitedString))
 				return 0;
@@ -96,12 +96,12 @@ namespace DataBooster.DbWebApi.DataAccess
 			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.CommaDelimitedSpListParameterName, commaDelimitedString);
 			parameters.Add(DbWebApiOptions.DetectDdlChangesContract.ElapsedTimeParameterName, (int)elapsedTime.TotalMinutes);
 
-			StoredProcedureResponse results = _DbAccess.ExecuteStoredProcedure(new StoredProcedureRequest(spDetectDdlChanges, parameters));
+			StoredProcedureResponse results = AccessChannel.ExecuteStoredProcedure(new StoredProcedureRequest(spDetectDdlChanges, parameters));
 
 			if (results.ResultSets.Count == 0 || results.ResultSets[0].Count == 0)
 				return 0;
 			else
-				return _DbAccess.RemoveCachedStoredProcedures(results.ResultSets[0].Select(item => item.First().Value as string));
+				return AccessChannel.RemoveCachedStoredProcedures(results.ResultSets[0].Select(item => item.First().Value as string));
 		}
 	}
 }
