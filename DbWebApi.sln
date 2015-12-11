@@ -10,15 +10,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A69
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
 	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Merge-All.bat = Server\NuGet\Merge-All.bat
 		Server\NuGet\Pack-All.bat = Server\NuGet\Pack-All.bat
 		Server\NuGet\Pack-Oracle-DataDirect.bat = Server\NuGet\Pack-Oracle-DataDirect.bat
 		Server\NuGet\Pack-Oracle-ODP.NET.bat = Server\NuGet\Pack-Oracle-ODP.NET.bat
 		Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat = Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat
 		Server\NuGet\Pack-SqlServer.bat = Server\NuGet\Pack-SqlServer.bat
+		Server\NuGet\Publish-All.bat = Server\NuGet\Publish-All.bat
 		Server\NuGet\Push-All.bat = Server\NuGet\Push-All.bat
 	EndProjectSection
 EndProject
@@ -70,6 +73,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2524A6C9
 	ProjectSection(SolutionItems) = preProject
 		Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec = Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec
 		Client\Net\nupkg\Pack-Client.Net.bat = Client\Net\nupkg\Pack-Client.Net.bat
+		Client\Net\nupkg\Publish-Client.Net.bat = Client\Net\nupkg\Publish-Client.Net.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Js", "Js", "{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}"
