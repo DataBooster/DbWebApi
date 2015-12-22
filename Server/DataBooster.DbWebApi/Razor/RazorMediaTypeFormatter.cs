@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Web.Http;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
@@ -43,7 +44,7 @@ namespace DataBooster.DbWebApi.Razor
 
 		public override bool CanWriteType(Type type)
 		{
-			return (type == typeof(RazorContext) || type == typeof(StoredProcedureResponse));
+			return (type == typeof(RazorContext) || typeof(StoredProcedureResponse).IsAssignableFrom(type) /*|| type == typeof(HttpError)*/);
 		}
 
 		/// <param name="type">The type of the object to serialize.</param>
@@ -52,10 +53,10 @@ namespace DataBooster.DbWebApi.Razor
 		/// <param name="content">The <see cref="T:System.Net.Http.HttpContent"/>, if available. Can be null.</param>
 		public override void WriteToStream(Type type, object value, Stream writeStream, HttpContent content)
 		{
-			if (type != typeof(RazorContext))
-				throw new ArgumentOutOfRangeException("type");
 			if (writeStream == null)
 				throw new ArgumentNullException("writeStream");
+			if (type != typeof(RazorContext))
+				throw new ArgumentOutOfRangeException("type");
 
 			RazorContext razorContext = value as RazorContext;
 			if (razorContext == null)

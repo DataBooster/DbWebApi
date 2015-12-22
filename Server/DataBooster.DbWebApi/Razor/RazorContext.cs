@@ -10,7 +10,7 @@ using RazorEngine.Templating;
 
 namespace DataBooster.DbWebApi.Razor
 {
-	class RazorContext
+	sealed class RazorContext
 	{
 		private readonly SerializableResponseData _Model;
 		public SerializableResponseData Model { get { return _Model; } }
