@@ -124,7 +124,6 @@
     <Compile Include="PseudoContentNegotiator.cs" />
     <Compile Include="PseudoMediaTypeFormatter.cs" />
     <Compile Include="Razor\RazorContext.cs" />
-    <Compile Include="Razor\SerializableResponseData.cs" />
     <Compile Include="Razor\RazorMediaTypeFormatter.cs" />
     <Compile Include="TypeHelper.cs" />
     <Compile Include="WebApiExtensions.cs" />

@@ -5,7 +5,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Web.Http;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
@@ -44,7 +43,7 @@ namespace DataBooster.DbWebApi.Razor
 
 		public override bool CanWriteType(Type type)
 		{
-			return (type == typeof(RazorContext) || typeof(StoredProcedureResponse).IsAssignableFrom(type) /*|| type == typeof(HttpError)*/);
+			return (type == typeof(RazorContext) || typeof(StoredProcedureResponse).IsAssignableFrom(type));
 		}
 
 		/// <param name="type">The type of the object to serialize.</param>
