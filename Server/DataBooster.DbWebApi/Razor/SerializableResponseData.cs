@@ -3,13 +3,21 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using System.Collections.Generic;
 using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi.Razor
 {
+	/// <summary>
+	/// The data model needs to be serializable since the Isolated RazorEngine will run the generated code within another AppDomain.
+	/// </summary>
 	[Serializable]
-	public class SerializableResponseData : StoredProcedureResponse
+	public class SerializableResponseData
 	{
+		public IList<IList<BindableDynamicObject>> ResultSets { get; set; }
+		public BindableDynamicObject OutputParameters { get; set; }
+		public object ReturnValue { get; set; }
+
 		public SerializableResponseData()
 		{
 		}
