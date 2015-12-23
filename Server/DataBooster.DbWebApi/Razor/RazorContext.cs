@@ -12,8 +12,8 @@ namespace DataBooster.DbWebApi.Razor
 {
 	sealed class RazorContext
 	{
-		private readonly StoredProcedureResponse _Model;
-		public StoredProcedureResponse Model { get { return _Model; } }
+		private readonly SerializableResponseData _Model;
+		public SerializableResponseData Model { get { return _Model; } }
 
 		private string _RazorTemplate;
 		public string RazorTemplate { get { return _RazorTemplate; } }
@@ -43,7 +43,7 @@ namespace DataBooster.DbWebApi.Razor
 			if (string.IsNullOrEmpty(language) || !Enum.TryParse(language, true, out _RazorLanguage))
 				_RazorLanguage = DbWebApiOptions.DefaultRazorLanguage;
 
-			_Model = spResponse;
+			_Model = new SerializableResponseData(spResponse);
 
 			ResolveRazorTemplate();
 		}

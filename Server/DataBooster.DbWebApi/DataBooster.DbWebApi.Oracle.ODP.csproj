@@ -129,6 +129,7 @@
     <Compile Include="PseudoMediaTypeFormatter.cs" />
     <Compile Include="Razor\RazorContext.cs" />
     <Compile Include="Razor\RazorMediaTypeFormatter.cs" />
+    <Compile Include="Razor\SerializableResponseData.cs" />
     <Compile Include="TypeHelper.cs" />
     <Compile Include="WebApiExtensions.cs" />
     <Compile Include="WebApiExtensions.parameters.cs" />
