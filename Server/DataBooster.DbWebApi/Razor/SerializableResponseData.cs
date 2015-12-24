@@ -9,7 +9,7 @@ using DbParallel.DataAccess;
 namespace DataBooster.DbWebApi.Razor
 {
 	/// <summary>
-	/// The data model needs to be serializable since the Isolated RazorEngine will run the generated code within another AppDomain.
+	/// The model needs to be serializable since Isolated RazorEngine will run the generated code within another AppDomain.
 	/// </summary>
 	[Serializable]
 	public class SerializableResponseData
