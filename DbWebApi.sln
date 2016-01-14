@@ -193,6 +193,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40.Oracle.DataDirect", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.Oracle.DataDirect.csproj", "{98988797-44E4-4F7E-B717-12D215006AA8}"
 EndProject
+Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "ClientModule", "Client\PowerShell\ClientModule\ClientModule.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -271,6 +273,10 @@ Global
 		{98988797-44E4-4F7E-B717-12D215006AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98988797-44E4-4F7E-B717-12D215006AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98988797-44E4-4F7E-B717-12D215006AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -333,5 +339,6 @@ Global
 		{ACCCC9C3-E51B-4D8F-9D00-874B03571307} = {55929138-F0E4-4621-AF85-EBF13315B92A}
 		{92A26689-0E7E-491B-AFB5-A5822EA3D222} = {CF8C5EA8-BE23-4E18-A2D6-9B8CF8075A46}
 		{98988797-44E4-4F7E-B717-12D215006AA8} = {DD85CDC2-CCCE-4562-A224-D3CD0F7EAE03}
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51} = {C218CFD1-D316-4F03-B0BD-202773280E72}
 	EndGlobalSection
 EndGlobal
