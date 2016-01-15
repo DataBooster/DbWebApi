@@ -30,8 +30,8 @@ Function Invoke-DbWebApi {
 		if ($PSCmdlet.ParameterSetName -eq 'BasicAuth') {
 			$basicAuth = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($($User) + ":" + $($Password)));
 			$psBoundParameters.Headers = @{ Authorization = $basicAuth };
-			$psBoundParameters.Remove("User");
-			$psBoundParameters.Remove("Password");
+			$psBoundParameters.Remove("User") | Out-Null;
+			$psBoundParameters.Remove("Password") | Out-Null;
 		}
 		else {
 			$psBoundParameters.UseDefaultCredentials = $true;
@@ -52,8 +52,11 @@ Function Invoke-DbWebApi {
 			$psBoundParameters.Body = ConvertTo-Json $Body;
 		}
 
-		if ($PSCmdlet.ShouldProcess($psBoundParameters)) {
+		if ($PSCmdlet.ShouldProcess("Invoke-RestMethod -Uri '$Uri' ...")) {
 			Invoke-RestMethod @psBoundParameters;
+		}
+		else {
+			Write-Verbose (ConvertTo-Json $psBoundParameters);
 		}
 	}
 }

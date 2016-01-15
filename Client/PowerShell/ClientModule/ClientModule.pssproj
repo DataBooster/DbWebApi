@@ -28,9 +28,8 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="dbwebapi-client.psd1" />
-    <Compile Include="dbwebapi-client.psm1" />
-    <Compile Include="dbwebapi-client.tests.ps1" />
+    <Compile Include="DbWebApi-Client.psd1" />
+    <Compile Include="DbWebApi-Client.psm1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
