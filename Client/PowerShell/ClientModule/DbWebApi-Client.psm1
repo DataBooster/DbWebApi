@@ -1,6 +1,4 @@
 <#
-	Invoke-DbWebApi
-
 	.SYNOPSIS 
 	Sends an HTTP or HTTPS request to a RESTful web service - simplified for DbWebApi invoking.
 
@@ -11,19 +9,25 @@
 	Windows PowerShell formats the response based to the data type. For an RSS or ATOM feed, Windows PowerShell returns the Item or Entry XML 
 	nodes. For JavaScript Object Notation (JSON) or XML, Windows PowerShell converts (or deserializes) the content into objects.
 
-	The Invoke-RestMethod cmdlet is introduced in Windows PowerShell 3.0.
+	The Invoke-RestMethod cmdlet was introduced in Windows PowerShell 3.0.
+
+	.COMPONENT
+	Invoke-RestMethod
 
 	.INPUTS
 	System.Object. You can pipe the body of a web request to Invoke-DbWebApi. The $Body will be passed in as-is to Invoke-RestMethod if it is a string, 
-	otherwise it will be treated as a object and converted to JSON string before passing to Invoke-RestMethod.
+	otherwise it will be treated as a object and converted to JSON string before passing to Invoke-RestMethod if ContentType is "application/json".
 
 	.PARAMETER Body
 	Enhanced: The Body value will be passed in as-is to Invoke-RestMethod if it is a string, otherwise it will be treated as a object and converted to 
-	JSON string before passing to Invoke-RestMethod.
+	JSON string before passing to Invoke-RestMethod if ContentType is "application/json".
 
 	.PARAMETER Uri
 	Specifies the Uniform Resource Identifier (URI) of the Internet resource to which the web request is sent. This parameter supports HTTP, 
 	HTTPS, FTP, and FILE values.
+
+	.PARAMETER Method
+	Specifies the method used for the web api request. Defaults to Post.
 
 	.PARAMETER ContentType
 	Specifies the content type of the web request. If this parameter is omitted, Invoke-DbWebApi sets the content type to "application/json".
@@ -44,6 +48,18 @@
 
 	.PARAMETER Password
 	Specifies the password of the specified user name, once you use Basic Authorization to send the request.
+
+	.NOTES
+	Any other valid parameters of Invoke-RestMethod can also be applied to the Invoke-DbWebApi, since it is just a simple wrap of build-in Invoke-RestMethod cmdlet.
+	For detail about all valid parameters, please see https://technet.microsoft.com/en-us/library/hh849971.aspx.
+
+	.EXAMPLE
+	$Response = Invoke-DbWebApi -Uri https://test-server:8089/something -Body @{inParamA = [DateTime]"2015-03-16"; inParamB = 108; inParamC = "Hello"}
+	(Using Integrated Windows Authentication.)
+
+	.EXAMPLE
+	Invoke-DbWebApi -Uri https://test-server:8089/somethingelse/csv -Method Get -User guest108 -Password "Hello World!" -OutFile "C:\Temp\test.csv"
+	(Using Basic Authentication.)
 
 	.LINK
 	https://github.com/DataBooster/DbWebApi

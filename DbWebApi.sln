@@ -90,9 +90,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2D4600AA
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{C218CFD1-D316-4F03-B0BD-202773280E72}"
-	ProjectSection(SolutionItems) = preProject
-		Client\PowerShell\dbwebapi-client.ps1 = Client\PowerShell\dbwebapi-client.ps1
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}"
 EndProject
