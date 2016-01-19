@@ -8,6 +8,17 @@
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>
     <Name>ClientModule</Name>
+    <ClrVersion />
+    <PowerShellHostVersion />
+    <PowerShellVersion />
+    <ProcessorArchitecture />
+    <RequiredModules />
+    <Author>Abel Cheng</Author>
+    <CompanyName>https://github.com/DataBooster/DbWebApi</CompanyName>
+    <Copyright>Copyright © Abel Cheng 2015</Copyright>
+    <Description>The Invoke-DbWebApi function wraps the Invoke-RestMethod cmdlet, and it's simplified for DbWebApi invoking.</Description>
+    <Guid>cc870197-a3f9-4cb1-a1ae-43c78115aa1a</Guid>
+    <Version>1.1.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="DbWebApi-Client-Sample.ps1" />
     <Compile Include="DbWebApi-Client.psd1" />
     <Compile Include="DbWebApi-Client.psm1" />
   </ItemGroup>

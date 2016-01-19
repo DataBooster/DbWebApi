@@ -3,11 +3,9 @@
 	Sends an HTTP or HTTPS request to a RESTful web service - simplified for DbWebApi invoking.
 
 	.DESCRIPTION
-	The Invoke-DbWebApi function wraps the Invoke-RestMethod cmdlet which sends HTTP and HTTPS requests to Representational State Transfer (REST) web services
-	that returns richly structured data, and simplified the parameters preparation for DbWebApi invoking.
+	The Invoke-DbWebApi function wraps the Invoke-RestMethod cmdlet which sends HTTP and HTTPS requests to Representational State Transfer (REST) web services that returns richly structured data, and simplified the parameters preparation for DbWebApi invoking.
 
-	Windows PowerShell formats the response based to the data type. For an RSS or ATOM feed, Windows PowerShell returns the Item or Entry XML 
-	nodes. For JavaScript Object Notation (JSON) or XML, Windows PowerShell converts (or deserializes) the content into objects.
+	Windows PowerShell formats the response based to the data type. For an RSS or ATOM feed, Windows PowerShell returns the Item or Entry XML nodes. For JavaScript Object Notation (JSON) or XML, Windows PowerShell converts (or deserializes) the content into objects.
 
 	The Invoke-RestMethod cmdlet was introduced in Windows PowerShell 3.0.
 
@@ -15,16 +13,13 @@
 	Invoke-RestMethod
 
 	.INPUTS
-	System.Object. You can pipe the body of a web request to Invoke-DbWebApi. The $Body will be passed in as-is to Invoke-RestMethod if it is a string, 
-	otherwise it will be treated as a object and converted to JSON string before passing to Invoke-RestMethod if ContentType is "application/json".
+	System.Object. You can pipe the body of a web request to Invoke-DbWebApi. The $Body will be passed in as-is to Invoke-RestMethod if it is a string, otherwise it will be treated as a object and converted to JSON string before passing to Invoke-RestMethod if ContentType is "application/json".
 
 	.PARAMETER Body
-	Enhanced: The Body value will be passed in as-is to Invoke-RestMethod if it is a string, otherwise it will be treated as a object and converted to 
-	JSON string before passing to Invoke-RestMethod if ContentType is "application/json".
+	Enhanced: The Body value will be passed in as-is to Invoke-RestMethod if it is a string, otherwise it will be treated as a object and converted to JSON string before passing to Invoke-RestMethod if ContentType is "application/json".
 
 	.PARAMETER Uri
-	Specifies the Uniform Resource Identifier (URI) of the Internet resource to which the web request is sent. This parameter supports HTTP, 
-	HTTPS, FTP, and FILE values.
+	Specifies the Uniform Resource Identifier (URI) of the Internet resource to which the web request is sent. This parameter supports HTTP, HTTPS, FTP, and FILE values.
 
 	.PARAMETER Method
 	Specifies the method used for the web api request. Defaults to Post.
@@ -50,8 +45,8 @@
 	Specifies the password of the specified user name, once you use Basic Authorization to send the request.
 
 	.NOTES
-	Any other valid parameters of Invoke-RestMethod can also be applied to the Invoke-DbWebApi, since it is just a simple wrap of build-in Invoke-RestMethod cmdlet.
-	For detail about all valid parameters, please see https://technet.microsoft.com/en-us/library/hh849971.aspx.
+	Since the Invoke-DbWebApi is just a simple wrap of the build-in Invoke-RestMethod cmdlet.
+	Please see https://technet.microsoft.com/en-us/library/hh849971.aspx for more detail.
 
 	.EXAMPLE
 	$Response = Invoke-DbWebApi -Uri https://test-server:8089/something -Body @{inParamA = [DateTime]"2015-03-16"; inParamB = 108; inParamC = "Hello"}
@@ -87,14 +82,44 @@ Function Invoke-DbWebApi {
 		[ValidateNotNullOrEmpty()]
 		[string]$User,
 		[Parameter(Mandatory, ParameterSetName = 'BasicAuth')]
-		[string]$Password
+		[string]$Password,
+
+		[Parameter()]
+		[System.Collections.IDictionary]$Headers,
+		[Parameter()]
+		[System.Security.Cryptography.X509Certificates.X509Certificate]$Certificate,
+		[Parameter()]
+		[string]$CertificateThumbprint,
+		[Parameter()]
+		[PSCredential]$Credential,
+		[Parameter()]
+		[switch]$DisableKeepAlive,
+		[Parameter()]
+		[int]$MaximumRedirection,
+		[Parameter()]
+		[switch]$PassThru,
+		[Parameter()]
+		[string]$SessionVariable,
+		[Parameter()]
+		[int]$TimeoutSec,
+		[Parameter()]
+		[string]$TransferEncoding,
+		[Parameter()]
+		[string]$UserAgent,
+		[Parameter()]
+		[Microsoft.PowerShell.Commands.WebRequestSession]$WebSession
 	)
 
 	Begin
 	{
 		if ($PSCmdlet.ParameterSetName -eq 'BasicAuth') {
 			$basicAuth = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($($User) + ":" + $($Password)));
-			$psBoundParameters.Headers = @{ Authorization = $basicAuth };
+			if ($Headers) {
+				$psBoundParameters.Headers["Authorization"] = $basicAuth;
+			}
+			else {
+				$psBoundParameters.Headers = @{ Authorization = $basicAuth };
+			}
 			$psBoundParameters.Remove("User") | Out-Null;
 			$psBoundParameters.Remove("Password") | Out-Null;
 		}
