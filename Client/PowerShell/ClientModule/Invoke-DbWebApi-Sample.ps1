@@ -1,5 +1,5 @@
 # Invoke-DbWebApi-Sample.ps1 - DbWebApi Client PowerShell Utility
-# https://github.com/databooster/dbwebapi
+# https://github.com/DataBooster/DbWebApi
 # Date: 2015-06-09
 
 Import-Module "Microsoft.PowerShell.Utility"
