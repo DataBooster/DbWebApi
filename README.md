@@ -76,6 +76,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
             - [Thousands or more](#thousands-or-more)
                 - [Table-Valued Parameters](#ps-table-valued-parameters)
                 - [PL/SQL Associative Array Parameters](#ps-associative-array-parameters)
+    - [Windows Command Line Client](#windows-command-line-client)
 - [Restrictions](#restrictions)
 - [NuGet](#nugget)
     - [Server packages](#server-side)
@@ -922,10 +923,17 @@ Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test
 ```
 *Tips:*  
 *Using PowerShell array for large dataset, better to initialize an array with explicit size (instead of dynamic array with subsequent appending elements), otherwise most of performance will be lost in highly frequent memory reallocation, data copying over and over again.*  
-*You may notice that [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) takes many fixed arguments, to be lazier to type them all the time, you can import a convenient function [Invoke-DbWebApi](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) from [dbwebapi-client.ps1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/dbwebapi-client.ps1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
+*You may notice that [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) takes many fixed arguments, to be lazier to type them all the time, you can import a convenient function [Invoke-DbWebApi](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi-Sample.ps1) from [DbWebApi-Client.psm1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/DbWebApi-Client.psm1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
 
 PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. In PowerShell, all data become visualized and extremely flexible to be quickly modified interactively.  
 
+#### Windows Command Line Client  
+On various occasions, conciseness is more important than running-performance. A generic Command-Line batch file to call the DbWebApi PowerShell Client may bring us much convenience. See [Invoke-DbWebApi.bat](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi.bat).  
+For usage example,
+```
+Invoke-DbWebApi.bat -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp" -Body "{inId:108,inDate:'2016-01-20T00:00:00Z'}"
+```
+To check what exact parameters will be sent to DbWebApi without really executing the stored procedure, you can append the _**-WhatIf -Verbose**_ switches to above command-line.
 
 ### Restrictions  
 * Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
