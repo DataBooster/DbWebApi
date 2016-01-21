@@ -928,12 +928,15 @@ Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test
 PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. In PowerShell, all data become visualized and extremely flexible to be quickly modified interactively.  
 
 #### Windows Command Line Client  
-On various occasions, conciseness is more important than running-performance. A generic Command-Line batch file to call the DbWebApi PowerShell Client may bring us much convenience. See [Invoke-DbWebApi.bat](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi.bat).  
+On some occasions which running-performance are not critical, using a generic batch file to call the DbWebApi PowerShell Client in a single command line may still be an efficient development. Refer to [Invoke-DbWebApi.bat](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi.bat).  
 For usage example,
-```
+```bat
 Invoke-DbWebApi.bat -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp" -Body "{inId:108,inDate:'2016-01-20T00:00:00Z'}"
 ```
+<u>_Remarks_</u>  
+_The Invoke-DbWebApi.bat requires Windows PowerShell 3.0._  
 To check what exact parameters will be sent to DbWebApi without really executing the stored procedure, you can append the _**-WhatIf -Verbose**_ switches to above command-line.
+
 
 ### Restrictions  
 * Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
