@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>DataBooster.DbWebApi.Client.PowerShell</id>
+		<version>1.1.0.1</version>
+		<title>DbWebApi Client PowerShell Modules</title>
+		<authors>Abel Cheng</authors>
+		<owners>https://github.com/DataBooster/DbWebApi</owners>
+		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>DbWebApi Client PowerShell Modules. https://github.com/DataBooster/DbWebApi </description>
+		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
+		<copyright>Copyright 2016 Abel Cheng</copyright>
+		<tags>DbWebApi PowerShell Client Module</tags>
+	</metadata>
+	<files>
+		<file src="..\ClientModule\*.psd1" target="tools" />
+		<file src="..\ClientModule\*.psm1" target="tools" />
+		<file src="..\ClientModule\*.bat" target="tools" />
+		<file src="..\ClientModule\*.ps1" target="tools" />
+	</files>
+</package>
