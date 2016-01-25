@@ -4,7 +4,7 @@
 
 Import-Module "Microsoft.PowerShell.Utility" -Cmdlet "Invoke-RestMethod"
 
-Import-Module "$PSScriptRoot\DbWebApi-Client.psm1" -Force
+Import-Module "$PSScriptRoot\DbWebApi-Client.psd1" -Force
 
 Invoke-DbWebApi @args
 
