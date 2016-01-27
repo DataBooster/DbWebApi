@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>DataBooster.DbWebApi.Client.PowerShell</id>
-		<version>1.1.0.3</version>
+		<version>1.1.0.4</version>
 		<title>DbWebApi Client PowerShell Modules</title>
 		<authors>Abel Cheng</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
