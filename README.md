@@ -931,7 +931,7 @@ PowerShell is true powerful to do more solid work with less coding if being rati
 On some occasions which running-performance are not critical, using a generic batch file to call the DbWebApi PowerShell Client in a single command line may still be an efficient development. Refer to [Invoke-DbWebApi.bat](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi.bat).  
 For usage example,
 ```bat
-Invoke-DbWebApi.bat -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp" -Body "{inId:108,inDate:'2016-01-20T00:00:00Z'}"
+Invoke-DbWebApi.bat -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp/xlsx" -Body "{inId:108,inDate:'2016-01-20T00:00:00Z'}" -OutFile "\\NFS\Shared Folder\Working Data\Rpt2015.xlsx"
 ```
 _<u>Remarks</u>_  
 _The Invoke-DbWebApi.bat requires Windows PowerShell 3.0 or higher._  
