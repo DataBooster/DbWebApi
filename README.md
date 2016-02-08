@@ -93,7 +93,8 @@ In other words, DbWebApi provides an alternative way to implement your Web APIs 
 
 In essence, DbWebApi is still a ASP.NET Web API instead of a naked tunnel for database. It just be generic, and provides a few extension methods to your ASP.NET Web API services.
 - Security:  
-The security of DbWebApi is entirely dependent on what you can do in ASP.NET Web API. What security you did for your existing Web API services, should still apply in the DbWebApi.
+The security of DbWebApi is completely dependent on what you can do in ASP.NET Web API. What security you did for your existing Web API services, should still apply in the DbWebApi. For information about access control, please see the [[Permission Control](#permission-control)] section later in this wiki.  
+_Some people may concern about the name of some stored procedures being exposed to the public. Hereby, it is necessary to clarify that all the exposed names of [stored procedures](https://msdn.microsoft.com/en-us/library/ms190782.aspx) are essentially some names of public services. No matter how hard the service provider try to hide/disguise the name of service function, as long as a service function is a businesses need for the service consumers to invoke, the service consumers always can get the real intention of the service according to its effect. Hiding/disguising service name make no contribution to improve security, it's fundamentally different from hiding any piece of credential information._
 
 - Data Contract:  
 Since there is no setup at all, the domain entities returned from DbWebApi simply reflect the result sets returned from your stored procedure. So the data contract is driven by your stored procedure.  
@@ -675,13 +676,14 @@ Notes: The automatic naming conversion only applies to result sets' column-names
 For JSON, XML and xlsx responses, detail exception will be encapsulated into HttpResponseMessage with HTTP 500 error status if the Web API service encounters any problems. For the verbosity of errors to show in client side, it depends on your IncludeErrorDetailPolicy in HttpConfiguration. However, because CSV respone uses a push stream, the client side will always receive a HTTP 200 OK header without Content-Length field. If the server side encounter any exception subsequently, it would simply interrupt the http connection and the client would get a Receive Failure without any detail exception message.
 
 ### Permission Control
-The example project shows using an authorization filter [DbWebApiAuthorize] to restrict which user can execute which stored procedure, that will integrate with your own implementation of permissions checking.
+Access authorization is the only one thing you have to handle by yourself, and the approach depends on the granularity of control you want.  
+Control over the stored-procedure granularity is a simple and effective practice. The [example project](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs) shows using an authorization filter [[DbWebApiAuthorize](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Filters/MyDbWebApiAuthorization.cs)] to restrict which user can execute which stored procedure, that should integrate with your own implementation of authorization checking.
 ``` CSharp
     public class MyDbWebApiAuthorization : IDbWebApiAuthorization
     {
-        public bool IsAuthorized(string userName, string storedProcedure)
+        public bool IsAuthorized(string userName, string storedProcedure, object state = null)
         {
-            // TO DO, to implementate your own authorization logic
+            // TO DO, to integrate with your own authorization implementation
             return true;	// If allow permission
             return false;	// If deny permission
         }
