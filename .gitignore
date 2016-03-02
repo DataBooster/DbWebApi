@@ -32,3 +32,5 @@ packages/*/
 Server/Sample/packages/*/
 Server/NuGet/nupkg/Net*/
 Server/DataBooster.DbWebApi/*.nuspec
+Server/Sample/MyDbWebApi/Web.config
+Server/Sample/MyDbWebApi.Net40/Web.config

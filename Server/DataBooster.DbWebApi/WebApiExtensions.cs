@@ -117,11 +117,11 @@ namespace DataBooster.DbWebApi
 		/// <typeparam name="T">IDictionary&lt;string, object&gt;</typeparam>
 		/// <param name="apiController">Your ApiController to invoke this extension method</param>
 		/// <param name="sp">Specifies the fully qualified name of database stored procedure or function</param>
-		/// <param name="listOfParameters">Specifies a collection of required parameter dictionary for every call in the bulk execution</param>
+		/// <param name="bulkParameterSets">Specifies a collection of required parameter dictionary for every call in the bulk execution</param>
 		/// <returns>A complete HttpResponseMessage contains an array of every result data returned by the database</returns>
-		public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController, string sp, IList<T> listOfParameters) where T : IDictionary<string, object>
+		public static HttpResponseMessage BulkExecuteDbApi<T>(this ApiController apiController, string sp, IList<T> bulkParameterSets) where T : IDictionary<string, object>
 		{
-			if (listOfParameters == null || listOfParameters.Count == 0)
+			if (bulkParameterSets == null || bulkParameterSets.Count == 0)
 				return apiController.Request.CreateResponse(HttpStatusCode.BadRequest);
 
 			try
@@ -134,10 +134,10 @@ namespace DataBooster.DbWebApi
 
 				using (DalCenter dbContext = new DalCenter(apiController.Request.GetQueryStringDictionary()))
 				{
-					StoredProcedureResponse[] spResponses = new StoredProcedureResponse[listOfParameters.Count];
+					StoredProcedureResponse[] spResponses = new StoredProcedureResponse[bulkParameterSets.Count];
 
 					for (int i = 0; i < spResponses.Length; i++)
-						spResponses[i] = dbContext.ExecuteDbApi(sp, listOfParameters[i]);
+						spResponses[i] = dbContext.ExecuteDbApi(sp, bulkParameterSets[i]);
 
 					return apiController.Request.CreateResponse(HttpStatusCode.OK, spResponses.AsQueryable());
 				}

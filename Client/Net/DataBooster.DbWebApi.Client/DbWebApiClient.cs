@@ -152,24 +152,24 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk Exec as StoredProcedureResponse overloads
-		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAsAsync<StoredProcedureResponse[]>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAsAsync<StoredProcedureResponse[]>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public Task<StoredProcedureResponse[]> ExecAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsync(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsync(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
-		public StoredProcedureResponse[] Exec<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public StoredProcedureResponse[] Exec<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAs<StoredProcedureResponse[]>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAs<StoredProcedureResponse[]>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public StoredProcedureResponse[] Exec<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public StoredProcedureResponse[] Exec<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return Exec(requestUri, listOfInputParameters, CancellationToken.None);
+			return Exec(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
 		#endregion
@@ -217,24 +217,24 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsJson overloads
-		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAsAsync<JObject[]>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAsAsync<JObject[]>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public Task<JObject[]> ExecAsJsonAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsJsonAsync(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsJsonAsync(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
-		public JObject[] ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public JObject[] ExecAsJson<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAs<JObject[]>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAs<JObject[]>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public JObject[] ExecAsJson<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public JObject[] ExecAsJson<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsJson(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsJson(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 		#endregion
 
@@ -281,24 +281,24 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsXml overloads
-		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAsAsync<XDocument>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAsAsync<XDocument>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public Task<XDocument> ExecAsXmlAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsXmlAsync(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsXmlAsync(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
-		public XDocument ExecAsXml<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public XDocument ExecAsXml<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAs<XDocument>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAs<XDocument>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public XDocument ExecAsXml<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public XDocument ExecAsXml<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsXml(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsXml(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
 		#endregion
@@ -346,24 +346,24 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsString overloads
-		public Task<string> ExecAsStringAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public Task<string> ExecAsStringAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAsAsync<string>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAsAsync<string>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public Task<string> ExecAsStringAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public Task<string> ExecAsStringAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsStringAsync<T>(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsStringAsync<T>(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
-		public string ExecAsString<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public string ExecAsString<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAs<string>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAs<string>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public string ExecAsString<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public string ExecAsString<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsString<T>(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsString<T>(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 		#endregion
 
@@ -410,24 +410,24 @@ namespace DataBooster.DbWebApi.Client
 		#endregion
 
 		#region Bulk ExecAsStream overloads
-		public Task<Stream> ExecAsStreamAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public Task<Stream> ExecAsStreamAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAsAsync<Stream>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAsAsync<Stream>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public Task<Stream> ExecAsStreamAsync<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public Task<Stream> ExecAsStreamAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsStreamAsync<T>(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsStreamAsync<T>(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 
-		public Stream ExecAsStream<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken)
+		public Stream ExecAsStream<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken)
 		{
-			return BulkExecAs<Stream>(requestUri, AsBulkInputParameters(listOfInputParameters), cancellationToken);
+			return BulkExecAs<Stream>(requestUri, AsBulkInputParameterSets(bulkInputParameterSets), cancellationToken);
 		}
 
-		public Stream ExecAsStream<T>(string requestUri, ICollection<T> listOfInputParameters)
+		public Stream ExecAsStream<T>(string requestUri, ICollection<T> bulkInputParameterSets)
 		{
-			return ExecAsStream<T>(requestUri, listOfInputParameters, CancellationToken.None);
+			return ExecAsStream<T>(requestUri, bulkInputParameterSets, CancellationToken.None);
 		}
 		#endregion
 
@@ -489,15 +489,15 @@ namespace DataBooster.DbWebApi.Client
 
 		#region Bulk Exec as Generic overloads
 #if WEB_API2
-		protected async Task<T> BulkExecAsAsync<T>(string requestUri, ICollection<IDictionary<string, object>> listOfInputParameters, CancellationToken cancellationToken) where T : class
+		protected async Task<T> BulkExecAsAsync<T>(string requestUri, ICollection<IDictionary<string, object>> bulkInputParameterSets, CancellationToken cancellationToken) where T : class
 		{
-			HttpResponseMessage httpResponse = await BulkExecRawAsync(requestUri, listOfInputParameters, cancellationToken);
+			HttpResponseMessage httpResponse = await BulkExecRawAsync(requestUri, bulkInputParameterSets, cancellationToken);
 			return httpResponse.ReadAs<T>();
 		}
 #else	// ASP.NET Web API 1
-		protected Task<T> BulkExecAsAsync<T>(string requestUri, ICollection<IDictionary<string, object>> listOfInputParameters, CancellationToken cancellationToken) where T : class
+		protected Task<T> BulkExecAsAsync<T>(string requestUri, ICollection<IDictionary<string, object>> bulkInputParameterSets, CancellationToken cancellationToken) where T : class
 		{
-			return BulkExecRawAsync(requestUri, listOfInputParameters, cancellationToken).
+			return BulkExecRawAsync(requestUri, bulkInputParameterSets, cancellationToken).
 				ContinueWith<T>(requestTask =>
 				{
 					if (requestTask.IsCanceled)
@@ -510,11 +510,11 @@ namespace DataBooster.DbWebApi.Client
 		}
 #endif
 
-		protected T BulkExecAs<T>(string requestUri, ICollection<IDictionary<string, object>> listOfInputParameters, CancellationToken cancellationToken) where T : class
+		protected T BulkExecAs<T>(string requestUri, ICollection<IDictionary<string, object>> bulkInputParameterSets, CancellationToken cancellationToken) where T : class
 		{
 			try
 			{
-				return BulkExecAsAsync<T>(requestUri, listOfInputParameters, cancellationToken).Result;
+				return BulkExecAsAsync<T>(requestUri, bulkInputParameterSets, cancellationToken).Result;
 			}
 			catch (AggregateException ae)
 			{
@@ -585,23 +585,23 @@ namespace DataBooster.DbWebApi.Client
 		#region Bulk Raw Methods
 		private const string _ErrBulkMethodGet = "Bulk Exec does not support HTTP GET";
 
-		protected Task<HttpResponseMessage> BulkExecRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		protected Task<HttpResponseMessage> BulkExecRawAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
 			if (_HttpMethod == HttpMethod.Get)
 				throw new NotSupportedException(_ErrBulkMethodGet);
 			else
-				return BulkPostRawAsync(requestUri, listOfInputParameters, cancellationToken);
+				return BulkPostRawAsync(requestUri, bulkInputParameterSets, cancellationToken);
 		}
 
-		private Task<HttpResponseMessage> BulkPostRawAsync<T>(string requestUri, ICollection<T> listOfInputParameters, CancellationToken cancellationToken) where T : IDictionary<string, object>
+		private Task<HttpResponseMessage> BulkPostRawAsync<T>(string requestUri, ICollection<T> bulkInputParameterSets, CancellationToken cancellationToken) where T : IDictionary<string, object>
 		{
-			if (listOfInputParameters == null)
-				throw new ArgumentNullException("listOfInputParameters");
+			if (bulkInputParameterSets == null)
+				throw new ArgumentNullException("bulkInputParameterSets");
 
-			if (listOfInputParameters.Count == 0)
+			if (bulkInputParameterSets.Count == 0)
 				return CreateEmptyJsonArrayResponse();
 
-			return _HttpClient.PostAsJsonAsync(requestUri, listOfInputParameters, cancellationToken);
+			return _HttpClient.PostAsJsonAsync(requestUri, bulkInputParameterSets, cancellationToken);
 		}
 
 		private Task<HttpResponseMessage> CreateEmptyJsonArrayResponse()
@@ -617,11 +617,11 @@ namespace DataBooster.DbWebApi.Client
 			return tcs.Task;
 		}
 
-		private ICollection<IDictionary<string, object>> AsBulkInputParameters<T>(ICollection<T> listOfAnonymousTypeParameters)
+		private ICollection<IDictionary<string, object>> AsBulkInputParameterSets<T>(ICollection<T> bulkAnonymousTypeParameters)
 		{
-			ICollection<IDictionary<string, object>> listOfInputParameterDictionary = listOfAnonymousTypeParameters as ICollection<IDictionary<string, object>>;
+			ICollection<IDictionary<string, object>> bulkInputParameterDictionary = bulkAnonymousTypeParameters as ICollection<IDictionary<string, object>>;
 
-			return listOfInputParameterDictionary ?? listOfAnonymousTypeParameters.Select(o => AsInputParameters(o)).ToList();
+			return bulkInputParameterDictionary ?? bulkAnonymousTypeParameters.Select(o => AsInputParameters(o)).ToList();
 		}
 		#endregion
 

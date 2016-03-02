@@ -910,7 +910,7 @@ Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test
 ```
 - 
     - <a name="ps-associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#ODPNT250) (Oracle)  
-Oracle uses another style,  each parameter must be separated as an array of simple data type. See following example,
+Oracle uses another style,  each parameter must be separated as an array of primitive data type. See following example,
 ``` PowerShell
 $impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
 $inpms = @{inItemIds=[int[]]@(0) * $impData.Length; inItemNames=[string[]]@("") * $import.Length; inItemValues=[decimal[]]@(0) * $import.Length; inBatchComment="This is a test load."};
@@ -941,7 +941,7 @@ To check what exact parameters will be sent to DbWebApi without really executing
 
 
 ### Restrictions  
-* Only basic database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
+* Only primitive database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
 * Database User-Defined Types, Oracle composite data types (such as Collection Types, Varrays, Nested Tables, etc.) are currently not supported in result set columns nor in sp/func parameters.  
 [Table-Valued Parameters (SQL Server 2008)](https://msdn.microsoft.com/en-us/library/bb675163.aspx) and [PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) are supported only in sp/func input parameters.    
 * All database procedure-names, function-names, column-names and parameter-names are regarded as case-insensitive.
