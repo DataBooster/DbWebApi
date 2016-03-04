@@ -15,10 +15,10 @@
     <RequiredModules />
     <Author>Abel Cheng</Author>
     <CompanyName>https://github.com/DataBooster/DbWebApi</CompanyName>
-    <Copyright>Copyright © Abel Cheng 2016</Copyright>
+    <Copyright>Copyright © 2016 Abel Cheng</Copyright>
     <Description>The Invoke-DbWebApi function wraps the Invoke-RestMethod cmdlet, and it's simplified for DbWebApi invoking.</Description>
     <Guid>cc870197-a3f9-4cb1-a1ae-43c78115aa1a</Guid>
-    <Version>1.1.0.4</Version>
+    <Version>1.1.0.5</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
