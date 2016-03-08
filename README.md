@@ -87,7 +87,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
 ***
 
 ### Overview  
-DbWebApi is a .Net library that implement an entirely generic Web API for data-driven applications clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets _(each resultset presents as an Excel worksheet)_. While being regarded as a gateway service, DbWebApi reflects in two directions: Data Access Gateway and Media Format Gateway.
+DbWebApi is a .Net library that implement an entirely generic Web API for HTTP clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets _(each resultset presents as an Excel worksheet)_. While being regarded as a gateway service, DbWebApi reflects in two directions: Data Access Gateway and Media Format Gateway.
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
@@ -933,12 +933,25 @@ PowerShell is true powerful to do more solid work with less coding if being rati
 On some occasions which running-performance are not critical, using a generic batch file to call the DbWebApi PowerShell Client in a single command line may still be an efficient development. Refer to [Invoke-DbWebApi.bat](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi.bat).  
 For usage example,
 ```bat
-Invoke-DbWebApi.bat -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp/xlsx" -Body "{inId:108,inDate:'2016-01-20T00:00:00Z'}" -OutFile "\\NFS\Shared Folder\Working Data\Rpt2015.xlsx"
+Invoke-DbWebApi.bat -Uri "http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp/xlsx" -Body "{'inId':108,'inDate':'2016-01-20T00:00:00Z'}" -OutFile "\\NFS\Shared Folder\Working Data\Rpt2015.xlsx"
 ```
 _<u>Remarks</u>_  
 _The Invoke-DbWebApi.bat requires Windows PowerShell 3.0 or higher._  
 To check what exact parameters will be sent to DbWebApi without really executing the stored procedure, you can append the _**-WhatIf -Verbose**_ switches to above command-line.
 
+To prevent a JSON string argument from being split into multiple broken arguments by Command Prompt, double quotes (") must be used to encapsulate the whole string, and leaving inside single quotes (') to JSON parser. For example:
+```
+-Body "{'inId': 108, 'inDate': '2016-01-20T00:00:00Z', 'inComment': 'Some Comment'}"
+```
+Because in Json.Net, single quotes around keys and values work in the same way as double quotes _(although it is not a standard of JSON.org)_. But in Windows Command Prompt, only double-quoted string _(contains spaces)_ can be recognized as a whole argument.
+
+Alternatively, escaping every inside double quote character (") needs to be considered. For example:
+```
+-Body "{\"inId\": 108, \"inDate\": \"2016-01-20T00:00:00Z\", \"inComment\": \"Some Comment\"}"
+```
+_Using -WhatIf -Verbose switches is an easy check._
+
+.
 
 ### Restrictions  
 * Only primitive database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
