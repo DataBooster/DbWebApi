@@ -55,8 +55,8 @@
       <HintPath>..\..\packages\CsvHelper.2.13.5.0\lib\net40-client\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DataBooster.Oracle.ODP.1.8.0.5\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.Oracle.ODP.1.8.0.6\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
