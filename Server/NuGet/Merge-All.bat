@@ -1,9 +1,9 @@
 @ECHO OFF
 CD /D %~dp0
 
-IF /i {%1} == {} GOTO :Usage
-IF /i {%1} == {-h} GOTO :Usage
-IF /i {%1} == {-help} GOTO :Usage
+IF /i {%1}=={} GOTO :Usage
+IF /i {%1}=={-h} GOTO :Usage
+IF /i {%1}=={-help} GOTO :Usage
 
 SET MERGE=..\..\packages\NupkgMerge.1.0.0.1\tools\NupkgMerge.exe
 SET PKGSQL=SqlServer.%1
@@ -31,7 +31,7 @@ SET PKGPREPARED=false
 )
 )
 
-IF {%PKGPREPARED%} == {false} (
+IF {%PKGPREPARED%}=={false} (
 COLOR 0C
 PAUSE
 COLOR
