@@ -12,11 +12,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{847A69
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8E71CF07-E755-4A97-A0A2-21DF211FB979}"
 	ProjectSection(SolutionItems) = preProject
+		Server\NuGet\Merge-All.bat = Server\NuGet\Merge-All.bat
 		Server\NuGet\Pack-All.bat = Server\NuGet\Pack-All.bat
 		Server\NuGet\Pack-Oracle-DataDirect.bat = Server\NuGet\Pack-Oracle-DataDirect.bat
 		Server\NuGet\Pack-Oracle-ODP.NET.bat = Server\NuGet\Pack-Oracle-ODP.NET.bat
 		Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat = Server\NuGet\Pack-Oracle-ODP.NET.Managed.bat
 		Server\NuGet\Pack-SqlServer.bat = Server\NuGet\Pack-SqlServer.bat
+		Server\NuGet\Publish-All.bat = Server\NuGet\Publish-All.bat
 		Server\NuGet\Push-All.bat = Server\NuGet\Push-All.bat
 	EndProjectSection
 EndProject
@@ -68,6 +70,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2524A6C9
 	ProjectSection(SolutionItems) = preProject
 		Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec = Client\Net\DataBooster.DbWebApi.Client\DataBooster.DbWebApi.Client.nuspec
 		Client\Net\nupkg\Pack-Client.Net.bat = Client\Net\nupkg\Pack-Client.Net.bat
+		Client\Net\nupkg\Publish-Client.Net.bat = Client\Net\nupkg\Publish-Client.Net.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Js", "Js", "{AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}"
@@ -84,9 +87,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{2D4600AA
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{C218CFD1-D316-4F03-B0BD-202773280E72}"
-	ProjectSection(SolutionItems) = preProject
-		Client\PowerShell\dbwebapi-client.ps1 = Client\PowerShell\dbwebapi-client.ps1
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5C2E67DA-7A8C-46A2-987C-0FF4A99BA6DA}"
 EndProject
@@ -129,6 +129,21 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40.Oracle.ODP", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.Oracle.ODP.csproj", "{92A26689-0E7E-491B-AFB5-A5822EA3D222}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBooster.DbWebApi.Net40.Oracle.DataDirect", "Server\DataBooster.DbWebApi\DataBooster.DbWebApi.Net40.Oracle.DataDirect.csproj", "{98988797-44E4-4F7E-B717-12D215006AA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientModule", "ClientModule", "{E2FCE54B-EDC7-49F7-AD2D-707CC4A1A050}"
+	ProjectSection(SolutionItems) = preProject
+		Client\PowerShell\ClientModule\DbWebApi-Client.psd1 = Client\PowerShell\ClientModule\DbWebApi-Client.psd1
+		Client\PowerShell\ClientModule\DbWebApi-Client.psm1 = Client\PowerShell\ClientModule\DbWebApi-Client.psm1
+		Client\PowerShell\ClientModule\Invoke-DbWebApi.bat = Client\PowerShell\ClientModule\Invoke-DbWebApi.bat
+		Client\PowerShell\ClientModule\Invoke-DbWebApi.Help.ps1 = Client\PowerShell\ClientModule\Invoke-DbWebApi.Help.ps1
+		Client\PowerShell\ClientModule\Invoke-DbWebApi.Sample.ps1 = Client\PowerShell\ClientModule\Invoke-DbWebApi.Sample.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{B81A6D26-2E4D-48B1-8F7A-85E9B569ACB3}"
+	ProjectSection(SolutionItems) = preProject
+		Client\PowerShell\nupkg\DataBooster.DbWebApi.Client.PS.nuspec = Client\PowerShell\nupkg\DataBooster.DbWebApi.Client.PS.nuspec
+		Client\PowerShell\nupkg\Pack-Client.PS.bat = Client\PowerShell\nupkg\Pack-Client.PS.bat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -194,6 +209,8 @@ Global
 		{2524A6C9-0B54-4334-9817-86CE3FFB5271} = {9C621537-BFDD-4F0C-9308-925AE75320EC}
 		{85B148EC-10C1-4109-9072-BEA4F698E9EF} = {AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}
 		{2D4600AA-6985-4B27-A317-6757BC0298F1} = {AE635240-4E33-4EEC-B2B5-EEA0CCD42D15}
+		{E2FCE54B-EDC7-49F7-AD2D-707CC4A1A050} = {C218CFD1-D316-4F03-B0BD-202773280E72}
+		{B81A6D26-2E4D-48B1-8F7A-85E9B569ACB3} = {C218CFD1-D316-4F03-B0BD-202773280E72}
 		{C76486D4-679C-4594-BFB5-6A011132DC20} = {53479D53-D6F6-428A-91F3-109079ABF914}
 		{0488E9A0-A4C0-4CF6-AC7E-CB827D357067} = {727E5007-8D52-483C-BB86-3B3BDC98BC2B}
 		{2C30A334-0BF7-42F4-84F7-85A6C2DCACB9} = {727E5007-8D52-483C-BB86-3B3BDC98BC2B}
