@@ -77,6 +77,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
                 - [Table-Valued Parameters](#ps-table-valued-parameters)
                 - [PL/SQL Associative Array Parameters](#ps-associative-array-parameters)
     - [Windows Command Line Client](#windows-command-line-client)
+    - [Power Query Client - Power BI](#power-query-client)
 - [Restrictions](#restrictions)
 - [NuGet](#nugget)
     - [Server packages](#server-side)
@@ -950,6 +951,21 @@ Alternatively, escaping every inside double quote character (") needs to be cons
 -Body "{\"inId\": 108, \"inDate\": \"2016-01-20T00:00:00Z\", \"inComment\": \"Some Comment\"}"
 ```
 _Using -WhatIf -Verbose switches is an easy check._
+
+#### Power Query Client  
+Power BI can use Power Query to invoke DbWebApi as simply as below:
+```
+let
+    Source = Json.Document(Web.Contents("http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp/json?inDate=2016-04-22")),
+    ResultSet1 = Table.FromRecords(Source[ResultSets]{0})
+in
+    ResultSet1
+```
+_(In practical applications, above regular query would be made into a function with parameters.)_
+
+In many cases, some on-site processes are programmed in stored procedures; Power BI needs to get the resultsets on demand. DbWebApi brings a convenient and secure way for Power Query to access stored procedures.
+
+_Especially for Oracle stored procedures, Power Query can not handle SYS_REFCURSOR. Without the DbWebApi, we mostly had to schedule the stored procedures to run and dump the resultsets into some physical tables at regular intervals. Then let Power Query get the result data from those tables. This might require assistance from the DBAs at your organization, for extra jobs, and grant appropriate database privilege on every individual tables. That’s too cumbersome!_
 
 .
 
