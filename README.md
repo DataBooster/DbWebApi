@@ -953,7 +953,7 @@ Alternatively, escaping every inside double quote character (") needs to be cons
 _Using -WhatIf -Verbose switches is an easy check._
 
 #### Power Query Client  
-Power BI can use Power Query to invoke DbWebApi as simply as below:
+[Power BI](https://powerbi.microsoft.com/en-us/guided-learning/) can use [Power Query](https://msdn.microsoft.com/en-us/library/mt260892.aspx) to invoke DbWebApi as simply as below example:
 ```
 let
     Source = Json.Document(Web.Contents("http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp/json?inDate=2016-04-22")),
@@ -966,6 +966,8 @@ _(In practical applications, above regular query would be made into a function w
 In many cases, some on-site processes are programmed in stored procedures; Power BI needs to get the resultsets on demand. DbWebApi brings a convenient and secure way for Power Query to access stored procedures.
 
 _Especially for Oracle stored procedures, Power Query can not handle SYS_REFCURSOR. Without the DbWebApi, we mostly had to schedule the stored procedures to run and dump the resultsets into some physical tables at regular intervals. Then let Power Query get the result data from those tables. This might require assistance from the DBAs at your organization, for extra jobs, and grant appropriate database privilege on every individual tables. That’s too cumbersome!_
+
+Since Power Query doesn't currently support POST web request with windows authentication. However, windows authentication is a necessity in most intranet-enterprise scenarios, so we have to use GET web request with windows authentication for now. Fortunately, DbWebApi accepts input parameters from either POST body or URL query string. This provides an easy workaround in many situations.
 
 .
 
