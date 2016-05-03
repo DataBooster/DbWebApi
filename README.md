@@ -38,6 +38,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
             - [Array of Parameter Sets](#array-of-parameter-sets)
             - [PL/SQL Associative Array Parameters](#associative-array-parameters)
             - [Table-Valued Parameters](#table-valued-parameters)
+			- [Summary of Input Parameters and Execution Modes](#summary-of-input-parameters-and-execution-modes)
         - [Accept Response MediaType](#accept-response-mediatype)
             - [JSON](#accept-json)
             - [BSON](#accept-bson) _(only available to targetFramework="4.5" or higher - ASP.NET Web API 2)_
@@ -128,7 +129,7 @@ namespace MyDbWebApi.Controllers
     {
         /// <param name="sp">Stored Procedure's fully qualified name</param>
         /// <param name="allParameters">Auto-binding from the request body</param>
-        [AcceptVerbs("GET", "POST", "PUT", "DELETE", "OPTIONS")]
+        [AcceptVerbs("GET", "POST", "PUT", "DELETE")]
         public HttpResponseMessage DynExecute(string sp, InputParameters allParameters)
         {
             // Supplement input parameters from URI query string.
@@ -237,7 +238,7 @@ Notes:
 - For a binary type parameter of stored procedure, the uploaded binary data will be passed in straightforward without any transformation; _(for above instance, "inImageData" parameter)_  
 - For a string(text) type parameter of stored procedure, the uploaded stream will be treated as UTF-8 encoding to be decoded back to a string, unless your file contains BOM (Byte Order Marks) _- it will detect encoding from the BOM_. Then pass the string into the stores procedure. _(for above instance, "inTextData" parameter)_
 
-.
+&nbsp;
 
 ###### <u>Array of Parameter Sets</u>  
 To pass bulk of same structure data back to database, you can just encapsulate all sets of parameters into an array like:
@@ -376,7 +377,166 @@ If you don't have any item in the "inTvpCategories", but you still want to execu
     "inGroupID": 108
 }
 ```
-.
+
+&nbsp;
+
+###### Summary of Input Parameters and Execution Modes
+The service execution mode is determined by the input payload from client's HTTP request body.
+- When a HTTP client sends a GET request (without message body),  
+DbWebApi works in single-execution mode only, and all input parameters are extracted from the URL query string;
+- When a HTTP client sends a POST (or PUT, DELETE) request,  
+DbWebApi follows these rules:
+
+<table>
+  <tr>
+    <th>Input Payload<br/>(Sample JSON)</th>
+    <th>Execution Mode</th>
+    <th>Stored Procedure<br/>(Examples)</th>
+  </tr>
+  <tr>
+    <td><pre>
+{
+  "inPartitionId": 108,
+  "inItemId": 101,
+  "inItemName": "Test String 1",
+  "inItemDate": "2015-02-03T00:00:00Z"
+}
+</pre></td>
+    <td align="center">Single Execution</td>
+    <td rowspan="2"><u>SQL Server</u>:
+<pre>
+ALTER PROCEDURE dbo.my_pck_Singly_Ins_Upd
+(
+    @inPartitionId  int,
+    @inItemId       int,
+    @inItemName     varchar(256),
+    @inItemDate     datetime
+)   AS  ...
+</pre>
+Or<br/><br/><u>Oracle</u>:
+<pre>
+CREATE OR REPLACE PACKAGE SCHEMA.MY_PCK IS
+
+PROCEDURE SINGLY_INS_UPD
+(
+    inPartitionId  PLS_INTEGER,
+    inItemId       PLS_INTEGER,
+    inItemName     VARCHAR2,
+    inItemDate     DATE
+);
+
+END MY_PCK;
+</pre></td>
+  </tr>
+  <tr>
+    <td><pre>
+[
+  {
+    "inPartitionId": 108,
+    "inItemId": 101,
+    "inItemName": "Test String 1",
+    "inItemDate": "2016-05-01T00:00:00Z"
+  },
+  {
+    "inPartitionId": 108,
+    "inItemId": 102,
+    "inItemName": "Test String 2",
+    "inItemDate": "2016-05-02T00:00:00Z"
+  },
+  {
+    "inPartitionId": 108,
+    "inItemId": 103,
+    "inItemName": "Test String 3",
+    "inItemDate": "2016-05-03T00:00:00Z"
+  }
+]
+</pre></td>
+    <td align="center">Bulk Execution</td>
+  </tr>
+  <tr>
+    <td><pre>
+{
+  "inPartitionId": 108,
+  "inItemIds": [
+    101,
+    102,
+    103
+  ],
+  "inItemNames": [
+    "Test String 1",
+    "Test String 2",
+    "Test String 3"
+  ],
+  "inItemDates": [
+    "2016-05-01T00:00:00Z",
+    "2016-05-02T00:00:00Z",
+    "2016-05-03T00:00:00Z"
+  ]
+}
+</pre></td>
+    <td align="center">PL/SQL Associative Array<br />(Oracle Bulk Binding)</td>
+    <td><u>Oracle</u>:
+<pre>
+CREATE OR REPLACE PACKAGE SCHEMA.MY_PCK IS
+
+TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+TYPE STRING_ARRAY IS TABLE OF VARCHAR2(256) INDEX BY PLS_INTEGER;
+TYPE DATE_ARRAY IS TABLE OF DATE INDEX BY PLS_INTEGER;
+
+PROCEDURE BULK_INS_UPD
+(
+    inPartitionId  PLS_INTEGER,
+    inItemIds      NUMBER_ARRAY,
+    inItemNames    STRING_ARRAY,
+    inItemDates    DATE_ARRAY
+);
+
+END MY_PCK;
+</pre></td>
+  </tr>
+  <tr>
+    <td><pre>
+{
+  "inPartitionId": 108,
+  "inTvpItems": [
+    {
+      "inItemId": 101,
+      "inItemName": "Test String 1",
+      "inItemDate": "2016-05-01T00:00:00Z"
+    },
+    {
+      "inItemId": 102,
+      "inItemName": "Test String 2",
+      "inItemDate": "2016-05-02T00:00:00Z"
+    },
+    {
+      "inItemId": 103,
+      "inItemName": "Test String 3",
+      "inItemDate": "2016-05-03T00:00:00Z"
+    }
+  ]
+}
+</pre></td>
+    <td align="center">Table-Valued Parameter<br />(SQL Server 2008+)</td>
+    <td><u>SQL Server 2008 or later</u>:
+<pre>
+CREATE TYPE dbo.ItemTableType AS TABLE
+(
+    ItemId      int,
+    ItemName    nvarchar(256),
+    ItemDate    datetime
+);
+
+CREATE PROCEDURE dbo.my_pck_Bulk_Ins_Upd
+(
+    @inPartitionId  int,
+    @inTvpItems     dbo.ItemTableType READONLY
+)   AS ...
+</pre></td>
+  </tr>
+</table>
+
+&nbsp;
 
 ##### Accept Response MediaType:  
 1. <a name="accept-json"></a>JSON _(default)_  
@@ -625,7 +785,7 @@ For above example stored procedure with *XmlAsAttribute=true*, the response beco
 Above options only provide some simple controls on XML styles.  
 For other XML format controls, you may still need to further apply [XDT](http://xdt.codeplex.com/) or raw XSLT transformations ... even hard coding in client side.
 
-.
+&nbsp;
 
 ##### text/csv  
     Sample:
@@ -845,7 +1005,7 @@ Here $.getDb('.../WhoAmI') acts as a bootstrapper, it makes the browser to start
 - HTML Form request _(Content-Type: application/x-www-form-urlencoded)_ and Multipart MIME request _(Content-Type: multipart/form-data)_ can also be used to send a fair amount of data to DbWebApi without preflight request.  
 _The limitation of these two media types' requests is that, they can only carry input parameters for a single execution of DbWebApi on each call. If you need a bulk execution of DbWebApi on one call, only the former way (all sets of input parameters are further encapsulated in an outer JSON or XML array) can satisfy the use._
 
-.
+&nbsp;
 
 ###### JSONP (Added: Server Lib v1.2.4, Client JS v1.0.8-alpha) 
 JSONP is a practicable way _(although it seems a little rascal)_ to solve the cross-domain access puzzle before CORS is supported by all popular browsers.  
@@ -877,7 +1037,7 @@ The third option is to change IE setting if neither of above options is applicab
 For intranet scenarios, browsers settings can be managed by your system administrator centralizedly.
 ![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
 
-.
+&nbsp;
 
 #### PowerShell Client  
 In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) cmdlet is readily available. See following sample:
@@ -963,13 +1123,13 @@ in
 ```
 _(In practical applications, above regular query would be made into a function with parameters.)_
 
-In many cases, some on-site processes are programmed in stored procedures; Power BI needs to get the resultsets on demand. DbWebApi brings a convenient and secure way for Power Query to access stored procedures.
+In many cases, some in-situ processes are programmed in stored procedures; Power BI needs to get the resultsets on demand. DbWebApi brings a convenient and secure way for Power Query to access stored procedures.
 
 _Especially for Oracle stored procedures, Power Query can not handle SYS_REFCURSOR. Without the DbWebApi, we mostly had to schedule the stored procedures to run and dump the resultsets into some physical tables at regular intervals. Then let Power Query get the result data from those tables. This might require assistance from the DBAs at your organization, for extra jobs, and grant appropriate database privilege on every individual tables. That’s too cumbersome!_
 
 Since Power Query doesn't currently support POST web request with windows authentication. However, windows authentication is a necessity in most intranet-enterprise scenarios, so we have to use GET web request with windows authentication for now. Fortunately, DbWebApi accepts input parameters from either POST body or URL query string. This provides an easy workaround in many situations.
 
-.
+&nbsp;
 
 ### Restrictions  
 * Only primitive database data types are supported -- can be mapped to .NET Framework simple data types which implement the [IConvertible](https://msdn.microsoft.com/en-us/library/system.iconvertible.aspx) interface.
