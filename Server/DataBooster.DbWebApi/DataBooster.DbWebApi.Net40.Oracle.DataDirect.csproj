@@ -47,16 +47,22 @@
     <DocumentationFile>bin\Release\Net40\Oracle\DataDirect\DataBooster.DbWebApi.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>DataBooster.DbWebApi.Oracle.DataDirect.Net40.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML">
       <HintPath>$(SolutionDir)\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CsvHelper.2.14.0\lib\net40\CsvHelper.dll</HintPath>
+      <HintPath>..\..\packages\CsvHelper.2.16.0.0\lib\net40\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DataBooster.Oracle.DataDirect.1.8.0.6\lib\net40-Client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.1.0, Culture=neutral, PublicKeyToken=2fe61c64b8ab9758, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.Oracle.DataDirect.1.8.1\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DDTek.Oracle, Culture=neutral, PublicKeyToken=c84cd5c63851e072, processorArchitecture=MSIL">
@@ -68,8 +74,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RazorEngine.3.8.2\lib\net40\RazorEngine.dll</HintPath>
+    <Reference Include="RazorEngine, Version=3.9.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RazorEngine.3.9.0\lib\net40\RazorEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -136,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="DataBooster.DbWebApi.Oracle.DataDirect.Net40.snk" />
     <None Include="DbWebApi.cd" />
     <None Include="DerivedParametersCache\SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
     <None Include="packages.DataBooster.DbWebApi.Net40.Oracle.DataDirect.config" />
