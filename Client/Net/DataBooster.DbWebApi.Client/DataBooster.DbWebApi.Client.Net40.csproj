@@ -39,13 +39,19 @@
     <DocumentationFile>bin\Release\Net40\DataBooster.DbWebApi.Client.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>DataBooster.DbWebApi.Client.Net40.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StoredProcedureData, Version=1.8.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.ClientModels.StoredProcedureData.1.8.0.6\lib\net40-Client\StoredProcedureData.dll</HintPath>
+    <Reference Include="StoredProcedureData, Version=1.8.1.0, Culture=neutral, PublicKeyToken=8b604e0084782c18, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.ClientModels.StoredProcedureData.1.8.1\lib\net40-client\StoredProcedureData.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -77,6 +83,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DataBooster.DbWebApi.Client.Net40.snk" />
     <None Include="packages.DataBooster.DbWebApi.Client.Net40.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
