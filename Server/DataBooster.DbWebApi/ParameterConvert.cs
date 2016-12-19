@@ -73,21 +73,8 @@ namespace DataBooster.DbWebApi
 
 			if (elementType == null)
 				return rawValue;
-
-			#region When the rawValue is IEnumerable<T>
-
-			if (typeof(IConvertible).IsAssignableFrom(elementType))
-				return (rawValue as IEnumerable).AsOfType<IConvertible>().AsParameterValue();
-
-			if (typeof(SqlDataRecord).IsAssignableFrom(elementType))
-				return (rawValue as IEnumerable).AsOfType<SqlDataRecord>().AsParameterValue();
-
-			if (typeof(IDictionary<string, object>).IsAssignableFrom(elementType))
-				return (rawValue as IEnumerable).AsOfType<IDictionary<string, object>>().AsParameterValue();
-
-			return (rawValue as IEnumerable).AsOfType<object>().AsParameterValue();
-
-			#endregion
+			else
+				return (rawValue as IEnumerable).AsParameterValue(elementType);
 		}
 
 		/// <summary>
