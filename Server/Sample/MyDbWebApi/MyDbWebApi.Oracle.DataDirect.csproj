@@ -50,8 +50,8 @@
       <HintPath>..\..\..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.10.0, Culture=neutral, PublicKeyToken=a137abba9b876cc7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.DataDirect.1.2.10\lib\net45\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.10.1, Culture=neutral, PublicKeyToken=a137abba9b876cc7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.DataDirect.1.2.10.1\lib\net45\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DbParallel.DataAccess, Version=1.8.1.3, Culture=neutral, PublicKeyToken=2fe61c64b8ab9758, processorArchitecture=MSIL">

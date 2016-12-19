@@ -85,7 +85,7 @@ namespace DataBooster.DbWebApi.Form
 		{
 			var multipartProvider = new MultipartFormDataMemoryStreamProvider();
 
-			await content.ReadAsMultipartAsync(multipartProvider);
+			await content.ReadAsMultipartAsync(multipartProvider).ConfigureAwait(false);
 
 			return new InputParameters(multipartProvider.GetAllInputData());
 		}

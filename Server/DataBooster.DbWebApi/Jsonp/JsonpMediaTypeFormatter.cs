@@ -97,7 +97,7 @@ namespace DataBooster.DbWebApi.Jsonp
 
 			if (string.IsNullOrEmpty(_Callback))
 			{
-				await base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
+				await base.WriteToStreamAsync(type, value, writeStream, content, transportContext).ConfigureAwait(false);
 				return;
 			}
 
@@ -107,7 +107,7 @@ namespace DataBooster.DbWebApi.Jsonp
 			writer.Write(_Callback + "(");
 			writer.Flush();
 
-			await base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
+			await base.WriteToStreamAsync(type, value, writeStream, content, transportContext).ConfigureAwait(false);
 
 			if (!string.IsNullOrEmpty(_JsonpState))
 			{

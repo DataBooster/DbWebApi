@@ -28,7 +28,7 @@ namespace DataBooster.DbWebApi.Form
 		{
 			if (type.IsAssignableFrom(typeof(InputParameters)))
 			{
-				JObject jInput = await base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger) as JObject;
+				JObject jInput = await base.ReadFromStreamAsync(typeof(JObject), readStream, content, formatterLogger).ConfigureAwait(false) as JObject;
 				return new InputParameters(jInput);
 			}
 			else

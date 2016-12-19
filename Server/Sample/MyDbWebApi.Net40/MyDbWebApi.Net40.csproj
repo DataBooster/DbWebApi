@@ -51,8 +51,8 @@
       <HintPath>..\..\..\packages\CsvHelper.2.16.3.0\lib\net40\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.10.0, Culture=neutral, PublicKeyToken=58093dc3fd4de73f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.10\lib\net40-client\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.10.1, Culture=neutral, PublicKeyToken=58093dc3fd4de73f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.10.1\lib\net40-client\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DbParallel.DataAccess, Version=1.8.1.3, Culture=neutral, PublicKeyToken=91696a6f7ea17e8c, processorArchitecture=MSIL">
