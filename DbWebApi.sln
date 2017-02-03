@@ -198,6 +198,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{EE6B2778
 		Client\PowerShell\nupkg\Pack-Client.PS.bat = Client\PowerShell\nupkg\Pack-Client.PS.bat
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Swagger-UI", "Swagger-UI", "{91AEA42F-BE88-4222-AE7C-C1A8D4D217D4}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Swagger-UI\Oracle_array_example.swagger.json = Client\Swagger-UI\Oracle_array_example.swagger.json
+		Client\Swagger-UI\Oracle_simple_example.swagger.json = Client\Swagger-UI\Oracle_simple_example.swagger.json
+		Client\Swagger-UI\SqlServer_simple_example.swagger.json = Client\Swagger-UI\SqlServer_simple_example.swagger.json
+		Client\Swagger-UI\SqlServer_TVP_example.swagger.json = Client\Swagger-UI\SqlServer_TVP_example.swagger.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -344,5 +352,6 @@ Global
 		{98988797-44E4-4F7E-B717-12D215006AA8} = {DD85CDC2-CCCE-4562-A224-D3CD0F7EAE03}
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51} = {C218CFD1-D316-4F03-B0BD-202773280E72}
 		{EE6B2778-AC81-4574-B0A5-FCCF762497DD} = {C218CFD1-D316-4F03-B0BD-202773280E72}
+		{91AEA42F-BE88-4222-AE7C-C1A8D4D217D4} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
 	EndGlobalSection
 EndGlobal

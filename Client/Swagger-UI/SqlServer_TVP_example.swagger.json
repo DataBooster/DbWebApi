@@ -1,0 +1,166 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "/*(REST API)*/",
+    "description": "/*(A short description of the application)*/"
+  },
+  "host": "/*(dbwebapi.domain.net)*/",
+  "basePath": "/*(/sqldev)*/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/*(/testdb.dbo.your_sp)*/": {
+      "post": {
+        "tags": [
+          "Service"
+        ],
+        "summary": "/*(A short summary of what the operation does)*/",
+        "operationId": "/*(your_sp)*/",
+        "consumes": [
+          "application/json",
+          "text/json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/xlsx",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "application/ms-excel",
+          "text/csv",
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "/*(A brief description of the parameter)*/",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/inputPayloadObject"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ResultSets": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/resultSet"
+                  }
+                },
+                "OutputParameters": {
+                  "$ref": "#/definitions/outputParametersObject"
+                },
+                "ReturnValue": {
+                  "type": "object",
+                  "example": "null"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "inputPayloadObject": {
+      "type": "object",
+      "properties": {
+        /*(
+        "tvpParam": {
+          "description": "A brief description of this TVP",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/eachTvpObject"
+          },
+          "example": [
+            {"name": "AAA", "address": "street address 1"},
+            {"name": "BBBB", "address": "street address 2"},
+            {"name": "CCCCC", "address": "street address 3"},
+            {"name": "DDDDDD", "address": "street address 4"}
+          ]
+        },
+        "simpleParam": {
+          "description": "A brief description of this simple value parameter",
+          "type": "string",
+          "example": "A Category",
+          "maxLength": 16
+        }
+        )*/
+      }
+    },
+    "eachTvpObject": {
+      "type": "object",
+      "properties": {
+        /*(
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+        )*/
+      }
+    },
+    "resultSet": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/eachRecord"
+      }
+      /*(
+      ,
+      "example": [
+        {
+          "Property1": "AAA",
+          "Property2": "zzzzzz"
+        },
+        {
+          "Property1": "BBBB",
+          "Property2": "yyyyy"
+        },
+        {
+          "Property1": "CCCCC",
+          "Property2": "xxxx"
+        },
+        {
+          "Property1": "DDDDDD",
+          "Property2": "www"
+        }
+      ]
+      )*/
+    },
+    "eachRecord": {
+      "type": "object",
+      "properties": {
+        /*(
+        "Property1": {
+          "type": "string"
+        },
+        "Property2": {
+          "type": "string"
+        }
+        )*/
+      }
+    },
+    "outputParametersObject": {
+      "type": "object",
+      "properties": {
+        /*(
+        "REF_ID": {
+          "type": "integer",
+          "example": 1001
+        }
+        )*/
+      }
+    }
+  }
+}
