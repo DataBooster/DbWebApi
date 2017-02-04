@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "v1",
-    "title": "/*(REST API)*/",
-    "description": "/*(A short description of the application)*/"
+    "title": "/*(Example DB Web API)*/",
+    "description": "/*(An example of DbWebApi with SQL Server Table-Valued Parameters (TVP))*/"
   },
   "host": "/*(dbwebapi.domain.net)*/",
   "basePath": "/*(/sqldev)*/",
@@ -38,7 +38,7 @@
           {
             "in": "body",
             "name": "request",
-            "description": "/*(A brief description of the parameter)*/",
+            "description": "/*(A brief description of the input parameter)*/",
             "required": true,
             "schema": {
               "$ref": "#/definitions/inputPayloadObject"
