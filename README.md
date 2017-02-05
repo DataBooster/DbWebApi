@@ -65,6 +65,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures out 
         - [Quasi Bulk (BulkExecute action)](#quasi-bulk)
         - [Thorough Bulk - Table-Valued Parameters or PL/SQL Associative Array Parameters](#thorough-bulk)
 - [Clients](#clients)
+    - [Swagger UI](#swagger-ui)
     - [.Net Client](#net-client)
     - [JavaScript Client](#javascript-client)
         - [Cross-domain](#cross-domain)
@@ -874,6 +875,13 @@ The performance overhead of each extra wrapper of network service _(wrap one web
 * <a name="thorough-bulk"></a>If there are thousands of data rows or more data sets need to be passed back to database, it's well worth considering using Table-Valued Parameters (specific for SQL Server 2008+) or PL/SQL Associative Array Parameters (specific for Oracle database) in a single ExecuteDbApi (Execute action) call as mentioned before, they are completely thorough bulk operations.
 
 ## Clients
+#### Swagger UI  
+[Swagger UI](http://swagger.io/swagger-ui/) is a handy WebAPI documentation tool.  
+Some examples of DbWebApi Swagger specifcation (swagger.json file) are provided in [DbWebApi/Client/Swagger-UI/](https://github.com/DataBooster/DbWebApi/tree/master/Client/Swagger-UI).  
+_Notes: the templating symbols `/*( ... )*/` are using in the example files to mark a section as replaceable._  
+[Swagger Editor](http://editor.swagger.io/#/) can be used to verify your customized Swagger specifcation file (_swagger.json_).  
+If your have complex data model, some JSON schema-generating tool (such as [JSONSchema.Net](http://jsonschema.net/#/)) can be used as an aid.
+
 #### .Net Client  
 [DbWebApi Client .Net Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net) can be used to simplify the client call. See following sample:
 ``` CSharp
