@@ -18,7 +18,7 @@ using DbParallel.DataAccess;
 
 namespace DataBooster.DbWebApi.Client
 {
-	public class DbWebApiClient : IDisposable
+	public partial class DbWebApiClient : IDisposable
 	{
 		const string _DefaultJsonInputParameterName = "JsonInput";
 		private bool _CreatedInternalClient;

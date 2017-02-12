@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="ClientHelper.cs" />
     <Compile Include="DbWebApiClient.cs" />
+    <Compile Include="DbWebApiClient.partial.cs" />
     <Compile Include="HttpErrorClient.cs" />
     <Compile Include="HttpResponseClientException.cs" />
     <Compile Include="InputParameterDictionary.cs" />

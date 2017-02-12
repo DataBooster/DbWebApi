@@ -11,7 +11,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
-		<copyright>Copyright 2015 Abel Cheng</copyright>
+		<copyright>Copyright 2015-2017 Abel Cheng</copyright>
 		<tags>DbWebApi Client Net40 ASP.NET WebApi HttpClient Database Oracle SqlServer Bulk JSON BSON CSV Excel xlsx ADO.NET Razor</tags>
 	</metadata>
 </package>
