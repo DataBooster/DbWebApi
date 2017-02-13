@@ -16,91 +16,91 @@ namespace DataBooster.DbWebApi.Client
 {
 	public partial class DbWebApiClient
 	{
-		private const int _streamDefaultBufferSize = 16 * 1024;
+		private const string _exceptionGetWithBody = "HTTP-Get-Method cannot carry content body";
 
 		#region ExecAsJson overloads
-		public Task<JObject> ExecAsJsonAsync(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<JObject> ExecAsJsonAsync(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<JObject>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public JObject ExecAsJson(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public JObject ExecAsJson(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<JObject>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public Task<JObject> ExecAsJsonAsync(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<JObject> ExecAsJsonAsync(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<JObject>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public JObject ExecAsJson(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public JObject ExecAsJson(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<JObject>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 		#endregion
 
 		#region ExecAsXml overloads
-		public Task<XDocument> ExecAsXmlAsync(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<XDocument>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public XDocument ExecAsXml(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public XDocument ExecAsXml(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<XDocument>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public Task<XDocument> ExecAsXmlAsync(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<XDocument> ExecAsXmlAsync(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<XDocument>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public XDocument ExecAsXml(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public XDocument ExecAsXml(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<XDocument>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 		#endregion
 
 		#region ExecAsString overloads
-		public Task<string> ExecAsStringAsync(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<string> ExecAsStringAsync(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<string>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public string ExecAsString(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public string ExecAsString(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<string>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public Task<string> ExecAsStringAsync(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<string> ExecAsStringAsync(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<string>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public string ExecAsString(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public string ExecAsString(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<string>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 		#endregion
 
 		#region ExecAsStream overloads
-		public Task<Stream> ExecAsStreamAsync(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<Stream> ExecAsStreamAsync(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<Stream>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public Stream ExecAsStream(string requestUri, string content, Encoding encoding, string mediaType, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Stream ExecAsStream(string requestUri, string content, Encoding encoding = null, string mediaType = null, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<Stream>(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public Task<Stream> ExecAsStreamAsync(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Task<Stream> ExecAsStreamAsync(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAsAsync<Stream>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
 
-		public Stream ExecAsStream(string requestUri, Stream content, int bufferSize = _streamDefaultBufferSize, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
+		public Stream ExecAsStream(string requestUri, Stream content, int bufferSize = 0, Action<HttpContentHeaders> contentHeadersCustomizer = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return ExecAs<Stream>(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
 		}
@@ -202,7 +202,7 @@ namespace DataBooster.DbWebApi.Client
 				if (string.IsNullOrEmpty(content))
 					return _HttpClient.GetAsync(requestUri, cancellationToken);
 				else
-					throw new InvalidOperationException("HTTP Get method cannot carry content body");
+					throw new InvalidOperationException(_exceptionGetWithBody);
 			}
 			else
 				return PostRawAsync(requestUri, content, encoding, mediaType, contentHeadersCustomizer, cancellationToken);
@@ -225,7 +225,7 @@ namespace DataBooster.DbWebApi.Client
 				if (content == null)
 					return _HttpClient.GetAsync(requestUri, cancellationToken);
 				else
-					throw new InvalidOperationException("HTTP Get method cannot carry content body");
+					throw new InvalidOperationException(_exceptionGetWithBody);
 			}
 			else
 				return PostRawAsync(requestUri, content, bufferSize, contentHeadersCustomizer, cancellationToken);
@@ -233,7 +233,7 @@ namespace DataBooster.DbWebApi.Client
 
 		private Task<HttpResponseMessage> PostRawAsync(string requestUri, Stream content, int bufferSize, Action<HttpContentHeaders> contentHeadersCustomizer, CancellationToken cancellationToken)
 		{
-			StreamContent streamContent = (bufferSize == 0) ? new StreamContent(content) : new StreamContent(content, bufferSize);
+			StreamContent streamContent = (bufferSize > 0) ? new StreamContent(content, bufferSize) : new StreamContent(content);
 
 			if (contentHeadersCustomizer != null)
 				contentHeadersCustomizer(streamContent.Headers);
