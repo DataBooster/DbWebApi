@@ -5,7 +5,7 @@ IF /i {%1}=={} GOTO :Usage
 IF /i {%1}=={-h} GOTO :Usage
 IF /i {%1}=={-help} GOTO :Usage
 
-SET MERGE=..\..\..\packages\NupkgMerge.1.0.0.1\tools\NupkgMerge.exe
+SET MERGE=..\..\..\packages\NupkgMerge.1.0.1.0\tools\NupkgMerge.exe
 SET PUSH=..\..\..\.nuget\NuGet.exe
 SET CNPKG=DataBooster.DbWebApi.Client.Net.%1
 
