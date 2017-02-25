@@ -883,12 +883,13 @@ _If your have complex data model, some JSON schema-generating tool (such as [JSO
 
 Then, your Swagger UI URL may look like `http://your_host/swagger-ui/index.html?url=specification_location/swagger.json` or `http://your_host/swagger-ui/?url=specification_location/swagger.json`.
 
-_If your swagger.json files are placed in IIS, you might need to add `.json` file extension in IIS MIME Types or add a mimeMap in the web.config as below._
+_If your swagger.json files are placed in some older IIS, you might need to add `.json` file extension in IIS MIME Types or add a mimeMap in the web.config as below._
 ``` XML
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <system.webServer>
     <staticContent>
+      <remove fileExtension=".json" />
       <mimeMap fileExtension=".json" mimeType="application/json" />
     </staticContent>
     <defaultDocument>
