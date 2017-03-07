@@ -39,12 +39,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Invoke-DbWebApi.bat" />
+    <Content Include="Run-RestJob_withEmailAlert.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Invoke-DbWebApi.Help.ps1" />
-    <Compile Include="Invoke-DbWebApi.Sample.ps1" />
     <Compile Include="DbWebApi-Client.psd1" />
     <Compile Include="DbWebApi-Client.psm1" />
+    <Compile Include="Invoke-DbWebApi.Help.ps1" />
+    <Compile Include="Invoke-DbWebApi.Sample.ps1" />
+    <Compile Include="Send-Email.psd1" />
+    <Compile Include="Send-Email.psm1" />
+    <Compile Include="Run-RestJob_withEmailAlert.sample.ps1" />
+    <Compile Include="EmailTemplate.config.psm1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
