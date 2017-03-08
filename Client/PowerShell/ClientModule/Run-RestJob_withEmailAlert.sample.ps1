@@ -25,7 +25,7 @@
 	Specifies the address from which the email notification is sent. Enter a name (optional) and e-mail address, such as "Name <someone@example.com>". This parameter is required.
 
 	.NOTES
-	The variable $SmtpServers defined in this script must be customized.
+	The variable $SmtpServers must be customized in this script or overridden in template config;
 	The template of email body defined in "EmailTemplate.config.psm1" needs to be customized.
 
 	.EXAMPLE
@@ -53,7 +53,7 @@ Param (
 )
 
 #region TODO: Please update following $SmtpServers - list all SMTP servers can be used in your enterprise intranet.
-$Global:SmtpServers = @("SMTP1.YOUR-COMPANY.COM", "SMTP2.YOUR-COMPANY.COM", "SMTP3.YOUR-COMPANY.COM");
+$SmtpServers = @("SMTP1.YOUR-COMPANY.COM", "SMTP2.YOUR-COMPANY.COM", "SMTP3.YOUR-COMPANY.COM");
 #endregion
 
 $Error.Clear();
@@ -71,14 +71,13 @@ $Result = Invoke-DbWebApi -Uri $Uri -Body $InputJson -ErrorAction Continue;
 $Success = $Error.Count -eq 0;
 
 If (!$JobName) {
-    $JobName = $Uri.ToString();
+	$JobName = $Uri.ToString();
 }
 
 $Subject = Get-EmailSubject -Success $Success -JobName $JobName;
-$EmailBody = Get-EmailBody -Success $Success -ResultObject $Result -ElapsedTime ((Get-Date) - $StartTime);
-
-if (![string]::IsNullOrWhiteSpace($EmailBody)) {
-    $null = Send-Email -To $EmailTo -From $EmailFrom -Subject $Subject -Body $EmailBody -SmtpServers $Global:SmtpServers;
+if (![string]::IsNullOrWhiteSpace($Subject)) {
+	$EmailBody = Get-EmailBody -Success $Success -ResultObject $Result -ElapsedTime ((Get-Date) - $StartTime);
+	$null = Send-Email -To $EmailTo -From $EmailFrom -Subject $Subject -Body $EmailBody -SmtpServers $SmtpServers;
 }
 #endregion email notification
 
