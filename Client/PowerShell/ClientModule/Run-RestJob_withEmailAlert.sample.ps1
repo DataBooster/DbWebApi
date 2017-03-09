@@ -53,14 +53,14 @@ Param (
 )
 
 #region TODO: Please update following $SmtpServers - list all SMTP servers can be used in your enterprise intranet.
-$SmtpServers = @("SMTP1.YOUR-COMPANY.COM", "SMTP2.YOUR-COMPANY.COM", "SMTP3.YOUR-COMPANY.COM");
+New-Variable SmtpServers @("SMTP1.YOUR-COMPANY.COM", "SMTP2.YOUR-COMPANY.COM", "SMTP3.YOUR-COMPANY.COM") -Force;
 #endregion
 
 $Error.Clear();
 Import-Module "Microsoft.PowerShell.Utility" -Cmdlet "Invoke-RestMethod";
 Import-Module "$PSScriptRoot\DbWebApi-Client.psd1";
 Import-Module "$PSScriptRoot\Send-Email.psd1";
-Import-Module "$PSScriptRoot\EmailTemplate.config.psm1" -Force;
+Import-Module "$PSScriptRoot\EmailTemplate.config.psm1" -Scope Local -Force;
 $StartTime = Get-Date;
 
 #region main call
