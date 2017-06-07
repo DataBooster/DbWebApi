@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>DataBooster.DbWebApi.Client.CmdUtility</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>$author$</authors>
+		<owners>https://github.com/DataBooster/DbWebApi</owners>
+		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>$description$</description>
+		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
+		<copyright>Copyright 2015-2017 Abel Cheng</copyright>
+		<tags>WebApi Command-line Client Net45 Database Oracle SqlServer JSON CSV Excel xlsx ADO.NET CMD Transit Pipeline Utility Standard Input Output stdin stdout</tags>
+	</metadata>
+	<files>
+		<file src="bin\Release\*.dll" target="tools" />
+	</files>
+</package>

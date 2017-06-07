@@ -205,6 +205,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Swagger-UI", "Swagger-UI", 
 		Client\Swagger-UI\SqlServer_TVP_example.swagger.json = Client\Swagger-UI\SqlServer_TVP_example.swagger.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLine", "CommandLine", "{8BD7F2A3-8C0A-4973-8D4F-F0F29BE9118E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi-Client", "Client\CommandLine\WebApi-Client\WebApi-Client.csproj", "{927D1B04-BB54-4ABF-B59F-04C11102DBA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{B361FBAA-7672-41BA-AEBA-38322486BD8E}"
+	ProjectSection(SolutionItems) = preProject
+		Client\CommandLine\nupkg\Pack-CmdUtility.bat = Client\CommandLine\nupkg\Pack-CmdUtility.bat
+		Client\CommandLine\nupkg\Publish-CmdUtility.bat = Client\CommandLine\nupkg\Publish-CmdUtility.bat
+		Client\CommandLine\WebApi-Client\WebApi-Client.nuspec = Client\CommandLine\WebApi-Client\WebApi-Client.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -287,6 +298,10 @@ Global
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927D1B04-BB54-4ABF-B59F-04C11102DBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927D1B04-BB54-4ABF-B59F-04C11102DBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927D1B04-BB54-4ABF-B59F-04C11102DBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927D1B04-BB54-4ABF-B59F-04C11102DBA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -352,5 +367,8 @@ Global
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51} = {C218CFD1-D316-4F03-B0BD-202773280E72}
 		{EE6B2778-AC81-4574-B0A5-FCCF762497DD} = {C218CFD1-D316-4F03-B0BD-202773280E72}
 		{91AEA42F-BE88-4222-AE7C-C1A8D4D217D4} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{8BD7F2A3-8C0A-4973-8D4F-F0F29BE9118E} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{927D1B04-BB54-4ABF-B59F-04C11102DBA2} = {8BD7F2A3-8C0A-4973-8D4F-F0F29BE9118E}
+		{B361FBAA-7672-41BA-AEBA-38322486BD8E} = {8BD7F2A3-8C0A-4973-8D4F-F0F29BE9118E}
 	EndGlobalSection
 EndGlobal
