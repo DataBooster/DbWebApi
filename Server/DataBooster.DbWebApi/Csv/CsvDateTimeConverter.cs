@@ -20,9 +20,9 @@ namespace DataBooster.DbWebApi.Csv
 				string fmt;
 
 				if (dt.Millisecond == 0)
-					fmt = (dt.Date == dt) ? "yyyy-MM-dd" : "yyyy-MM-dd HH-mm-ss";
+					fmt = (dt.TimeOfDay.Ticks == 0L) ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss";
 				else
-					fmt = "yyyy-MM-dd HH-mm-ss.fff";
+					fmt = "yyyy-MM-dd HH:mm:ss.fff";
 
 				return dt.ToString(fmt);
 			}
