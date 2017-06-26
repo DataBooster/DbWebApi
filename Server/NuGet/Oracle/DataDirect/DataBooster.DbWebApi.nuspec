@@ -11,7 +11,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
-		<copyright>Copyright 2015 Abel Cheng</copyright>
+		<copyright>Copyright 2015-2017 Abel Cheng</copyright>
 		<tags>Generic ASP.NET Web API data driven ADO.NET Booster Oracle DataDirect DDTek Database Stored Procedure DataAccess Bulk JSON BSON XML CSV Excel xlsx JSONP Razor CsvHelper ClosedXML RazorEngine</tags>
 	</metadata>
 	<files>

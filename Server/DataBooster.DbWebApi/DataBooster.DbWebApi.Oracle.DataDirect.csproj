@@ -65,8 +65,8 @@
       <HintPath>..\..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.1.3, Culture=neutral, PublicKeyToken=2fe61c64b8ab9758, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DataBooster.Oracle.DataDirect.1.8.1.3\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.1.5, Culture=neutral, PublicKeyToken=2fe61c64b8ab9758, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DataBooster.Oracle.DataDirect.1.8.1.5\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DDTek.Oracle, Version=3.5.0.0, Culture=neutral, PublicKeyToken=c84cd5c63851e072, processorArchitecture=MSIL">
@@ -81,8 +81,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine, Version=3.9.3.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RazorEngine.3.9.3\lib\net45\RazorEngine.dll</HintPath>
+    <Reference Include="RazorEngine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RazorEngine.3.10.0\lib\net45\RazorEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
