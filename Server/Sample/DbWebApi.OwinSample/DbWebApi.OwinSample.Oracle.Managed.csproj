@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A329C68D-1884-4113-BBEB-67454E19D9CF}</ProjectGuid>
+    <ProjectGuid>{A19F0E7A-9E56-4D27-AC2F-48829A1888E9}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -26,7 +26,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\SqlServer\</OutputPath>
+    <OutputPath>bin\Oracle\ODP.NET.Managed\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NO_SAMPLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,7 +34,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\SqlServer\</OutputPath>
+    <OutputPath>bin\Oracle\ODP.NET.Managed\</OutputPath>
     <DefineConstants>TRACE;NO_SAMPLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -48,16 +48,16 @@
       <HintPath>..\..\..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.11.1, Culture=neutral, PublicKeyToken=2584e3f7334b8712, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.11.1\lib\net45\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.11.1, Culture=neutral, PublicKeyToken=33528056505af6c1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.Managed.1.2.11.1\lib\net45\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.1.5, Culture=neutral, PublicKeyToken=91696a6f7ea17e8c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.SqlServer.1.8.1.5\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.1.5, Culture=neutral, PublicKeyToken=d6cd5a7c20de3a13, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.Oracle.Managed.1.8.1.5\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -71,6 +71,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Oracle.ManagedDataAccess.12.2.1100\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -112,7 +116,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -124,8 +128,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.DbWebApi.OwinSample.config" />
-    <None Include="Web.DbWebApi.OwinSample.config" />
+    <None Include="packages.DbWebApi.OwinSample.Oracle.Managed.config" />
+    <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
+    <None Include="Web.DbWebApi.OwinSample.Oracle.Managed.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -135,7 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigHelper.cs" />
@@ -178,19 +185,19 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-	<Target Name="BeforeBuild">
-		<Message Text="Overwriting Web.config by Web.$(MSBuildProjectName).config" Condition="Exists('Web.$(MSBuildProjectName).config')" Importance="high" />
-		<Copy SourceFiles="Web.$(MSBuildProjectName).config" DestinationFiles="Web.config" SkipUnchangedFiles="true" Condition="Exists('Web.$(MSBuildProjectName).config')" />
-	</Target>
-	<Target Name="AfterBuild">
-		<CreateItem Include="bin\*.*">
-			<Output TaskParameter="Include" ItemName="DefaultBinFiles" />
-		</CreateItem>
-		<CreateItem Include="$(OutputPath)*.*">
-			<Output TaskParameter="Include" ItemName="OutputFiles" />
-		</CreateItem>
-		<Message Text="Copying output files from $(OutputPath) to bin\" Importance="high" />
-		<Delete Files="@(DefaultBinFiles)" />
-		<Copy SourceFiles="@(OutputFiles)" DestinationFolder="bin" />
-	</Target>
+  <Target Name="BeforeBuild">
+    <Message Text="Overwriting Web.config by Web.$(MSBuildProjectName).config" Condition="Exists('Web.$(MSBuildProjectName).config')" Importance="high" />
+    <Copy SourceFiles="Web.$(MSBuildProjectName).config" DestinationFiles="Web.config" SkipUnchangedFiles="true" Condition="Exists('Web.$(MSBuildProjectName).config')" />
+  </Target>
+  <Target Name="AfterBuild">
+    <CreateItem Include="bin\*.*">
+      <Output TaskParameter="Include" ItemName="DefaultBinFiles" />
+    </CreateItem>
+    <CreateItem Include="$(OutputPath)*.*">
+      <Output TaskParameter="Include" ItemName="OutputFiles" />
+    </CreateItem>
+    <Message Text="Copying output files from $(OutputPath) to bin\" Importance="high" />
+    <Delete Files="@(DefaultBinFiles)" />
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="bin" />
+  </Target>
 </Project>
