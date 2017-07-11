@@ -17,13 +17,13 @@ namespace DataBooster.DbWebApi
 {
 	public static partial class WebApiExtensions
 	{
-		private static bool _Registered = false;
+		private const string _RegisteredPropertyKey = "DataBooster.DbWebApi:Registered";
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 
 		#region Registration
 		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true, bool supportFormUrlEncoded = true, bool supportMultipartForm = true)
 		{
-			if (_Registered)
+			if (config.Properties.ContainsKey(_RegisteredPropertyKey))
 				throw new InvalidOperationException("Duplicate Registered");
 
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
@@ -50,7 +50,7 @@ namespace DataBooster.DbWebApi
 			if (supportMultipartForm)
 				config.Formatters.Add(new MultipartFormDataMediaTypeFormatter());
 
-			_Registered = true;
+			config.Properties.TryAdd(_RegisteredPropertyKey, true);
 		}
 
 		public static void AddFormatPlug(this HttpConfiguration config, IFormatPlug formatPlug, string queryStringParameterName = null)
