@@ -12,7 +12,9 @@ namespace DbWebApi.OwinSample
 {
 	public class Startup
 	{
-		public void Configuration(IAppBuilder app)
+		private static HttpServer _httpServer;
+
+		static Startup()
 		{
 			HttpConfiguration config = new HttpConfiguration();
 
@@ -40,7 +42,12 @@ namespace DbWebApi.OwinSample
 
 			DbWebApiAuthorizeAttribute.RegisterWebApiAuthorization<MyDbWebApiAuthorization>();
 
-			app.UseWebApi(config);
+			_httpServer = new HttpServer(config);
+		}
+
+		public void Configuration(IAppBuilder app)
+		{
+			app.UseWebApi(_httpServer);
 		}
 
 		private static void EnableCors(HttpConfiguration config)
