@@ -48,8 +48,8 @@
       <HintPath>..\..\..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.11.1, Culture=neutral, PublicKeyToken=2584e3f7334b8712, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.11.1\lib\net45\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.11.2, Culture=neutral, PublicKeyToken=2584e3f7334b8712, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.SqlServer.1.2.11.2\lib\net45\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DbParallel.DataAccess, Version=1.8.1.5, Culture=neutral, PublicKeyToken=91696a6f7ea17e8c, processorArchitecture=MSIL">
@@ -178,19 +178,19 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-	<Target Name="BeforeBuild">
-		<Message Text="Overwriting Web.config by Web.$(MSBuildProjectName).config" Condition="Exists('Web.$(MSBuildProjectName).config')" Importance="high" />
-		<Copy SourceFiles="Web.$(MSBuildProjectName).config" DestinationFiles="Web.config" SkipUnchangedFiles="true" Condition="Exists('Web.$(MSBuildProjectName).config')" />
-	</Target>
-	<Target Name="AfterBuild">
-		<CreateItem Include="bin\*.*">
-			<Output TaskParameter="Include" ItemName="DefaultBinFiles" />
-		</CreateItem>
-		<CreateItem Include="$(OutputPath)*.*">
-			<Output TaskParameter="Include" ItemName="OutputFiles" />
-		</CreateItem>
-		<Message Text="Copying output files from $(OutputPath) to bin\" Importance="high" />
-		<Delete Files="@(DefaultBinFiles)" />
-		<Copy SourceFiles="@(OutputFiles)" DestinationFolder="bin" />
-	</Target>
+  <Target Name="BeforeBuild">
+    <Message Text="Overwriting Web.config by Web.$(MSBuildProjectName).config" Condition="Exists('Web.$(MSBuildProjectName).config')" Importance="high" />
+    <Copy SourceFiles="Web.$(MSBuildProjectName).config" DestinationFiles="Web.config" SkipUnchangedFiles="true" Condition="Exists('Web.$(MSBuildProjectName).config')" />
+  </Target>
+  <Target Name="AfterBuild">
+    <CreateItem Include="bin\*.*">
+      <Output TaskParameter="Include" ItemName="DefaultBinFiles" />
+    </CreateItem>
+    <CreateItem Include="$(OutputPath)*.*">
+      <Output TaskParameter="Include" ItemName="OutputFiles" />
+    </CreateItem>
+    <Message Text="Copying output files from $(OutputPath) to bin\" Importance="high" />
+    <Delete Files="@(DefaultBinFiles)" />
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="bin" />
+  </Target>
 </Project>
