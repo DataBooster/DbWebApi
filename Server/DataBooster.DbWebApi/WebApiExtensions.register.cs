@@ -17,14 +17,14 @@ namespace DataBooster.DbWebApi
 {
 	public static partial class WebApiExtensions
 	{
-		private const string _RegisteredPropertyKey = "DataBooster.DbWebApi:Registered";
+		private const string _RegisteredPropertyKey = "[DataBooster.DbWebApi]:Registered";
 		private static PseudoMediaTypeFormatter _PseudoFormatter;
 
 		#region Registration
 		public static void RegisterDbWebApi(this HttpConfiguration config, bool supportRazor = true, bool supportJsonp = true, bool supportXlsx = true, bool supportCsv = true, bool supportBson = true, bool supportFormUrlEncoded = true, bool supportMultipartForm = true)
 		{
 			if (config.Properties.ContainsKey(_RegisteredPropertyKey))
-				throw new InvalidOperationException("Duplicate Registered");
+				throw new InvalidOperationException("Registered DbWebApi Repeatedly");
 
 			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
 
