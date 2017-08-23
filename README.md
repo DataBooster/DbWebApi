@@ -269,116 +269,115 @@ BulkExecute reads bulk sets of parameters from the request message body only, it
 
 * <a name="associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
 In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake _(avoid too many context switches between the PL/SQL and SQL engines)_. For example, in database side:
-``` SQL
-TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+    ``` PLSQL
+    TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
 
-PROCEDURE WRITE_BULK_DATA
-(
-    inGroupID       PLS_INTEGER,
-    inItemValues    NUMBER_ARRAY,
-    RC1             OUT SYS_REFCURSOR
-);
+    PROCEDURE WRITE_BULK_DATA
+    (
+        inGroupID       PLS_INTEGER,
+        inItemValues    NUMBER_ARRAY,
+        RC1             OUT SYS_REFCURSOR
+    );
 
-```
-The payload JSON should look like:  
-``` JSON
-{
-    "inGroupID": 108,
-    "inItemValues": [
-                        0,
-                        1,
-                        0.618,
-                        1001,
-                        -3.1415926585
-                    ]
-}
-```
-
+    ```
+    The payload JSON should look like:
+    ``` JSON
+    {
+        "inGroupID": 108,
+        "inItemValues": [
+                            0,
+                            1,
+                            0.618,
+                            1001,
+                            -3.1415926585
+                        ]
+    }
+    ```
+    _Note: Oracle does not support binding an`empty array`or`null`to a [PL/SQL Associative Array Parameter](https://docs.oracle.com/database/121/ODPNT/OracleParameterClass.htm#ODPNT1890)._
 * <a name="table-valued-parameters"></a>[Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb675163.aspx) (SQL Server 2008+):  
 In SQL Server 2008 or later, [Table-Valued Parameter](https://msdn.microsoft.com/en-us/library/bb510489.aspx) provides an equifinality of Associative Array Bulk Binds, but the implementation styles have different looks. For example, in database side:
-``` SQL
-CREATE TYPE dbo.CategoryTableType AS TABLE
-    ( CategoryID int, Weight float(6), CategoryName nvarchar(50) )
+    ``` SQL
+    CREATE TYPE dbo.CategoryTableType AS TABLE
+        ( CategoryID int, Weight float(6), CategoryName nvarchar(50) )
 
-CREATE PROCEDURE dbo.usp_UpdateCategories 
-    (@inGroupID int, @inTvpCategories dbo.CategoryTableType READONLY)
-```
-The payload JSON should look like:  
-``` JSON
-{
-    "inGroupID": 108,
-    "inTvpCategories": [
-                           {
-                               "CategoryID": 1,
-                               "Weight": 0.15,
-                               "CategoryName": "Peach Blossom"
-                           },
-                           {
-                               "CategoryID": 2,
-                               "Weight": 0.38,
-                               "CategoryName": "Peony"
-                           },
-                           {
-                               "CategoryID": 3,
-                               "Weight": 0.26,
-                               "CategoryName": "Tulip"
-                           },
-                           {
-                               "CategoryID": 4,
-                               "Weight": 0.06,
-                               "CategoryName": "Cymbidium Orchis"
-                           },
-                           {
-                               "CategoryID": 5,
-                               "Weight": 0.18,
-                               "CategoryName": "Water Lily"
-                           }
-                       ]
-}
-```
-*Tips:  
-Unlike outer parameters bind-by-name (as above exampled "inGroupID" and "inTvpCategories"), Inside of the Table-Valued Parameter SQL Server actually behaves bind-by-position. No matter what you name those internal columns (as above exampled "CategoryID", "Weight", "CategoryName"), it made no difference to SQL Server. Below JSON input would get the same results as above.*
-``` JSON
-{
-    "inGroupID": 108,
-    "inTvpCategories": [
-                           {
-                               "C01": 1,
-                               "C02": 0.15,
-                               "C03": "Peach Blossom"
-                           },
-                           {
-                               "C01": 2,
-                               "C02": 0.38,
-                               "C03": "Peony"
-                           },
-                           {
-                               "C01": 3,
-                               "C02": 0.26,
-                               "C03": "Tulip"
-                           },
-                           {
-                               "C01": 4,
-                               "C02": 0.06,
-                               "C03": "Cymbidium Orchis"
-                           },
-                           {
-                               "C01": 5,
-                               "C02": 0.18,
-                               "C03": "Water Lily"
-                           }
-                       ]
-}
-```
-*According to this, you can control the order of properties in JSON Serialization by this sort of lazy way.*   
-Notes:  
-If you don't have any item in the "inTvpCategories", but you still want to execute the stored procedure dbo.usp_UpdateCategories with an empty table-value, please remove the whole "inTvpCategories" parameter from the JSON payload as below:
-``` JSON
-{
-    "inGroupID": 108
-}
-```
-
+    CREATE PROCEDURE dbo.usp_UpdateCategories 
+        (@inGroupID int, @inTvpCategories dbo.CategoryTableType READONLY)
+    ```
+    The payload JSON should look like:  
+    ``` JSON
+    {
+        "inGroupID": 108,
+        "inTvpCategories": [
+                               {
+                                   "CategoryID": 1,
+                                   "Weight": 0.15,
+                                   "CategoryName": "Peach Blossom"
+                               },
+                               {
+                                   "CategoryID": 2,
+                                   "Weight": 0.38,
+                                   "CategoryName": "Peony"
+                               },
+                               {
+                                   "CategoryID": 3,
+                                   "Weight": 0.26,
+                                   "CategoryName": "Tulip"
+                               },
+                               {
+                                   "CategoryID": 4,
+                                   "Weight": 0.06,
+                                   "CategoryName": "Cymbidium Orchis"
+                               },
+                               {
+                                   "CategoryID": 5,
+                                   "Weight": 0.18,
+                                   "CategoryName": "Water Lily"
+                               }
+                           ]
+    }
+    ```
+    *Tips:  
+    Unlike outer parameters bind-by-name (as above exampled "inGroupID" and "inTvpCategories"), Inside of the Table-Valued Parameter SQL Server actually behaves bind-by-position. No matter what you name those internal columns (as above exampled "CategoryID", "Weight", "CategoryName"), it made no difference to SQL Server. Below JSON input would get the same results as above.*
+    ``` JSON
+    {
+        "inGroupID": 108,
+        "inTvpCategories": [
+                               {
+                                   "C01": 1,
+                                   "C02": 0.15,
+                                   "C03": "Peach Blossom"
+                               },
+                               {
+                                   "C01": 2,
+                                   "C02": 0.38,
+                                   "C03": "Peony"
+                               },
+                               {
+                                   "C01": 3,
+                                   "C02": 0.26,
+                                   "C03": "Tulip"
+                               },
+                               {
+                                   "C01": 4,
+                                   "C02": 0.06,
+                                   "C03": "Cymbidium Orchis"
+                               },
+                               {
+                                   "C01": 5,
+                                   "C02": 0.18,
+                                   "C03": "Water Lily"
+                               }
+                           ]
+    }
+    ```
+    *According to this, you can control the order of properties in JSON Serialization by this sort of lazy way.*   
+    Note:  
+    If you don't have any item in the "inTvpCategories", but you still want to execute the stored procedure dbo.usp_UpdateCategories with an empty table-value, please remove the whole "inTvpCategories" parameter from the JSON payload as below:
+    ``` JSON
+    {
+        "inGroupID": 108
+    }
+    ```
 &nbsp;
 
 ###### Summary of Input Parameters and Execution Modes
@@ -1085,7 +1084,7 @@ Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.dev.
 - <a name="hundreds-or-less"></a>If you only have hundreds of records or less to post back to database, you can just encapsulate all records into an array, let the Web API server side implicitly perform the BulkExecute action. Following example shows how to load data from a local CSV file and post back into database:
 ``` PowerShell
 $impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
-Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test.net/oradev/test_schema.prj_package.write_row" -Body (ConvertTo-Json $impData) -ContentType "application/json";
+Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.test.net/oradev/test_schema.prj_package.write_row" -Body (ConvertTo-Json $impData) -ContentType "application/json";
 ```
 Straightforwardly, any CSV columns that match the names in input parameters will be passed into the stored procedure.  
 By using PowerShell pipeline, if need, you can easily apply some data transformations, to do such as: column-parameter mapping or simple calculating by [select cmdlet](https://technet.microsoft.com/en-us/library/hh849895.aspx), data filtering by [where cmdlet](https://technet.microsoft.com/en-us/library/hh849715.aspx), some simple aggregation by [group cmdlet](https://technet.microsoft.com/en-us/library/hh849907.aspx), and data sorting by [sort cmdlet](https://technet.microsoft.com/en-us/library/hh849912.aspx), ... etc.
@@ -1093,28 +1092,57 @@ By using PowerShell pipeline, if need, you can easily apply some data transforma
     - <a name="ps-table-valued-parameters"></a>[Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb510489.aspx) (SQL Server 2008+)  
 Basically just further wrap the array of records into a single parameter, like the second line in following example *(note that dbo.pck_bulk_write stored procedure is different from single row operation)*:
 ``` PowerShell
-$impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
-$inpms = @{ tvpParam = $impData };
-Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test.net/sqldev/dbo.pck_bulk_write" -Body (ConvertTo-Json $inpms) -ContentType "application/json";
+$csv = Import-Csv -Path "D:\Test\bulk-100s.csv";
+$inpms = @{ tvpParam = $csv };
+Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.test.net/sqldev/dbo.pck_bulk_write" -Body (ConvertTo-Json $inpms) -ContentType "application/json";
 ```
 - 
     - <a name="ps-associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#ODPNT250) (Oracle)  
 Oracle uses another style,  each parameter must be separated as an array of primitive data type. See following example,
 ``` PowerShell
-$impData = Import-Csv -Path "D:\Test\bulk-100s.csv";
-$inpms = @{inItemIds=[int[]]@(0) * $impData.Length; inItemNames=[string[]]@("") * $import.Length; inItemValues=[decimal[]]@(0) * $import.Length; inBatchComment="This is a test load."};
+$csv = Import-Csv -Path "D:\Test\bulk-100s.csv";
+$inpms = @{inItemIds=[int[]]@(0) * $csv.Length; inItemNames=[string[]]@("") * $import.Length; inItemValues=[decimal[]]@(0) * $import.Length; inBatchComment="This is a test load."};
 [int]$i = 0;
-foreach ($item in $impData) {
+foreach ($item in $csv) {
     $inpms.inItemIds[$i] = $item.ItemId;
     $inpms.inItemNames[$i] = $item.ItemName;
     $inpms.inItemValues[$i] = $item.ItemValue;
     $i++;
 }
-Invoke-RestMethod -UseDefaultCredentials -method Post -Uri "http://dbwebapi.test.net/oradev/test_schema.tst_package.bulk_write" -Body (ConvertTo-Json $inpms) -ContentType "application/json";
+Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri "http://dbwebapi.test.net/oradev/test_schema.tst_package.bulk_write" -Body (ConvertTo-Json $inpms) -ContentType "application/json";
 ```
 *Tips:*  
 *Using PowerShell array for large dataset, better to initialize an array with explicit size (instead of dynamic array with subsequent appending elements), otherwise most of performance will be lost in highly frequent memory reallocation, data copying over and over again.*  
 *You may notice that [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) takes many fixed arguments, to be lazier to type them all the time, you can import a convenient function [Invoke-DbWebApi](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/Invoke-DbWebApi.Sample.ps1) from [DbWebApi-Client.psm1](https://github.com/DataBooster/DbWebApi/blob/master/Client/PowerShell/ClientModule/DbWebApi-Client.psm1) to further clean your PowerShell scripts. As a shell, PowerShell is much better at describing what to do, rather than how to do. Each Cmdlet or external service focuses on how to do. So keep PowerShell scripts as clean as possible will benefit the whole process flow in a clear thread.*
+
+If you like to automatically match all Associative Array Parameters to the CSV Columns (by names), above example can be refactored into a generic function as follows:
+``` PowerShell
+Function LoadCsv-IntoOra {
+    [CmdletBinding(SupportsShouldProcess)]
+    Param (
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [string]$CsvPath,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Uri]$SpUri
+    )
+
+    $csv = Import-Csv -Path $CsvPath;
+
+    If ($csv.Length -gt 0) {
+        $plAAParams = [PSCustomObject]@{};
+
+        Get-Member -InputObject $csv[0] -MemberType Properties | ForEach-Object {
+            $inArray = @($null) * $csv.Length;
+
+            for ([int]$i = 0; $i -lt $csv.Length; $i++) {
+                $inArray[$i] = $csv[$i].($_.Name);
+            }
+            Add-Member -InputObject $plAAParams -MemberType NoteProperty -Name $_.Name -Value $inArray;
+        }
+        return Invoke-RestMethod -UseDefaultCredentials -Method Post -Uri $SpUri -Body (ConvertTo-Json $plAAParams) -ContentType "application/json";
+    }
+}
+```
 
 PowerShell is true powerful to do more solid work with less coding if being rationally utilized. Especially for back office system-integration applications, heterogeneous techniques across different systems can be leveraged by PowerShell's interoperability with consistent pipeline mechanism. It's also extremely handy to use PowerShell as a test/debug tool. In PowerShell, all data become visualized and extremely flexible to be quickly modified interactively.  
 
