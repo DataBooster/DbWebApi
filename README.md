@@ -72,6 +72,7 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures in a
             - [CORS](#cors)
             - [JSONP](#jsonp-added-server-lib-v124-client-js-v108-alpha)
             - [IE option](#ie-option)
+    - [AngularJS Client](#angularjs-client)
     - [PowerShell Client](#powershell-client)
         - [Bulk Data Post Back](#bulk-data-post-back)
             - [Hundreds or less](#hundreds-or-less)
@@ -818,7 +819,7 @@ public static class WebApiConfig
 {
     public static void Register(HttpConfiguration config)
     {
-        ....
+        ...
         DbWebApiOptions.DefaultPropertyNamingConvention =
             PropertyNamingConvention.PascalCase;
     }
@@ -931,7 +932,7 @@ client.HttpMethod = HttpMethod.Get;
 
 If you just need the response content stream (E.g. CSV, Excel xlsx or generated text) to be stored as a file or transfer forward to somewhere else on the network, see below example, replacing Exec() by ExecAsStream().
 ``` CSharp
-....
+...
 Stream stream = client.ExecAsStream("test_schema.prj_package.foo",
     new {
         inDate = new DateTime(2015, 3, 16)
@@ -949,34 +950,34 @@ By default, the DbWebApiClient uses Windows authentication for the convenience o
 #### JavaScript Client  
 You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
     Sample:
-``` javascript
+``` JavaScript
 <script src="Scripts/jquery-2.1.3.js" type="text/javascript"></script>
 <script src="Scripts/dbwebapi_client-1.0.8-alpha.js" type="text/javascript"></script>
 ```
-``` javascript
+``` JavaScript
 <script type="text/javascript">
-    ....
+    ...
     $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
              '{"inDate":"2015-03-10T00:00:00.000Z"}',
              function (data) {
                  // Bind data.ResultSets[0] with some contorls,
                  // or iterate through each JSON object in data.
              });
-    ....
+    ...
 </script>
 ```
 The second argument of $.postDb - _inputJson_ can be either a JSON string or a plain object. If it's a plain object, it will be converted by JSON.stringify before sending to the server. Below sample is equivalent to above sample.
-``` javascript
-    ....
+``` JavaScript
+    ...
     var input = {
         inDate: $.utcDate(2015,03,10)
     };
     $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
              input,
              function (data) {
-                 ....
+                 ...
              });
-    ....
+    ...
 ```
 If there is no input parameter to pass to the server, please put _**null**_ in the second argument.  
 If an array of input parameter sets is passed into the second argument, the return data will be an array that contains the corresponding results of every iterative executions.  
@@ -1014,8 +1015,8 @@ Usually the CORS preflight will fail by a 401 unauthorized error _(Access is den
 $.getDb(...) can encode input JSON object into a special parameter in query string.  
 _But there is a limitation on length of the URL, large data still requires the use of POST method, see the next ways then:_
 - Attach cross-origin POST request in any one very lightweight GET request's callback function, as in the following example:
-``` javascript
-    ....
+``` JavaScript
+    ...
     var input = {
         inDate: $.utcDate(2015,03,10)
     };
@@ -1023,10 +1024,10 @@ _But there is a limitation on length of the URL, large data still requires the u
         $.postDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
              input,
              function (data) {
-                 ....
+                 ...
              });
     });
-    ....
+    ...
 ```
 Here $.getDb('.../WhoAmI') acts as a bootstrapper, it makes the browser to start an authentication handshake in advance, once IIS authenticates the request, [the default behavior of IIS](https://msdn.microsoft.com/en-us/library/aa347548.aspx) will cache a token/ticket on the server for the connection, then the immediate preflight request on the same connection is not required to be authenticated again, so the preflight request will succeed, then the browser can continue the actual CORS request.
 - HTML Form request _(Content-Type: application/x-www-form-urlencoded)_ and Multipart MIME request _(Content-Type: multipart/form-data)_ can also be used to send a fair amount of data to DbWebApi without preflight request.  
@@ -1037,17 +1038,17 @@ _The limitation of these two media types' requests is that, they can only carry 
 ###### JSONP (Added: Server Lib v1.2.4, Client JS v1.0.8-alpha) 
 JSONP is a practicable way _(although it seems a little rascal)_ to solve the cross-domain access puzzle before CORS is supported by all popular browsers.  
 Below example is a JSONP approach of above example,
-``` javascript
-    ....
+``` JavaScript
+    ...
     var input = {
         inDate: $.utcDate(2015,03,10)
     };
     $.jsonpDb('http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo',
              input,
              function (data) {
-                 ....
+                 ...
              });
-    ....
+    ...
 ```
 Notes: since JSONP sends request by HTTP GET method, BulkExecute can not be used by JSONP.  
 
@@ -1064,7 +1065,16 @@ The third option is to change IE setting if neither of above options is applicab
 For intranet scenarios, browsers settings can be managed by your system administrator centralizedly.
 ![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
 
-&nbsp;
+
+#### AngularJS Client
+Using the built-in [$http service](https://docs.angularjs.org/api/ng/service/$http) is a straightforward way for AngularJS client to invoke the Web API. For example,
+``` JavaScript
+...
+return $http.post("http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo", inputData, {withCredentials: true})
+            .then(function(response){
+                return response.data.ResultSets; 
+            });
+```
 
 #### PowerShell Client  
 In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) cmdlet is readily available. See following sample:
@@ -1249,7 +1259,7 @@ namespace MyDbWebApi.Controllers
     [DbWebApiAuthorize]
     public class DbWebApiController : ApiController
     {
-        ....
+        ...
     }
 }
 ```
