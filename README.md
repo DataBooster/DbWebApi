@@ -271,15 +271,14 @@ BulkExecute reads bulk sets of parameters from the request message body only, it
 * <a name="associative-array-parameters"></a>[PL/SQL Associative Array Parameters](http://docs.oracle.com/cd/E51173_01/win.122/e17732/featOraCommand.htm#BABBDHBB) (Oracle):  
 In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds) to reduce loop overhead for performance sake _(avoid too many context switches between the PL/SQL and SQL engines)_. For example, in database side:
     ``` PLSQL
-    TYPE NUMBER_ARRAY IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+    NUMBER_EMPTY_ARRAY  DBMS_UTILITY.NUMBER_ARRAY;
 
     PROCEDURE WRITE_BULK_DATA
     (
         inGroupID       PLS_INTEGER,
-        inItemValues    NUMBER_ARRAY,
+        inItemValues    DBMS_UTILITY.NUMBER_ARRAY := NUMBER_EMPTY_ARRAY,
         RC1             OUT SYS_REFCURSOR
     );
-
     ```
     The payload JSON should look like:
     ``` JSON
@@ -294,7 +293,9 @@ In Oracle database, you can use PL/SQL Associative Array Parameters (Bulk Binds)
                         ]
     }
     ```
-    _Note: Oracle does not support binding an`empty array`or`null`to a [PL/SQL Associative Array Parameter](https://docs.oracle.com/database/121/ODPNT/OracleParameterClass.htm#ODPNT1890)._
+    _Tips:  
+Oracle ODP.NET does not support binding an **empty array** to a [PL/SQL Associative Array Parameter](https://docs.oracle.com/database/121/ODPNT/OracleParameterClass.htm#ODPNT1890). To work around this limitation, simply declaring an empty associative array as the default value for the parameter. Because the underlying DataBooster library does NOT pass the empty array to database for that particular parameter at all, the database engine will then use the DEFAULT value (which is an empty associative array declared in your stored procedures package) for that parameter, as shown above._  
+ 
 * <a name="table-valued-parameters"></a>[Table-Valued Parameters](https://msdn.microsoft.com/en-us/library/bb675163.aspx) (SQL Server 2008+):  
 In SQL Server 2008 or later, [Table-Valued Parameter](https://msdn.microsoft.com/en-us/library/bb510489.aspx) provides an equifinality of Associative Array Bulk Binds, but the implementation styles have different looks. For example, in database side:
     ``` SQL
@@ -903,7 +904,7 @@ _If your swagger.json files are placed in some older IIS, you might need to add 
 ```
 
 #### .Net Client  
-[DbWebApi Client .Net Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net) can be used to simplify the client call. See following sample:
+[DbWebApi Client .Net Library](https://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net) can be used to simplify the client call. See following sample:
 ``` CSharp
 using DataBooster.DbWebApi.Client;
 ```
@@ -948,7 +949,7 @@ For more general purpose, ExecAsStream _(or ExecAsStreamAsync)_, ExecAsJson _(or
 By default, the DbWebApiClient uses Windows authentication for the convenience of intranet usage scenarios. Please see its constructor overrides for other options.
 
 #### JavaScript Client  
-You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
+You can use jQuery.ajax easily to call the Web API, or you can use [DbWebApi Client JavaScript Library](https://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS) to reduce repetitive coding.  
     Sample:
 ``` JavaScript
 <script src="Scripts/jquery-2.1.3.js" type="text/javascript"></script>
@@ -1069,11 +1070,11 @@ For intranet scenarios, browsers settings can be managed by your system administ
 #### AngularJS Client
 Using the built-in [$http service](https://docs.angularjs.org/api/ng/service/$http) is a straightforward way for AngularJS client to invoke the Web API. For example,
 ``` JavaScript
-...
-return $http.post("http://dbwebapi.dev.com/oradev/test_schema.prj_package.foo", inputData, {withCredentials: true})
-            .then(function(response){
-                return response.data.ResultSets; 
-            });
+    ...
+    return $http.post(spUrl, inputData, {withCredentials: true})
+                .then(function(response){
+                    return response.data.ResultSets; 
+                });
 ```
 
 #### PowerShell Client  
@@ -1209,19 +1210,20 @@ Since Power Query doesn't currently support POST web request with windows authen
 ## NuGet
 #### Server side
 There are 4 NuGet packages for 4 differenct versions of ADO.NET providers:
-- [DbWebApi for SQL Server](http://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
-- [DbWebApi for Oracle (use ODP.NET Managed Driver)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.Managed)
-- [DbWebApi for Oracle (use ODP.NET Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.ODP)
-- [DbWebApi for Oracle (use DataDirect Provider)](http://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.DataDirect)
+- [DbWebApi for SQL Server](https://www.nuget.org/packages/DataBooster.DbWebApi.SqlServer)
+- [DbWebApi for Oracle (use ODP.NET Managed Driver)](https://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.Managed)
+- [DbWebApi for Oracle (use ODP.NET Provider)](https://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.ODP)
+- [DbWebApi for Oracle (use DataDirect Provider)](https://www.nuget.org/packages/DataBooster.DbWebApi.Oracle.DataDirect)
 
 For-Oracle versions always contain the support for SQL Server. To switch from Oracle to SQL Server, simply change the providerName and connectionString of connectionStrings "DataBooster.DbWebApi.MainConnection" in your web.config.  
 To switch above from one NuGet package to another NuGet Package, simply uninstall one and install another from NuGet Package Manager.
 #### Clients
-- [DbWebApi Client .Net Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net)
-- [DbWebApi Client JavaScript Library](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS)
+- [DbWebApi Client .Net Library](https://www.nuget.org/packages/DataBooster.DbWebApi.Client.Net)
+- [DbWebApi Client JavaScript Library](https://www.nuget.org/packages/DataBooster.DbWebApi.Client.JS)
+- [DbWebApi Client Command-line Utility](https://www.nuget.org/packages/DataBooster.DbWebApi.Client.CmdUtility)
 - PowerShell:
 - [DbWebApi Client PowerShell Module _on PowerShell Gallery_](http://www.powershellgallery.com/packages/DbWebApi-Client)
-- [DbWebApi Client PowerShell Utility _on NuGet Gallery_](http://www.nuget.org/packages/DataBooster.DbWebApi.Client.PowerShell)
+- [DbWebApi Client PowerShell Utility _on NuGet Gallery_](https://www.nuget.org/packages/DataBooster.DbWebApi.Client.PowerShell)
 
 
 ### SymbolSource
