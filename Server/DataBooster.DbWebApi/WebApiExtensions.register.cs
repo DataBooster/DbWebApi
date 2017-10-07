@@ -26,7 +26,7 @@ namespace DataBooster.DbWebApi
 			if (config.Properties.ContainsKey(_RegisteredPropertyKey))
 				throw new InvalidOperationException("Registered DbWebApi Repeatedly");
 
-			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromMinutes(15);
+			DbWebApiOptions.DerivedParametersCacheExpireInterval = TimeSpan.FromDays(1);
 
 			config.SupportMediaTypeShortMapping();
 #if WEB_API2

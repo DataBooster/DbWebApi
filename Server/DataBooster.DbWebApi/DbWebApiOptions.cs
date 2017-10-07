@@ -195,20 +195,26 @@ namespace DataBooster.DbWebApi
 			get { return _CsvConfiguration; }
 		}
 
+		private static readonly CsvDateTimeConverter _CsvDateTimeConverter;
+		public static CsvDateTimeConverter CsvDateTimeConverter
+		{
+			get { return _CsvDateTimeConverter; }
+		}
+
 		static DbWebApiOptions()
 		{
 			_CsvConfiguration = new CsvConfiguration();
 
-			SetCsvDateTimeConverter();
-		}
-
-		private static void SetCsvDateTimeConverter()
-		{
+			#region	SetCsvDateTimeConverter();
 			Type dt = typeof(DateTime);
 			Type cvt = TypeConverterFactory.GetConverter(dt).GetType();
 
 			if (cvt == typeof(DateTimeConverter) || cvt == typeof(DefaultTypeConverter))
-				TypeConverterFactory.AddConverter(dt, new CsvDateTimeConverter());
+			{
+				_CsvDateTimeConverter = new CsvDateTimeConverter();
+				TypeConverterFactory.AddConverter(dt, _CsvDateTimeConverter);
+			}
+			#endregion
 		}
 
 		private static RazorEngine.Encoding _DefaultRazorEncoding = RazorEngine.Encoding.Raw;
