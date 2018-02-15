@@ -6,12 +6,12 @@
 		<title>$title$ for Oracle (using ODP.NET Provider)</title>
 		<authors>$author$</authors>
 		<owners>https://github.com/DataBooster/DbWebApi</owners>
-		<licenseUrl>https://dbwebapi.codeplex.com/license</licenseUrl>
+		<licenseUrl>https://github.com/DataBooster/DbWebApi/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/DataBooster/DbWebApi</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>https://github.com/DataBooster/DbWebApi/wiki</releaseNotes>
-		<copyright>Copyright 2015-2017 Abel Cheng</copyright>
+		<copyright>Copyright 2015-2018 Abel Cheng</copyright>
 		<tags>Generic ASP.NET Web API data driven ADO.NET Booster Oracle ODP.NET Database Stored Procedure DataAccess Bulk JSON BSON XML CSV Excel xlsx JSONP Razor CsvHelper ClosedXML RazorEngine</tags>
 	</metadata>
 	<files>

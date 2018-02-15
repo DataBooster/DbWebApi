@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Abel Cheng")]
 [assembly: AssemblyProduct("DataBooster.DbWebApi")]
-[assembly: AssemblyCopyright("Copyright © 2015-2017 Abel Cheng")]
+[assembly: AssemblyCopyright("Copyright © 2015-2018 Abel Cheng")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
