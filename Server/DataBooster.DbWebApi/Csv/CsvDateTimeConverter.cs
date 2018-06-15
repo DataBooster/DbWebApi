@@ -3,6 +3,8 @@
 // Repository:	https://github.com/DataBooster/DbWebApi
 
 using System;
+using CsvHelper;
+using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 
 namespace DataBooster.DbWebApi.Csv
@@ -66,25 +68,47 @@ namespace DataBooster.DbWebApi.Csv
 			}
 		}
 
+#if WEB_API2	// .NETFramework 4.5 (After CsvHelper 2.16.3) - https://joshclose.github.io/CsvHelper/change-log
+
+		/// <param name="value">The object to convert to a string.</param>
+		/// <param name="row">The <see cref="T:CsvHelper.IWriterRow"/> for the current record.</param>
+		/// <param name="memberMapData">The <see cref="T:CsvHelper.Configuration.MemberMapData"/> for the member being written.</param>
+		/// <returns>The string representation of the object.</returns>
+		public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+		{
+			var format = memberMapData.TypeConverterOptions.Formats;
+
+			if (value is DateTime && (format == null || format.Length == 0 || string.IsNullOrEmpty(format[0])))
+				return ConvertDateToString((DateTime)value);
+			else
+				return base.ConvertToString(value, row, memberMapData);
+		}
+
+#else			// .NETFramework 4.0 (Until CsvHelper 2.16.3)
+
 		/// <param name="options">The options to use when converting.</param>
 		/// <param name="value">The object to convert to a string.</param>
 		/// <returns>The string representation of the object.</returns>
 		public override string ConvertToString(TypeConverterOptions options, object value)
 		{
 			if (value is DateTime && string.IsNullOrEmpty(options.Format))
-			{
-				DateTime dt = (DateTime)value;
-				string fmt;
-
-				if (dt.Millisecond == 0)
-					fmt = (dt.TimeOfDay.Ticks == 0L) ? _Format_Date : _Format_DateTimeSecond;
-				else
-					fmt = _Format_DateTimeFractionalSecond;
-
-				return dt.ToString(fmt);
-			}
+				return ConvertDateToString((DateTime)value);
 			else
 				return base.ConvertToString(options, value);
+		}
+
+#endif
+
+		private string ConvertDateToString(DateTime value)
+		{
+			string fmt;
+
+			if (value.Millisecond == 0)
+				fmt = (value.TimeOfDay.Ticks == 0L) ? _Format_Date : _Format_DateTimeSecond;
+			else
+				fmt = _Format_DateTimeFractionalSecond;
+
+			return value.ToString(fmt);
 		}
 	}
 }

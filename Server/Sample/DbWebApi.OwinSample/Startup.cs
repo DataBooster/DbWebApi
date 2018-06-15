@@ -35,6 +35,7 @@ namespace DbWebApi.OwinSample
 
 			config.RegisterDbWebApi();
 			config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
+			config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/plain"));
 #if DEBUG
 			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 #endif

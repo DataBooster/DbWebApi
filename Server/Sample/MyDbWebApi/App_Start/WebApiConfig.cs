@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Net.Http.Headers;
 using DataBooster.DbWebApi;
 
 namespace MyDbWebApi
@@ -29,6 +30,8 @@ namespace MyDbWebApi
 			);
 
 			config.RegisterDbWebApi();
+			config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
+			config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/plain"));
 #if DEBUG
 			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 #endif

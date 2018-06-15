@@ -189,8 +189,13 @@ namespace DataBooster.DbWebApi
 			set { _DefaultPropertyNamingConvention = value; }
 		}
 
+#if WEB_API2	// .NETFramework 4.5 (After CsvHelper 2.16.3) - https://joshclose.github.io/CsvHelper/change-log
+		private static readonly Configuration _CsvConfiguration;
+		public static Configuration CsvConfiguration
+#else			// .NETFramework 4.0 (Until CsvHelper 2.16.3)
 		private static readonly CsvConfiguration _CsvConfiguration;
 		public static CsvConfiguration CsvConfiguration
+#endif
 		{
 			get { return _CsvConfiguration; }
 		}
@@ -203,16 +208,28 @@ namespace DataBooster.DbWebApi
 
 		static DbWebApiOptions()
 		{
+#if WEB_API2	// .NETFramework 4.5 (After CsvHelper 2.16.3) - https://joshclose.github.io/CsvHelper/change-log
+			_CsvConfiguration = new Configuration();
+#else			// .NETFramework 4.0 (Until CsvHelper 2.16.3)
 			_CsvConfiguration = new CsvConfiguration();
+#endif
 
 			#region	SetCsvDateTimeConverter();
 			Type dt = typeof(DateTime);
+#if WEB_API2	// .NETFramework 4.5 (After CsvHelper 2.16.3) - https://joshclose.github.io/CsvHelper/change-log
+			Type cvt = _CsvConfiguration.TypeConverterCache.GetConverter(dt).GetType();
+#else			// .NETFramework 4.0 (Until CsvHelper 2.16.3)
 			Type cvt = TypeConverterFactory.GetConverter(dt).GetType();
+#endif
 
 			if (cvt == typeof(DateTimeConverter) || cvt == typeof(DefaultTypeConverter))
 			{
 				_CsvDateTimeConverter = new CsvDateTimeConverter();
+#if WEB_API2	// .NETFramework 4.5 (After CsvHelper 2.16.3) - https://joshclose.github.io/CsvHelper/change-log
+				_CsvConfiguration.TypeConverterCache.AddConverter(dt, _CsvDateTimeConverter);
+#else			// .NETFramework 4.0 (Until CsvHelper 2.16.3)
 				TypeConverterFactory.AddConverter(dt, _CsvDateTimeConverter);
+#endif
 			}
 			#endregion
 		}
