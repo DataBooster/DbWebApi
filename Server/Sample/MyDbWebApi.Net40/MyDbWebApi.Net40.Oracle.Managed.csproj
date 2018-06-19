@@ -216,7 +216,6 @@
     <None Include="packages.MyDbWebApi.Net40.Oracle.Managed.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
     <None Include="Web.MyDbWebApi.Net40.Oracle.Managed.config" />
   </ItemGroup>

@@ -212,7 +212,6 @@
     <None Include="packages.MyDbWebApi.Net40.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="Web.MyDbWebApi.Net40.config" />
   </ItemGroup>
   <PropertyGroup>
