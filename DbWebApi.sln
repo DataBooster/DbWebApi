@@ -237,6 +237,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbWebApi.OwinSample.Oracle.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbWebApi.OwinSample.Oracle.Managed", "Server\Sample\DbWebApi.OwinSample\DbWebApi.OwinSample.Oracle.Managed.csproj", "{A19F0E7A-9E56-4D27-AC2F-48829A1888E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F5C7984D-12F1-45E2-80FE-D88C2C36C469}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Angular\src\dbWebApi.client.ts = Client\Angular\src\dbWebApi.client.ts
+		Client\Angular\src\dbWebApi.interceptor.ts = Client\Angular\src\dbWebApi.interceptor.ts
+		Client\Angular\src\dbWebApi.model.ts = Client\Angular\src\dbWebApi.model.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{B3B87211-C371-4103-B57C-790CE6139EAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -417,5 +426,7 @@ Global
 		{5FD82C4F-960D-449B-93F1-D319CD5E1668} = {0C700892-91B0-43E1-A8C3-55631651B3C5}
 		{F468B8D9-97E7-46B5-BD42-E3B20060BA88} = {B865E22A-3F6C-4B52-AE26-38CBE5B742F4}
 		{A19F0E7A-9E56-4D27-AC2F-48829A1888E9} = {052C9A6A-AEB8-4760-8E98-A94FA938347E}
+		{F5C7984D-12F1-45E2-80FE-D88C2C36C469} = {B3B87211-C371-4103-B57C-790CE6139EAE}
+		{B3B87211-C371-4103-B57C-790CE6139EAE} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
 	EndGlobalSection
 EndGlobal
