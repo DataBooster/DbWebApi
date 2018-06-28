@@ -7,7 +7,7 @@ import { Injectable } from "@angular/core";
 import { HttpRequest, HttpInterceptor, HttpHandler, HttpEvent, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from 'rxjs/operators';
-import { DbError } from './dbWebApi.model';
+import { DbError } from './dbwebapi-client.model';
 
 @Injectable()
 export class DbWebApiInterceptor implements HttpInterceptor {

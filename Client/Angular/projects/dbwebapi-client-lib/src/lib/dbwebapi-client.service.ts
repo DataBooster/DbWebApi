@@ -5,7 +5,7 @@
 */
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IStoredProcedureResponse, OracleInputParams } from './dbWebApi.model';
+import { IStoredProcedureResponse, OracleInputParams } from './dbwebapi-client.model';
 
 export class DbWebApiClient {
   public httpOptions = {

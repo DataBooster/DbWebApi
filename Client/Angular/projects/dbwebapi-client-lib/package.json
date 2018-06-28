@@ -1,0 +1,30 @@
+{
+  "name": "dbwebapi-client",
+  "version": "0.0.1-alpha.1",
+  "description": "DbWebApi Client for Angular Package",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DataBooster/DbWebApi.git"
+  },
+  "keywords": [
+    "webapi",
+    "restful",
+    "oracle",
+    "sql-server",
+    "stored-procedure",
+    "httpclient",
+    "angular",
+    "typescript"
+  ],
+  "author": "Abel Cheng (https://github.com/DataBooster/DbWebApi)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DataBooster/DbWebApi/issues"
+  },
+  "homepage": "https://github.com/DataBooster/DbWebApi#readme",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
+    "rxjs": "^6.0.0"
+  }
+}
