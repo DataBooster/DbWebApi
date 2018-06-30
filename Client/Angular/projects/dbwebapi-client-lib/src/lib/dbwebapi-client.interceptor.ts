@@ -9,7 +9,7 @@ import { Observable, throwError } from "rxjs";
 import { catchError } from 'rxjs/operators';
 import { DbError } from './dbwebapi-client.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DbWebApiInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
