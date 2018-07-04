@@ -237,14 +237,36 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbWebApi.OwinSample.Oracle.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbWebApi.OwinSample.Oracle.Managed", "Server\Sample\DbWebApi.OwinSample\DbWebApi.OwinSample.Oracle.Managed.csproj", "{A19F0E7A-9E56-4D27-AC2F-48829A1888E9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F5C7984D-12F1-45E2-80FE-D88C2C36C469}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{B3B87211-C371-4103-B57C-790CE6139EAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "projects", "projects", "{EC1CD19D-1438-4E4B-AB7C-64785627AC0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dbwebapi-client-lib", "dbwebapi-client-lib", "{DC91C2D0-6AAB-4A8F-8CC0-019600D207FE}"
 	ProjectSection(SolutionItems) = preProject
-		Client\Angular\src\dbWebApi.client.ts = Client\Angular\src\dbWebApi.client.ts
-		Client\Angular\src\dbWebApi.interceptor.ts = Client\Angular\src\dbWebApi.interceptor.ts
-		Client\Angular\src\dbWebApi.model.ts = Client\Angular\src\dbWebApi.model.ts
+		Client\Angular\projects\dbwebapi-client-lib\karma.conf.js = Client\Angular\projects\dbwebapi-client-lib\karma.conf.js
+		Client\Angular\projects\dbwebapi-client-lib\ng-package.json = Client\Angular\projects\dbwebapi-client-lib\ng-package.json
+		Client\Angular\projects\dbwebapi-client-lib\ng-package.prod.json = Client\Angular\projects\dbwebapi-client-lib\ng-package.prod.json
+		Client\Angular\projects\dbwebapi-client-lib\package.json = Client\Angular\projects\dbwebapi-client-lib\package.json
+		Client\Angular\projects\dbwebapi-client-lib\README.md = Client\Angular\projects\dbwebapi-client-lib\README.md
+		Client\Angular\projects\dbwebapi-client-lib\tsconfig.lib.json = Client\Angular\projects\dbwebapi-client-lib\tsconfig.lib.json
+		Client\Angular\projects\dbwebapi-client-lib\tsconfig.spec.json = Client\Angular\projects\dbwebapi-client-lib\tsconfig.spec.json
+		Client\Angular\projects\dbwebapi-client-lib\tslint.json = Client\Angular\projects\dbwebapi-client-lib\tslint.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{B3B87211-C371-4103-B57C-790CE6139EAE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1FEFF01E-36A5-4BCB-85D8-E505CA441491}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Angular\projects\dbwebapi-client-lib\src\public_api.ts = Client\Angular\projects\dbwebapi-client-lib\src\public_api.ts
+		Client\Angular\projects\dbwebapi-client-lib\src\test.ts = Client\Angular\projects\dbwebapi-client-lib\src\test.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{9AE02AFA-4CCD-4070-AB3D-3B76F5ABD7E2}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.interceptor.ts = Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.interceptor.ts
+		Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.model.ts = Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.model.ts
+		Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.module.ts = Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.module.ts
+		Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.service.spec.ts = Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.service.spec.ts
+		Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.service.ts = Client\Angular\projects\dbwebapi-client-lib\src\lib\dbwebapi-client.service.ts
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -426,7 +448,10 @@ Global
 		{5FD82C4F-960D-449B-93F1-D319CD5E1668} = {0C700892-91B0-43E1-A8C3-55631651B3C5}
 		{F468B8D9-97E7-46B5-BD42-E3B20060BA88} = {B865E22A-3F6C-4B52-AE26-38CBE5B742F4}
 		{A19F0E7A-9E56-4D27-AC2F-48829A1888E9} = {052C9A6A-AEB8-4760-8E98-A94FA938347E}
-		{F5C7984D-12F1-45E2-80FE-D88C2C36C469} = {B3B87211-C371-4103-B57C-790CE6139EAE}
 		{B3B87211-C371-4103-B57C-790CE6139EAE} = {6B2094D1-99E1-4AEB-AFF5-7636BFF5D927}
+		{EC1CD19D-1438-4E4B-AB7C-64785627AC0B} = {B3B87211-C371-4103-B57C-790CE6139EAE}
+		{DC91C2D0-6AAB-4A8F-8CC0-019600D207FE} = {EC1CD19D-1438-4E4B-AB7C-64785627AC0B}
+		{1FEFF01E-36A5-4BCB-85D8-E505CA441491} = {DC91C2D0-6AAB-4A8F-8CC0-019600D207FE}
+		{9AE02AFA-4CCD-4070-AB3D-3B76F5ABD7E2} = {1FEFF01E-36A5-4BCB-85D8-E505CA441491}
 	EndGlobalSection
 EndGlobal
