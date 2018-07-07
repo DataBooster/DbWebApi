@@ -16,15 +16,23 @@ export class DbWebApiClient {
 
   constructor(public httpClient: HttpClient, public baseUrl: string = '') { }
 
-  public getSp(sp: string): Observable<IStoredProcedureResponse> {
-    return this.httpClient.get<IStoredProcedureResponse>(this.baseUrl + sp, this.httpOptions);
+  /**
+   * Construct a GET request which interprets the body as JSON and returns it.
+   *
+   * @return an `Observable` of the body as type `IStoredProcedureResponse`.
+   */
+  public get(storedProcedure: string): Observable<IStoredProcedureResponse> {
+    return this.httpClient.get<IStoredProcedureResponse>(this.baseUrl + storedProcedure, this.httpOptions);
   }
 
-  public postSp(sp: string, body: any | null): Observable<IStoredProcedureResponse> {
-    return this.httpClient.post<IStoredProcedureResponse>(this.baseUrl + sp, body, this.httpOptions);
-  }
-
-  public postOraSp(sp: string, body: any | null): Observable<IStoredProcedureResponse> {
-    return this.httpClient.post<IStoredProcedureResponse>(this.baseUrl + sp, OracleInputParams.Flatten(body), this.httpOptions);
+  /**
+   * Construct a POST request which interprets the body as JSON and returns it.
+   *
+   * @return an `Observable` of the body as type `IStoredProcedureResponse`.
+   */
+  public post(storedProcedure: string, body: any | null, flattenAssociativeArrayParameters: boolean = false): Observable<IStoredProcedureResponse> {
+    return this.httpClient.post<IStoredProcedureResponse>(this.baseUrl + storedProcedure,
+      flattenAssociativeArrayParameters ? OracleInputParams.Flatten(body) : body,
+      this.httpOptions);
   }
 }
