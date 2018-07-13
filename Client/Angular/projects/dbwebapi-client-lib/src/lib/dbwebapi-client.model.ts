@@ -25,11 +25,13 @@ export class DbError implements IDbError {
   StackTrace: string;
 
   constructor(public httpError: HttpErrorResponse) {
-    const err = httpError.error as IDbError;
-    this.Message = err.Message;
-    this.ExceptionMessage = err.ExceptionMessage;
-    this.ExceptionType = err.ExceptionType;
-    this.StackTrace = err.StackTrace;
+    const err = httpError.error;
+
+    for (let e in err) {
+      if (!this.hasOwnProperty(e)) {
+        this[e] = err[e];
+      }
+    }
   }
 }
 
