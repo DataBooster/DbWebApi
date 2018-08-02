@@ -14,15 +14,28 @@ export class DbWebApiClient {
     withCredentials: true
   };
 
+  private static absUrlRegExp = new RegExp('^(?:[A-Za-z]+:)?\/\/');
+
   constructor(public httpClient: HttpClient, public baseUrl: string = '') { }
+
+  private resolveUrl(spUrl: string): string {
+    if (!this.baseUrl) {
+      return spUrl;
+    }
+    if (!spUrl) {
+      return this.baseUrl;
+    }
+
+    return DbWebApiClient.absUrlRegExp.test(spUrl) ? spUrl : this.baseUrl + spUrl;
+  }
 
   /**
    * Construct a GET request which interprets the body as JSON and returns it.
    *
    * @return an `Observable` of the body as type `IStoredProcedureResponse`.
    */
-  public get(storedProcedure: string): Observable<IStoredProcedureResponse> {
-    return this.httpClient.get<IStoredProcedureResponse>(this.baseUrl + storedProcedure, this.httpOptions);
+  public get(spUrl: string): Observable<IStoredProcedureResponse> {
+    return this.httpClient.get<IStoredProcedureResponse>(this.resolveUrl(spUrl), this.httpOptions);
   }
 
   /**
@@ -30,8 +43,8 @@ export class DbWebApiClient {
    *
    * @return an `Observable` of the body as type `IStoredProcedureResponse`.
    */
-  public post(storedProcedure: string, body: any | null, flattenAssociativeArrayParameters: boolean = false): Observable<IStoredProcedureResponse> {
-    return this.httpClient.post<IStoredProcedureResponse>(this.baseUrl + storedProcedure,
+  public post(spUrl: string, body: any | null, flattenAssociativeArrayParameters: boolean = false): Observable<IStoredProcedureResponse> {
+    return this.httpClient.post<IStoredProcedureResponse>(this.resolveUrl(spUrl),
       flattenAssociativeArrayParameters ? OracleInputParams.Flatten(body) : body,
       this.httpOptions);
   }
