@@ -43,20 +43,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.92.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ClosedXML.0.92.1\lib\net40\ClosedXML.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.93.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ClosedXML.Signed.0.93.1\lib\net40\ClosedXML.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\CsvHelper.2.16.3.0\lib\net40\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.14.0, Culture=neutral, PublicKeyToken=46217670ae2462fe, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.Managed.1.2.14\lib\net40-client\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.15.0, Culture=neutral, PublicKeyToken=46217670ae2462fe, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.Managed.1.2.15\lib\net40-client\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.2.4, Culture=neutral, PublicKeyToken=d6cd5a7c20de3a13, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.Oracle.Managed.1.8.2.4\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.3.0, Culture=neutral, PublicKeyToken=d6cd5a7c20de3a13, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.Oracle.Managed.1.8.3\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
@@ -173,6 +173,7 @@
       <HintPath>$(SolutionDir)\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\MyDbWebApi\ConfigHelper.cs">
@@ -200,7 +201,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
-    <None Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -216,7 +216,6 @@
     <None Include="packages.MyDbWebApi.Net40.Oracle.Managed.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
     <None Include="Web.MyDbWebApi.Net40.Oracle.Managed.config" />
   </ItemGroup>
   <PropertyGroup>

@@ -40,20 +40,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.92.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ClosedXML.0.92.1\lib\net40\ClosedXML.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.93.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ClosedXML.Signed.0.93.1\lib\net40\ClosedXML.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\CsvHelper.7.1.1\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.14.0, Culture=neutral, PublicKeyToken=a137abba9b876cc7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.DataDirect.1.2.14\lib\net45\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.15.0, Culture=neutral, PublicKeyToken=a137abba9b876cc7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.DataDirect.1.2.15\lib\net45\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.2.4, Culture=neutral, PublicKeyToken=2fe61c64b8ab9758, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.Oracle.DataDirect.1.8.2.4\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.3.0, Culture=neutral, PublicKeyToken=2fe61c64b8ab9758, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.Oracle.DataDirect.1.8.3\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DDTek.Oracle, Version=3.5.0.0, Culture=neutral, PublicKeyToken=c84cd5c63851e072, processorArchitecture=MSIL">
@@ -134,10 +134,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.DbWebApi.OwinSample.Oracle.DataDirect.config" />
-    <None Include="SqlScripts\Oracle\DBWEBAPI-DETECT_DDL_CHANGES.pck" />
     <None Include="Web.DbWebApi.OwinSample.Oracle.DataDirect.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -147,7 +147,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SqlScripts\SqlServer\DBWEBAPI_DETECT_DDL_CHANGES.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
