@@ -69,10 +69,10 @@ namespace DataBooster.DbWebApi.DataAccess
 			}
 		}
 
-		public string ResolvePropertyName(string columnName)
-		{
-			return AccessChannel.DynamicPropertyNamingResolver(columnName);
-		}
+		//public string ResolvePropertyName(string columnName)
+		//{
+		//	return AccessChannel.DynamicPropertyNamingResolver(columnName);
+		//}
 
 		public StoredProcedureResponse ExecuteDbApi(string sp, IDictionary<string, object> parameters)
 		{

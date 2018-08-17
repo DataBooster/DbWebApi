@@ -71,19 +71,13 @@ namespace DataBooster.DbWebApi.Csv
 					dbContext.ExecuteDbApi(sp, parameters, null,
 						readHeader =>
 						{
-							string[] headers = new string[readHeader.VisibleFieldCount];
-
-							for (int i = 0; i < headers.Length; i++)
-								headers[i] = dbContext.ResolvePropertyName(readHeader.GetName(i));
-
-							csvExporter.WriteHeader(headers);
+							csvExporter.WriteHeader(dbContext.NameAllFields(readHeader));
 						},
 						readRow =>
 						{
-							object[] values = new object[readRow.VisibleFieldCount];
+							object[] values = new object[csvExporter.ColumnCount];
 
 							readRow.GetColumnValues(values);
-
 							csvExporter.WriteRow(values);
 						},
 						null, null, resultSetChoices);

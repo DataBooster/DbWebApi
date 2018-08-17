@@ -13,6 +13,9 @@ namespace DataBooster.DbWebApi.Csv
 	{
 		private readonly CsvWriter _CsvWriter;
 
+		private int _ColumnCount;
+		public int ColumnCount { get { return _ColumnCount; } }
+
 		public CsvExporter(TextWriter writer)
 		{
 			_CsvWriter = new CsvWriter(writer, DbWebApiOptions.CsvConfiguration);
@@ -22,8 +25,13 @@ namespace DataBooster.DbWebApi.Csv
 		{
 			if (headerColumns != null)
 			{
+				_ColumnCount = 0;
+
 				foreach (string header in headerColumns)
+				{
 					_CsvWriter.WriteField(header);
+					_ColumnCount++;
+				}
 
 				_CsvWriter.NextRecord();
 			}

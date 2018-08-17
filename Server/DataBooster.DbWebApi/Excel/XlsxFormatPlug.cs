@@ -54,16 +54,20 @@ namespace DataBooster.DbWebApi.Excel
 					{
 						currentWorksheet = workbook.AddWorksheet(string.Format("Sheet{0}", rs + 1));
 					},
-					header =>
+					readHeader =>
 					{
 						if (currentWorksheet != null)
-							for (int col = 0; col < header.VisibleFieldCount; col++)
-								currentWorksheet.Cell(1, col + 1).SetValue(dbContext.ResolvePropertyName(header.GetName(col))).Style.Font.Bold = true;
+						{
+							string[] fieldNames = dbContext.NameAllFields(readHeader);
+
+							for (int col = 0; col < fieldNames.Length; col++)
+								currentWorksheet.Cell(1, col + 1).SetValue(fieldNames[col]).Style.Font.Bold = true;
+						}
 					},
-					rows =>
+					readRow =>
 					{
 						if (currentWorksheet != null)
-							currentWorksheet.Cell(2, 1).Value = rows;
+							currentWorksheet.Cell(2, 1).Value = readRow;
 					},
 					foot =>
 					{
