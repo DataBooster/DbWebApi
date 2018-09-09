@@ -44,8 +44,9 @@ export class DbWebApiClient {
    * @return an `Observable` of the body as type `IStoredProcedureResponse`.
    */
   public post(spUrl: string, body: any | null, flattenAssociativeArrayParameters: boolean = false): Observable<IStoredProcedureResponse> {
-    return this.httpClient.post<IStoredProcedureResponse>(this.resolveUrl(spUrl),
-      flattenAssociativeArrayParameters ? OracleInputParams.Flatten(body) : body,
-      this.httpOptions);
+    if (flattenAssociativeArrayParameters && body && typeof body === 'object' && !(body instanceof String)) {
+      body = OracleInputParams.Flatten(body);
+    }
+    return this.httpClient.post<IStoredProcedureResponse>(this.resolveUrl(spUrl), body, this.httpOptions);
   }
 }
