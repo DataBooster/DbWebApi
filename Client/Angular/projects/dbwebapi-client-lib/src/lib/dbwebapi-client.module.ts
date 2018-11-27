@@ -30,3 +30,48 @@ export class DbwebapiClientModule {
     }
   }
 }
+
+export const enum DateJSONFormat {
+	Unspecified = 0,
+	UTC = 1,
+	TimeOffset = 2
+}
+
+declare global {
+  interface Date {
+	toTzString(): string;
+	toNonTzString(): string;
+}
+
+interface DateConstructor {
+	jsonFormatType: DateJSONFormat;
+  }
+}
+
+Date.jsonFormatType = DateJSONFormat.UTC;
+
+Date.prototype.toNonTzString = function (): string {
+  let lt = new Date(this.getTime() - this.getTimezoneOffset() * 60000);
+  let uz = lt.toISOString();
+	return uz.substr(0, uz.length - 1);
+}
+
+Date.prototype.toTzString = function (): string {
+  let tzOffset = this.getTimezoneOffset();
+  let sign = tzOffset > 0 ? '-' : '+';
+  let absOffset = Math.abs(tzOffset);
+  let zh = (absOffset / 60 + 100).toString().substr(1);
+  let zm = (absOffset % 60 + 100).toString().substr(1);
+	return this.toNonTzString() + sign + zh + ':' + zm;
+}
+
+Date.prototype.toJSON = function (): string {
+	switch (Date.jsonFormatType) {
+		case DateJSONFormat.UTC:
+			return this.toISOString();
+		case DateJSONFormat.TimeOffset:
+			return this.toTzString();
+		default:
+			return this.toNonTzString();
+	}
+}
