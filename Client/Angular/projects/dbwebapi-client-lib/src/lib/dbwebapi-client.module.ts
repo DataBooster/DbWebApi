@@ -31,7 +31,7 @@ export class DbwebapiClientModule {
   }
 }
 
-export const enum DateJSONFormat {
+export enum DateJSONFormat {
   Unspecified = 0,
   UTC = 1,
   TimeOffset = 2
