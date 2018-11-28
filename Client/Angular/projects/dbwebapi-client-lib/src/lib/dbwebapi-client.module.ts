@@ -30,7 +30,7 @@ export class DbwebapiClientModule {
     }
   }
 }
-
+/*
 export enum DateJSONFormat {
   Unspecified = 0,
   UTC = 1,
@@ -75,3 +75,4 @@ Date.prototype.toJSON = function (this: Date): string {
       return this.toNonTzString();
   }
 }
+*/
