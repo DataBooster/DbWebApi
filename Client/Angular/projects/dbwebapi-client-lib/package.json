@@ -1,6 +1,6 @@
 {
   "name": "dbwebapi-client",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "DbWebApi Client for Angular Package",
   "repository": {
     "type": "git",

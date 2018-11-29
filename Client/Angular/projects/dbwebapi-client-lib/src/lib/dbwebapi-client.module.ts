@@ -30,8 +30,8 @@ export class DbwebapiClientModule {
     }
   }
 }
-/*
-export enum DateJSONFormat {
+
+export const enum JsonTimeZoneKind {
   Unspecified = 0,
   UTC = 1,
   TimeOffset = 2
@@ -44,11 +44,11 @@ declare global {
   }
 
   interface DateConstructor {
-    jsonFormatType: DateJSONFormat;
+    jsonTimeZoneKind: JsonTimeZoneKind;
   }
 }
 
-Date.jsonFormatType = DateJSONFormat.TimeOffset;
+Date.jsonTimeZoneKind = JsonTimeZoneKind.TimeOffset;
 
 Date.prototype.toNonTzString = function (this: Date): string {
   let lt = new Date(this.getTime() - this.getTimezoneOffset() * 60000);
@@ -66,13 +66,12 @@ Date.prototype.toTzString = function (this: Date): string {
 }
 
 Date.prototype.toJSON = function (this: Date): string {
-  switch (Date.jsonFormatType) {
-    case DateJSONFormat.UTC:
+  switch (Date.jsonTimeZoneKind) {
+    case JsonTimeZoneKind.UTC:
       return this.toISOString();
-    case DateJSONFormat.TimeOffset:
+    case JsonTimeZoneKind.TimeOffset:
       return this.toTzString();
     default:
       return this.toNonTzString();
   }
 }
-*/
