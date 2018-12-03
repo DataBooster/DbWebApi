@@ -60,7 +60,7 @@ Date.prototype.toTzString = function (this: Date): string {
   let tzOffset = this.getTimezoneOffset();
   let sign = tzOffset > 0 ? '-' : '+';
   let absOffset = Math.abs(tzOffset);
-  let zh = (absOffset / 60 + 100).toString().substr(1);
+  let zh = Math.floor(absOffset / 60 + 100).toString().substr(1);
   let zm = (absOffset % 60 + 100).toString().substr(1);
   return this.toNonTzString() + sign + zh + ':' + zm;
 }

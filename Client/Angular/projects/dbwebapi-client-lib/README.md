@@ -27,11 +27,14 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 
-import { DbWebApiClient } from 'dbwebapi-client';
+import { DbWebApiClient, JsonTimeZoneKind } from 'dbwebapi-client';
 
 @Injectable({ providedIn: 'root' })
 export class MyDbWebApiService extends DbWebApiClient {
-    constructor(_http: HttpClient) { super(_http, 'http://my-base-url-path.'); }
+    constructor(_http: HttpClient) {
+        super(_http, 'http://my-base-url-path.');
+        Date.jsonTimeZoneKind = JsonTimeZoneKind.Unspecified;
+    }
 
     invokeMyStoredProcedure(inParams: object): Observable<MyTypescriptModel> {
         return super.post('my_stored_procedure', inParams).pipe(map(data => new MyTypescriptModel(data.ResultSets)));
