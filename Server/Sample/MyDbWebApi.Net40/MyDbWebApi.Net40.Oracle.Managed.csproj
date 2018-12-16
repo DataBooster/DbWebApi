@@ -51,12 +51,12 @@
       <HintPath>..\..\..\packages\CsvHelper.2.16.3.0\lib\net40\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DataBooster.DbWebApi, Version=1.2.15.0, Culture=neutral, PublicKeyToken=46217670ae2462fe, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.Managed.1.2.15\lib\net40-client\DataBooster.DbWebApi.dll</HintPath>
+    <Reference Include="DataBooster.DbWebApi, Version=1.2.16.0, Culture=neutral, PublicKeyToken=46217670ae2462fe, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.DbWebApi.Oracle.Managed.1.2.16\lib\net40-client\DataBooster.DbWebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DbParallel.DataAccess, Version=1.8.3.0, Culture=neutral, PublicKeyToken=d6cd5a7c20de3a13, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DataBooster.Oracle.Managed.1.8.3\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
+    <Reference Include="DbParallel.DataAccess, Version=1.8.4.0, Culture=neutral, PublicKeyToken=d6cd5a7c20de3a13, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DataBooster.Oracle.Managed.1.8.4\lib\net40-client\DbParallel.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
@@ -72,12 +72,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.12.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Oracle.ManagedDataAccess.12.2.1100\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.18.3, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Oracle.ManagedDataAccess.18.3.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RazorEngine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">

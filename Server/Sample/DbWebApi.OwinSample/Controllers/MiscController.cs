@@ -5,6 +5,7 @@ namespace DbWebApi.OwinSample.Controllers
 {
 	public class MiscController : ApiController
 	{
+		[Authorize]
 		[AcceptVerbs("GET", "POST")]
 		public string WhoAmI()
 		{

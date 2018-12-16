@@ -5,6 +5,7 @@ namespace MyDbWebApi.Controllers
 {
 	public class MiscController : ApiController
 	{
+		[Authorize]
 		[AcceptVerbs("GET", "POST")]
 		public string WhoAmI()
 		{
