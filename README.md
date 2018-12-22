@@ -118,6 +118,8 @@ _It's unnecessary to repeat design for the same part of contract again. Repeated
 
 ## Usage
 
+As one of the quickest learning ways, https://github.com/DataBooster/DbWebApi/releases provides several examples of using the DbWebApi library. Download it, select one of the projects to configure the database connection, compile and deploy it to IIS server, then start your intuitive experience by following the registered URL route. You can come back to read the details later in this section when you have time.
+
 #### ApiController:  
 Please reference the sample [DbWebApiController.cs](https://github.com/DataBooster/DbWebApi/blob/master/Server/Sample/MyDbWebApi/Controllers/DbWebApiController.cs):
 ``` CSharp
@@ -870,7 +872,7 @@ As a completely generic web service, DbWebApi makes the distributed deployment m
 
 * For front-end applications and systems integration  
 As a Web API, the target clients are still front-end applications mainly, plus some data formats transform for systems integration convenience.  
-The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](http://databooster.codeplex.com/) directly for high-performance database access.  
+The performance overhead of each extra wrapper of network service _(wrap one web service on top of another web service, and another one ... fussily)_ is always very expensive. For efficient custom data services development, it is recommended to use [DataBooster Library - Extension to ADO.NET Data Provider](https://github.com/DataBooster/DataAccess) directly for high-performance database access.  
   
 #### Bulk Manipulation  
 * <a name="quasi-bulk"></a>The BulkExecuteDbApi extension (BulkExecute action) is not a completely thorough bulk operation. It does performs the real bulk operation only between HTTP client and Web API server, it still performs a big loop calls to database from the Web API server. But it provides a convenient wrapper around every single call, and it is independent on specific database (Oracle or SQL Server).
@@ -1284,7 +1286,7 @@ Please refer to example projects - MyDbWebApi in https://github.com/DataBooster/
 
 Inside the solutions, both .Net45 branch and .Net40 branch are further divided into 4 projects for - SQL Server, Oracle (ODP.NET Managed, ODP.NET Unmanaged and DataDirect provider). You can keep one of them as needed and removed all the rest. Hopefully, base on the examples, it's easier to customize it as your own DbWebApi server.
 
-If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://github.com/DataBooster/DbWebApi/releases or http://dbwebapi.codeplex.com/releases simplicity.
+If you are only interested in having your trial server setup quickly, you can download the released server side samples from https://github.com/DataBooster/DbWebApi/releases simplicity.
 
 By default, the example server is configured for intranet environment:
 
@@ -1332,4 +1334,4 @@ According to your own circumstances, above should be modified as needed, just li
 
 _Notes: the example web sites are just for hosting the DbWebApi, there is no default page in them, so you would see HTTP Error 403.14 when you open the nonexistent home page, that's normal._
 
-Welcome all feedback through the [Discussions](https://dbwebapi.codeplex.com/discussions) or [Issues](https://github.com/DataBooster/DbWebApi/issues).
+Welcome all feedback through the [Issues](https://github.com/DataBooster/DbWebApi/issues).
