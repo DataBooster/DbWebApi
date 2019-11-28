@@ -24,6 +24,12 @@ With DbWebApi you can access SQL Server or Oracle package stored procedures in a
 * `http://dbwebapi.dev.com/oradev/test_schema.prj_package.your_sp/csv?resultset=0&filename=Rpt2015`
 * `http://dbwebapi.dev.com/sqldev/test_schema.prj_package.your_sp/razor?RazorTemplate=outTemplateSpParameter`
 
+The input parameters of your stored procedure can be supplied in URL query-string or in request body by JSON (recommended), XML or multipart/form-data. Oracle PL/SQL Associative Array Parameter (Bulk Bind - for bulk insert, bulk update) and SQL Server Table-Valued Parameter are natively supported for high-performance.
+
+DbWebApi handles type inferencing, for example, if a client passes in a Base64 string and your stored procedure expects to receive a binary input, the Base64 string is automatically decoded into the binary parameter.
+
+If the client further wraps a batch of parameter sets into an array as the HTTP request body, the server will sequentially call the stored procedure by each parameter set in the array, and wrap all the result sets in a more outer array before return to the client.
+
 ***
 ### Contents:
 - [Overview](#Overview)
