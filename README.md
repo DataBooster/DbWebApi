@@ -77,9 +77,9 @@ If the client further wraps a batch of parameter sets into an array as the HTTP 
         - [Cross-domain](#cross-domain)
             - [CORS](#cors)
             - [JSONP](#jsonp-added-server-lib-v124-client-js-v108-alpha)
-            - [IE option](#ie-option)
     - [AngularJS Client](#angularjs-client)
     - [Angular 6+ Client](#angular-6-client)
+    - [Python(3+) Client](#python3-client)
     - [PowerShell Client](#powershell-client)
         - [Bulk Data Post Back](#bulk-data-post-back)
             - [Hundreds or less](#hundreds-or-less)
@@ -98,7 +98,7 @@ If the client further wraps a batch of parameter sets into an array as the HTTP 
 ***
 
 ### Overview  
-DbWebApi is a .Net library that implement an entirely generic Web API for HTTP clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. For cross-domain access, client can request JSONP response. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets _(each resultset presents as an Excel worksheet)_. While being regarded as a gateway service, DbWebApi reflects in two directions: Data Access Gateway and Media Format Gateway.
+DbWebApi is a .Net library that implement an entirely generic Web API for HTTP clients to call database (Oracle & SQL Server) stored procedures or functions out-of-the-box without any configuration or extra coding, the http response JSON or XML will have all Result Sets, Output Parameters and Return Value. If client request a CSV format (accept: text/csv), the http response will transmit one result set as a CSV stream for large amounts of data. DbWebApi also supports xlsx (Excel 2007/2010) format response for multiple resultsets _(each resultset presents as an Excel worksheet)_. While being regarded as a gateway service, DbWebApi reflects in two directions: Data Access Gateway and Media Format Gateway.
 
 In other words, DbWebApi provides an alternative way to implement your Web APIs by implementing some stored procedures or functions in database. The DbWebApi will expose these stored procedures or functions as Web APIs straight away.
 
@@ -110,7 +110,7 @@ _Some people may concern about the name of some stored procedures being exposed 
 - Data Contract:  
 Since there is no setup at all, the domain entities returned from DbWebApi simply reflect the result sets returned from your stored procedure. So the data contract is driven by your stored procedure.  
 To isolate the downstream consumers from the source raw schemas, you can slimly achieve the isolation in your stored procedure only once, or do some data transportation once after DbWebApi.  
-_Actually, the contract transformation can be done in any one node of the intermediate links of your data flow. Just to keep the isolation simple, and reduce dogmatic data-isolations repeated in multiple links of a closed process chain over and over again._
+_Actually, the contract transformation can be done in any one node of the intermediate links of your data flow. Just to keep the isolation simple, and reduce dogmatic data-isolation repeated in multiple links of a closed process chain over and over again._
 
 ### What are the benefits of DbWebApi?
 
@@ -1071,10 +1071,6 @@ which will include JSONP support by default. If you don't want to support JSONP,
 ``` CSharp
     config.RegisterDbWebApi(supportJsonp: false);
 ```
-###### IE option
-The third option is to change IE setting if neither of above options is applicable to your situation.  
-For intranet scenarios, browsers settings can be managed by your system administrator centralizedly.
-![](https://github.com/DataBooster/DbWebApi/blob/master/Doc/Images/ie9-cors.png)
 
 
 #### AngularJS Client
@@ -1130,6 +1126,8 @@ _The example method will return an Observable MyTypescriptModel instance if the 
 
 If you need to control the details of http options (such as: credentials, headers), you can use the property `httpOptions` to set it up.
 
+#### Python(3+) Client
+Specifically for `JSON-request=>JSON-response` with Windows single sign-on authentication, the PyPi package [**simple-rest-call**](https://pypi.org/project/simple-rest-call/) can be leveraged to simplify your Python client.
 
 #### PowerShell Client  
 In Windows PowerShell 3.0 or higher, [Invoke-RestMethod](https://technet.microsoft.com/en-us/library/hh849971.aspx) cmdlet is readily available. See following sample:
